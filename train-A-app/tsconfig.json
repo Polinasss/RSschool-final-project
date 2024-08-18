@@ -5,6 +5,7 @@
     "compilerOptions": {
         "outDir": "./dist/out-tsc",
         "strict": true,
+        "noImplicitAny": true,
         "noImplicitOverride": true,
         "noPropertyAccessFromIndexSignature": true,
         "noImplicitReturns": true,
@@ -26,5 +27,8 @@
         "strictInjectionParameters": true,
         "strictInputAccessModifiers": true,
         "strictTemplates": true
-    }
+    },
+    "include": [
+        "src/**/*.ts"
+    ]
 }

@@ -24,6 +24,7 @@
                 "import/no-duplicates": "error",
                 "import/no-extraneous-dependencies": "off",
                 "no-console": 0,
+                "class-methods-use-this": "off",
                 "@typescript-eslint/indent": "off",
                 "@typescript-eslint/comma-dangle": "off",
                 "@typescript-eslint/no-shadow": "error",
