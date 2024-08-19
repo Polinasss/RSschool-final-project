@@ -8,24 +8,24 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "prepare": "cd .. && husky ./train-A-app/.husky",
-    "lint": "ng lint",
-    "format": "npx prettier --write ."
   },
   "private": true,
   "lint-staged": {
     "*.{ts, html}": [
-      "npm run lint --fix"
+      "eslint --fix"
     ],
     "*.{json,css,scss,less,md,ts,html}": [
-      "npm run format"
+      "prettier --write"
     ]
   },
   "dependencies": {
     "@angular/animations": "^18.0.0",
+    "@angular/cdk": "~18.2.0",
     "@angular/common": "^18.0.0",
     "@angular/compiler": "^18.0.0",
     "@angular/core": "^18.0.0",
     "@angular/forms": "^18.0.0",
+    "@angular/material": "~18.2.0",
     "@angular/platform-browser": "^18.0.0",
     "@angular/platform-browser-dynamic": "^18.0.0",
     "@angular/router": "^18.0.0",
