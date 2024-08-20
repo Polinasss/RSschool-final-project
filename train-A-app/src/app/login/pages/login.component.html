@@ -1,0 +1,28 @@
+<div class="login">
+  <h1>Sign In</h1>
+  <form [formGroup]="loginForm" class="login__form form">
+    <p class="form__label">Email</p>
+    <mat-form-field class="form__input">
+      <input matInput #login formControlName="name" />
+    </mat-form-field>
+    <!-- <div *ngIf="name?.invalid && name?.touched">
+      <p *ngIf="name?.hasError('required')" class="form__error">*Please enter a login email</p>
+      <p *ngIf="name?.hasError('email')" class="form__error">*The login email is invalid</p>
+    </div> -->
+    <p class="form__label">Password</p>
+    <mat-form-field class="form__input">
+      <input matInput #passwordId formControlName="password" />
+    </mat-form-field>
+    <!-- <div *ngIf="password?.invalid && password?.touched">
+    <p *ngIf="password?.hasError('required')" class="form__error">*Please enter a password</p>
+    <p *ngIf="password?.hasError('minlength')" class="form__error">*Your password isn't strong enough, it must have at least 8 characters</p>
+    <p *ngIf="password?.hasError('invalidPasswordMixLetters')" class="form__error">*Your password isn't strong enough, it must have a mixture of both uppercase and lowercase letters</p>
+    <p *ngIf="password?.hasError('invalidPasswordMixNumbersAndLetters')" class="form__error">*Your password isn't strong enough, it must have a mixture of letters and numbers</p>
+    <p *ngIf="password?.hasError('invalidPasswordSpecialCharacter')" class="form__error">*Your password isn't strong enough, it must have a inclusion of at least one special character, e.g., ! &#64; # ? ]</p>
+  </div> -->
+    <button class="form__button" [isDisabled]="loginForm.invalid" (clickOnButton)="login()">
+      Sign In
+    </button>
+    <a routerLink="/signup">Sign Up</a>
+  </form>
+</div>
