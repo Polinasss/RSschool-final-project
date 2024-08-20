@@ -1,13 +1,30 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { RouterLink, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [RouterLink, RouterOutlet],
+  imports: [
+    RouterLink,
+    RouterOutlet,
+    ReactiveFormsModule,
+    MatFormField,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+  ],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss',
+  styleUrls: ['./login.component.scss', './../../../core/styles/common.scss'],
 })
 export class LoginComponent implements OnInit {
   public loginForm!: FormGroup<{
@@ -32,5 +49,7 @@ export class LoginComponent implements OnInit {
     return this.loginForm.get('password');
   }
 
-  public login() {}
+  public signIn() {
+    console.log('login');
+  }
 }

@@ -1,0 +1,14 @@
+@import './../../../core/styles/function.scss';
+@import './../../../core/styles/variables.scss';
+
+.login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: $primary;
+  height: 95vh;
+
+  &__form {
+    width: 400px;
+  }
+}

@@ -1,0 +1,75 @@
+@import './function.scss';
+@import './variables.scss';
+
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: rem(28) rem(20);
+  background-color: $white;
+  border-radius: 5px;
+  box-shadow: 2px 2px 2px 1px $label;
+
+  &__title {
+    font-size: rem(40);
+    line-height: rem(18);
+    font-weight: bold;
+    margin: rem(40) 0;
+  }
+
+  &__label {
+    margin-left: rem(10);
+    font-size: rem(16);
+    font-weight: bold;
+  }
+
+  &__field {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__input {
+    width: 400px;
+    background-color: inherit;
+  }
+
+  &__input-small {
+    width: 110px;
+  }
+
+  &__controls {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  &__link {
+    text-decoration: none;
+  }
+
+  &__group {
+    width: 380px;
+    border-radius: 5px;
+    border: 1px solid $label;
+    padding: 10px;
+    margin-bottom: 20px;
+  }
+
+  &__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  &__icon {
+    cursor: pointer;
+  }
+
+  &__error {
+    font-size: rem(12);
+    line-height: rem(12);
+    color: $error;
+  }
+}
