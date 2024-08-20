@@ -29,6 +29,8 @@
         "@typescript-eslint/comma-dangle": "off",
         "@typescript-eslint/no-shadow": "error",
         "@typescript-eslint/no-explicit-any": "error",
+        "@angular-eslint/template/click-events-have-key-events": "off",
+        "@angular-eslint/template/interactive-supports-focus": "off",
         "@typescript-eslint/quotes": [
           "error",
           "single",
