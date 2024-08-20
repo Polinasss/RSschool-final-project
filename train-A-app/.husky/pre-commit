@@ -1,0 +1,2 @@
+cd train-A-app
+npx lint-staged

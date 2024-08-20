@@ -11,12 +11,13 @@ import { RouterOutlet } from '@angular/router';
 })
 export class AppComponent {
   title = 'train-A-app';
-  stations  = ''
+
+  stations = '';
+
   constructor(private http: HttpClient) {
-    this.http.get<unknown[]>('/api/station/').subscribe((stations)=>{
+    this.http.get<unknown[]>('/api/station/').subscribe((stations) => {
       this.stations = JSON.stringify(stations[0], null, 4);
-      console.log({stations});
-      
-    })
+      console.log({ stations });
+    });
   }
 }

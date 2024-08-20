@@ -1,67 +1,67 @@
 {
-    "root": true,
-    "ignorePatterns": ["projects/**/*"],
-    "plugins": ["simple-import-sort", "import", "prettier"],
-    "parserOptions": {
-        "project": ["**/tsconfig.json"]
+  "root": true,
+  "ignorePatterns": ["projects/**/*"],
+  "plugins": ["simple-import-sort", "import", "prettier"],
+  "parserOptions": {
+    "project": ["**/tsconfig.json"]
+  },
+  "overrides": [
+    {
+      "files": ["*.ts"],
+      "extends": [
+        "airbnb-base",
+        "airbnb-typescript/base",
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@angular-eslint/recommended",
+        "plugin:@angular-eslint/template/process-inline-templates",
+        "plugin:prettier/recommended"
+      ],
+      "rules": {
+        "import/prefer-default-export": "off",
+        "import/first": "error",
+        "import/newline-after-import": "error",
+        "import/no-duplicates": "error",
+        "import/no-extraneous-dependencies": "off",
+        "no-console": 0,
+        "class-methods-use-this": "off",
+        "@typescript-eslint/indent": "off",
+        "@typescript-eslint/comma-dangle": "off",
+        "@typescript-eslint/no-shadow": "error",
+        "@typescript-eslint/no-explicit-any": "error",
+        "@typescript-eslint/quotes": [
+          "error",
+          "single",
+          {
+            "avoidEscape": true,
+            "allowTemplateLiterals": true
+          }
+        ],
+        "@angular-eslint/directive-selector": [
+          "error",
+          {
+            "type": "attribute",
+            "prefix": "app",
+            "style": "camelCase"
+          }
+        ],
+        "@angular-eslint/component-selector": [
+          "error",
+          {
+            "type": "element",
+            "prefix": "app",
+            "style": "kebab-case"
+          }
+        ]
+      }
     },
-    "overrides": [
-        {
-            "files": ["*.ts"],
-            "extends": [
-                "airbnb-base",
-                "airbnb-typescript/base",
-                "eslint:recommended",
-                "plugin:@typescript-eslint/recommended",
-                "plugin:@angular-eslint/recommended",
-                "plugin:@angular-eslint/template/process-inline-templates",
-                "plugin:prettier/recommended"
-            ],
-            "rules": {
-                "import/prefer-default-export": "off",
-                "import/first": "error",
-                "import/newline-after-import": "error",
-                "import/no-duplicates": "error",
-                "import/no-extraneous-dependencies": "off",
-                "no-console": 0,
-                "class-methods-use-this": "off",
-                "@typescript-eslint/indent": "off",
-                "@typescript-eslint/comma-dangle": "off",
-                "@typescript-eslint/no-shadow": "error",
-                "@typescript-eslint/no-explicit-any": "error",
-                "@typescript-eslint/quotes": [
-                    "error",
-                    "single",
-                    {
-                        "avoidEscape": true,
-                        "allowTemplateLiterals": true
-                    }
-                ],
-                "@angular-eslint/directive-selector": [
-                    "error",
-                    {
-                        "type": "attribute",
-                        "prefix": "app",
-                        "style": "camelCase"
-                    }
-                ],
-                "@angular-eslint/component-selector": [
-                    "error",
-                    {
-                        "type": "element",
-                        "prefix": "app",
-                        "style": "kebab-case"
-                    }
-                ]
-            }
-        },
-        {
-            "files": ["*.html"],
-            "extends": [
-                "plugin:@angular-eslint/template/recommended",
-                "plugin:@angular-eslint/template/accessibility"
-            ],
-            "rules": {}
-        }
-    ]
+    {
+      "files": ["*.html"],
+      "extends": [
+        "plugin:@angular-eslint/template/recommended",
+        "plugin:@angular-eslint/template/accessibility"
+      ],
+      "rules": {}
+    }
+  ]
 }
