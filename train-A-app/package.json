@@ -14,10 +14,10 @@
   "private": true,
   "lint-staged": {
     "*.{ts, html}": [
-      "npm run lint --fix"
+      "eslint --fix"
     ],
     "*.{json,css,scss,less,md,ts,html}": [
-      "npm run format"
+      "prettier --write"
     ]
   },
   "dependencies": {
