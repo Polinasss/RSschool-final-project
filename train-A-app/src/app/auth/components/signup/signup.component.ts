@@ -1,24 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { Component, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
   Validators,
   FormsModule,
   ReactiveFormsModule,
+  AbstractControl,
+  ValidationErrors,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
-import { Subscription } from 'rxjs';
-
-type ErrorsHandler = Readonly<{
-  invalidFields: (message: string) => void;
-  invalidEmail: (message: string) => void;
-  invalidPassword: (message: string) => void;
-  invalidUniqueKey: (message: string) => void;
-}>;
 
 @Component({
   selector: 'app-signup',
@@ -34,43 +27,19 @@ type ErrorsHandler = Readonly<{
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss'],
 })
-export class SignupComponent implements OnDestroy {
+export class SignupComponent {
   signupForm: FormGroup;
 
-  signupStatus = false;
-
-  isSubmitting = false;
-
-  formWasFilled = false;
-
-  private subscriptions: Subscription = new Subscription();
-
-  private errorsHandler: ErrorsHandler = {
-    invalidFields: (message: string) => {
-      this.email?.setErrors({ serverError: message });
-      this.password?.setErrors({ serverError: message });
-      this.repeatPassword?.setErrors({ serverError: message });
-    },
-    invalidEmail: (message: string) => {
-      this.email?.setErrors({ serverError: message });
-    },
-    invalidPassword: (message: string) => {
-      this.password?.setErrors({ serverError: message });
-    },
-    invalidUniqueKey: () => {
-      this.email?.setErrors({ serverError: 'Account with this email already exists' });
-    },
-  };
+  loginStatus = false;
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private http: HttpClient,
   ) {
     this.signupForm = this.fb.group(
       {
-        email: ['', [Validators.required, Validators.pattern(/^[\w\d_]+@[\w\d_]+.\w{2,7}$/)]],
-        password: ['', [Validators.required, Validators.minLength(8), Validators.pattern(/^\S*$/)]],
+        email: ['', [Validators.required, Validators.email]],
+        password: ['', [Validators.required, this.passwordStrengthValidator]],
         repeatPassword: ['', [Validators.required]],
       },
       {
@@ -93,46 +62,37 @@ export class SignupComponent implements OnDestroy {
     return this.signupForm.get('password');
   }
 
-  get repeatPassword() {
-    return this.signupForm.get('repeatPassword');
-  }
-
   onSubmit(): void {
     if (this.signupForm.valid) {
-      this.isSubmitting = true;
-      console.log(this.signupForm.getRawValue());
+      console.log(this.signupForm.value);
+      this.loginStatus = true;
       // this.authService.signup(this.signupForm.value);
-      const { email, password } = this.signupForm.getRawValue();
-      const sub = this.http
-        .post<{ token: string }>('/api/signup/', {
-          email,
-          password,
-        })
-        .subscribe({
-          next: () => {
-            // TODO: we need a flag inside service, pointing user is isAuthenticated or not
-            // this.isAuthenticated = true
-            this.router.navigate(['/signin']);
-          },
-          error: (error) => {
-            const reasons = Object.keys(this.errorsHandler) as Array<
-              keyof typeof this.errorsHandler
-            >;
-            const reason = reasons.find((r) => r === error.error.reason);
-            if (reason) {
-              this.errorsHandler[reason](error.error.message);
-            } else {
-              this.signupForm.setErrors({ serverError: error.message });
-            }
-            this.isSubmitting = false;
-          },
-          complete: () => {
-            this.isSubmitting = false;
-          },
-        });
-      this.subscriptions.add(sub);
+      // this.router.navigate(['/']);
     }
-    this.formWasFilled = true;
+  }
+
+  passwordStrengthValidator(control: AbstractControl): ValidationErrors | null {
+    const { value } = control;
+
+    if (!value) {
+      return null;
+    }
+
+    const hasUpperCase = /[A-Z]/.test(value);
+    const hasLowerCase = /[a-z]/.test(value);
+    const hasNumeric = /[0-9]/.test(value);
+    const hasSpecial = /[!@#?$%^&*(),.?":{}|<>]/.test(value);
+    const isValidLength = value.length >= 8;
+
+    const passwordValid = hasUpperCase && hasLowerCase && hasNumeric && hasSpecial && isValidLength;
+
+    if (!passwordValid) {
+      return {
+        passwordStrength:
+          "Your password isn't strong enough. Ensure it has at least 8 characters, upper and lowercase letters, numbers and at least one special character.",
+      };
+    }
+    return null;
   }
 
   isControlInvalid(controlName: string): boolean {
@@ -144,16 +104,8 @@ export class SignupComponent implements OnDestroy {
   get isRepeatPassInvalid() {
     return (
       this.signupForm.errors?.['passwordNotMatch'] &&
-      this.signupForm.controls['repeatPassword'].value.length > 0
+      this.signupForm.controls['repeatPassword'].touched
     );
-  }
-
-  get disabledForm() {
-    return this.signupForm.invalid || this.isSubmitting;
-  }
-
-  get unknownServerError() {
-    return this.signupForm.errors?.['serverError'];
   }
 
   getErrorMessage(controlName: string): string {
@@ -169,20 +121,20 @@ export class SignupComponent implements OnDestroy {
             return 'This field is required';
         }
       }
-      if (errors['pattern']) {
+      if (errors['email']) {
         return 'Email is not valid';
       }
       if (errors['minlength']) {
         return `The ${controlName} is too short`;
       }
-      if (errors['serverError']) {
-        return errors['serverError'];
+
+      if (errors['maxlength']) {
+        return `The ${controlName} is too long`;
+      }
+      if (errors['passwordStrength']) {
+        return "Your password isn't strong enough. Ensure it has at least 8 characters, upper and lowercase letters, numbers and at least one special character.";
       }
     }
     return '';
-  }
-
-  public ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
   }
 }
