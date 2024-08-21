@@ -1,5 +1,6 @@
 import { CommonModule, NgIf } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -8,7 +9,12 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
+
+interface LoginInterface {
+  email: string;
+  password: string;
+}
 
 @Component({
   selector: 'app-login',
@@ -18,14 +24,18 @@ import { RouterLink, RouterOutlet } from '@angular/router';
   styleUrls: ['./signin.component.scss', './../../../core/styles/common.scss'],
 })
 export class SigninComponent implements OnInit {
+  private fb: FormBuilder = inject(FormBuilder);
+
+  private http: HttpClient = inject(HttpClient);
+
+  private router: Router = inject(Router);
+
   public isSubmitted: boolean = false;
 
   public loginForm!: FormGroup<{
     email: FormControl<string | null>;
     password: FormControl<string | null>;
   }>;
-
-  constructor(private fb: FormBuilder) {}
 
   public ngOnInit() {
     this.loginForm = this.fb.group({
@@ -47,8 +57,25 @@ export class SigninComponent implements OnInit {
     this.signIn();
   }
 
-  // TODO: replace to auth.service
+  // TODO: replace it to auth service
   public signIn() {
-    console.log('submit form');
+    const value = this.loginForm.getRawValue();
+    this.http
+      .post<{ user: LoginInterface }>('/api/signin', {
+        email: value.email,
+        password: value.password,
+      })
+      .subscribe({
+        next: (response) => {
+          console.log(response);
+          localStorage.setItem('token', 'response');
+          this.router.navigateByUrl('/');
+        },
+        error: (error) => {
+          console.log(error);
+          this.email?.setErrors({ serverError: true });
+          this.password?.setErrors({ serverError: true });
+        },
+      });
   }
 }

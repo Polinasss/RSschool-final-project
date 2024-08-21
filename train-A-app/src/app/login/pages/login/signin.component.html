@@ -10,6 +10,7 @@
     <div *ngIf="isSubmitted && email?.invalid && email?.touched">
       <p *ngIf="email?.hasError('required')" class="form__error">Required</p>
       <p *ngIf="email?.hasError('pattern')" class="form__error">Incorrect email</p>
+      <p *ngIf="email?.hasError('serverError')" class="form__error">Incorrect email or password</p>
     </div>
     <p class="form__label">Password</p>
     <input
@@ -19,6 +20,7 @@
     />
     <div *ngIf="isSubmitted && password?.invalid && password?.touched">
       <p *ngIf="password?.hasError('required')" class="form__error">Required</p>
+      <p *ngIf="email?.hasError('serverError')" class="form__error">Incorrect email or password</p>
     </div>
     <div class="form__controls">
       <button mat-flat-button [disabled]="loginForm.invalid" (click)="onSubmit()">Sign In</button>
