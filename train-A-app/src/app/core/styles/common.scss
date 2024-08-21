@@ -9,6 +9,7 @@
   background-color: $white;
   border-radius: 5px;
   box-shadow: 2px 2px 2px 1px $label;
+  width: 400px;
 
   &__title {
     font-size: rem(40);
@@ -54,6 +55,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    margin-top: 20px;
     gap: 8px;
   }
 
@@ -88,5 +90,17 @@
     font-size: rem(12);
     line-height: rem(12);
     color: $error;
+  }
+}
+
+@media (max-width: $layout-breakpoint-mobile) {
+  .form {
+    width: 300px;
+  }
+}
+
+@media (max-width: $layout-breakpoint-small-mobile) {
+  .form {
+    width: 260px;
   }
 }
