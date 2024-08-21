@@ -68,6 +68,8 @@ export class SigninComponent implements OnInit {
       .subscribe({
         next: (response) => {
           console.log(response);
+          // TODO: we need a flag in the service that user isAuthenticated
+          // this.isAuthenticated = true
           localStorage.setItem('token', 'response');
           this.router.navigateByUrl('/');
         },

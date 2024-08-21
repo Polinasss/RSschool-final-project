@@ -1,10 +1,11 @@
 import { Routes } from '@angular/router';
 import { SigninComponent } from './login/pages/login/signin.component';
+import { SigninGuard } from './login/guards/signin.guard';
 
 export const routes: Routes = [
-  // TODO: add for testing login page
   {
     path: 'signin',
     component: SigninComponent,
+    canActivate: [SigninGuard],
   },
 ];
