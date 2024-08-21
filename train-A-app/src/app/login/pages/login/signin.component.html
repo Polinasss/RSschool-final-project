@@ -1,0 +1,28 @@
+<div class="login">
+  <h1 class="form__title">Sign In</h1>
+  <form [formGroup]="loginForm" class="login__form form">
+    <p class="form__label">Email</p>
+    <input
+      class="form__input"
+      [ngClass]="{ 'form__input--error': isSubmitted && email?.invalid && email?.touched }"
+      formControlName="email"
+    />
+    <div *ngIf="isSubmitted && email?.invalid && email?.touched">
+      <p *ngIf="email?.hasError('required')" class="form__error">Required</p>
+      <p *ngIf="email?.hasError('pattern')" class="form__error">Incorrect email</p>
+    </div>
+    <p class="form__label">Password</p>
+    <input
+      class="form__input"
+      [ngClass]="{ 'form__input--error': isSubmitted && email?.invalid && email?.touched }"
+      formControlName="password"
+    />
+    <div *ngIf="isSubmitted && password?.invalid && password?.touched">
+      <p *ngIf="password?.hasError('required')" class="form__error">Required</p>
+    </div>
+    <div class="form__controls">
+      <button mat-flat-button [disabled]="loginForm.invalid" (click)="onSubmit()">Sign In</button>
+      <a class="form__link" routerLink="/signup">Sign Up</a>
+    </div>
+  </form>
+</div>
