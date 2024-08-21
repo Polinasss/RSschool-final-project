@@ -1,6 +1,6 @@
 import { CommonModule, NgIf } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -10,11 +10,8 @@ import {
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
-
-interface LoginInterface {
-  email: string;
-  password: string;
-}
+import { Subscription } from 'rxjs';
+import { noSpaceValidator } from '../../../shared/utils/validators';
 
 @Component({
   selector: 'app-login',
@@ -23,14 +20,18 @@ interface LoginInterface {
   templateUrl: './signin.component.html',
   styleUrls: ['./signin.component.scss', './../../../core/styles/common.scss'],
 })
-export class SigninComponent implements OnInit {
+export class SigninComponent implements OnInit, OnDestroy {
   private fb: FormBuilder = inject(FormBuilder);
 
   private http: HttpClient = inject(HttpClient);
 
   private router: Router = inject(Router);
 
+  private subscriptions: Subscription = new Subscription();
+
   public isSubmitted: boolean = false;
+
+  public isSubmitting: boolean = false;
 
   public loginForm!: FormGroup<{
     email: FormControl<string | null>;
@@ -40,8 +41,25 @@ export class SigninComponent implements OnInit {
   public ngOnInit() {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.pattern(/^[\w\d_]+@[\w\d_]+.\w{2,7}$/)]],
-      password: ['', [Validators.required]],
+      password: ['', [noSpaceValidator()]],
     });
+    this.subscriptions.add(
+      this.email?.valueChanges.subscribe(() => {
+        if (this.email?.hasError('serverError') || this.password?.hasError('serverError')) {
+          this.email?.setErrors(null);
+          this.password?.setErrors(null);
+        }
+      }),
+    );
+
+    this.subscriptions.add(
+      this.password?.valueChanges.subscribe(() => {
+        if (this.password?.hasError('serverError') || this.email?.hasError('serverError')) {
+          this.email?.setErrors(null);
+          this.password?.setErrors(null);
+        }
+      }),
+    );
   }
 
   get email() {
@@ -54,23 +72,23 @@ export class SigninComponent implements OnInit {
 
   public onSubmit() {
     this.isSubmitted = true;
+    this.isSubmitting = true;
     this.signIn();
   }
 
   // TODO: replace it to auth service
   public signIn() {
     const value = this.loginForm.getRawValue();
-    this.http
-      .post<{ user: LoginInterface }>('/api/signin', {
+    const sub = this.http
+      .post<{ token: string }>('/api/signin', {
         email: value.email,
         password: value.password,
       })
       .subscribe({
         next: (response) => {
-          console.log(response);
-          // TODO: we need a flag in the service that user isAuthenticated
+          // TODO: we need a flag inside service, pointing user is isAuthenticated or not
           // this.isAuthenticated = true
-          localStorage.setItem('token', 'response');
+          localStorage.setItem('token', response.token);
           this.router.navigateByUrl('/');
         },
         error: (error) => {
@@ -78,6 +96,14 @@ export class SigninComponent implements OnInit {
           this.email?.setErrors({ serverError: true });
           this.password?.setErrors({ serverError: true });
         },
+        complete: () => {
+          this.isSubmitting = false;
+        },
       });
+    this.subscriptions.add(sub);
+  }
+
+  public ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 }

@@ -19,11 +19,13 @@
       formControlName="password"
     />
     <div *ngIf="isSubmitted && password?.invalid && password?.touched">
-      <p *ngIf="password?.hasError('required')" class="form__error">Required</p>
+      <p *ngIf="password?.hasError('space')" class="form__error">Required</p>
       <p *ngIf="email?.hasError('serverError')" class="form__error">Incorrect email or password</p>
     </div>
     <div class="form__controls">
-      <button mat-flat-button [disabled]="loginForm.invalid" (click)="onSubmit()">Sign In</button>
+      <button mat-flat-button [disabled]="loginForm.invalid || isSubmitting" (click)="onSubmit()">
+        Sign In
+      </button>
       <a class="form__link" routerLink="/signup">Sign Up</a>
     </div>
   </form>
