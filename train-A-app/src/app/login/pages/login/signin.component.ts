@@ -34,32 +34,17 @@ export class SigninComponent implements OnInit, OnDestroy {
   public isSubmitting: boolean = false;
 
   public loginForm!: FormGroup<{
-    email: FormControl<string | null>;
-    password: FormControl<string | null>;
+    email: FormControl<string>;
+    password: FormControl<string>;
   }>;
 
   public ngOnInit() {
-    this.loginForm = this.fb.group({
+    this.loginForm = this.fb.nonNullable.group({
       email: ['', [Validators.required, Validators.pattern(/^[\w\d_]+@[\w\d_]+.\w{2,7}$/)]],
       password: ['', [noSpaceValidator()]],
     });
-    this.subscriptions.add(
-      this.email?.valueChanges.subscribe(() => {
-        if (this.email?.hasError('serverError') || this.password?.hasError('serverError')) {
-          this.email?.setErrors(null);
-          this.password?.setErrors(null);
-        }
-      }),
-    );
-
-    this.subscriptions.add(
-      this.password?.valueChanges.subscribe(() => {
-        if (this.password?.hasError('serverError') || this.email?.hasError('serverError')) {
-          this.email?.setErrors(null);
-          this.password?.setErrors(null);
-        }
-      }),
-    );
+    this.subscriptions.add(this.email?.valueChanges.subscribe(() => this.resetServerErrors()));
+    this.subscriptions.add(this.password?.valueChanges.subscribe(() => this.resetServerErrors()));
   }
 
   get email() {
@@ -70,19 +55,32 @@ export class SigninComponent implements OnInit, OnDestroy {
     return this.loginForm.get('password');
   }
 
+  private resetServerErrors() {
+    if (this.email?.hasError('serverError') || this.password?.hasError('serverError')) {
+      this.email?.setErrors(null);
+      this.password?.setErrors(null);
+    }
+  }
+
   public onSubmit() {
     this.isSubmitted = true;
     this.isSubmitting = true;
     this.signIn();
   }
 
-  // TODO: replace it to auth service
+  // TODO: replace http request to auth service
+  // signIn(email: string, password: string): Observable<{ token: string }> {
+  //   return this.http.post<{ token: string }>('/api/signin', {
+  //     email,
+  //     password,
+  //   });
+  // }
   public signIn() {
-    const value = this.loginForm.getRawValue();
+    const { email, password } = this.loginForm.getRawValue();
     const sub = this.http
       .post<{ token: string }>('/api/signin', {
-        email: value.email,
-        password: value.password,
+        email,
+        password,
       })
       .subscribe({
         next: (response) => {
@@ -91,10 +89,10 @@ export class SigninComponent implements OnInit, OnDestroy {
           localStorage.setItem('token', response.token);
           this.router.navigateByUrl('/');
         },
-        error: (error) => {
-          console.log(error);
+        error: () => {
           this.email?.setErrors({ serverError: true });
           this.password?.setErrors({ serverError: true });
+          this.isSubmitting = false;
         },
         complete: () => {
           this.isSubmitting = false;
