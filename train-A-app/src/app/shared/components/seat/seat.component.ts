@@ -1,12 +1,6 @@
 import { NgClass } from '@angular/common';
 import { Component, Input } from '@angular/core';
-
-interface Seat {
-  seatNumber: number;
-  position: 'left' | 'right';
-  isAvailable: boolean;
-  selected: boolean;
-}
+import { Seat } from '../../types/seat';
 
 @Component({
   selector: 'app-seat',

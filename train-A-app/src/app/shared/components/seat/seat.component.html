@@ -6,6 +6,7 @@
     selected: seat.selected,
     unavailable: !seat.isAvailable,
   }"
+  (click)="toggleSelectedSeat()"
 >
   {{ seat.seatNumber }}
 </div>
