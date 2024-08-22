@@ -1,0 +1,19 @@
+.stations-page-container {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .map-form-container {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .station-list-container {
+    width: 100%;
+  }
+}

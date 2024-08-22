@@ -9,10 +9,11 @@
 
 .admin-container {
   display: flex;
+  margin: 0 auto;
+  height: 100vh;
 
   .admin-left-side {
     width: 200px;
-    height: 100vh;
     background-color: #e9e9e9;
 
     .admin-panel {
@@ -31,5 +32,10 @@
         width: 80%;
       }
     }
+  }
+
+  .admin-right-side {
+    margin-left: 30px;
+    flex-grow: 1;
   }
 }
