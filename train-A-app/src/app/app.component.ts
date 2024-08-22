@@ -15,10 +15,20 @@ export class AppComponent {
 
   stations = '';
 
+  carriages = '';
+
   constructor(private http: HttpClient) {
     this.http.get<unknown[]>('/api/station/').subscribe((stations) => {
       this.stations = JSON.stringify(stations[0], null, 4);
       console.log({ stations });
     });
+    // this.http.get<unknown[]>('/api/carriage/').subscribe((carriages) => {
+    //   this.carriages = JSON.stringify(carriages, null, 4);
+    //   console.log({ carriages });
+    // });
+    // this.http.get<unknown[]>('/api/route/').subscribe((routes) => {
+    //   this.carriages = JSON.stringify(routes, null, 4);
+    //   console.log({ routes });
+    // });
   }
 }
