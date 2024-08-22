@@ -1,0 +1,11 @@
+<div
+  class="seat"
+  [ngClass]="{
+    left: seat.position === 'left',
+    right: seat.position === 'right',
+    selected: seat.selected,
+    unavailable: !seat.isAvailable,
+  }"
+>
+  {{ seat.seatNumber }}
+</div>

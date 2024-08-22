@@ -1,0 +1,30 @@
+//TODO: replace colors by variables
+.seat {
+  width: 40px;
+  height: 40px;
+  margin: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  background-color: blue;
+  cursor: pointer;
+}
+
+.left {
+  margin-right: 20px;
+}
+
+.right {
+  margin-left: 20px;
+}
+
+.selected {
+  background-color: orange;
+  color: white;
+}
+
+.unavailable {
+  background-color: gray;
+  cursor: not-allowed;
+}
