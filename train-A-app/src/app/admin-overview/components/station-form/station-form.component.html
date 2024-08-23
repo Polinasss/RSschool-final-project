@@ -1,0 +1,60 @@
+<div class="form-container">
+  <form (ngSubmit)="createStationCoordinates()" [formGroup]="formGroup">
+    <mat-form-field class="small" appearance="outline">
+      <mat-label>City Name</mat-label>
+      <input matInput type="text" formControlName="city" />
+      <mat-error class="hint" *ngIf="cityControl?.invalid">
+        <span *ngIf="cityControl?.errors?.['required']">Please enter a city name</span>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="small" appearance="outline">
+      <mat-label>Latitude</mat-label>
+      <input matInput type="number" formControlName="latitude" min="-90" max="90" step="any" />
+      <mat-error class="hint" *ngIf="latitudeControl?.invalid">
+        <span *ngIf="latitudeControl?.errors?.['required']">Please enter a latitude</span>
+        <span *ngIf="latitudeControl?.errors?.['min']"
+          >Latitude must be greater than or equal to -90</span
+        >
+        <span *ngIf="latitudeControl?.errors?.['max']"
+          >Latitude must be less than or equal to 90</span
+        >
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="small" appearance="outline">
+      <mat-label>Longitude</mat-label>
+      <input matInput type="number" formControlName="longitude" min="-180" max="180" step="any" />
+      <mat-error class="hint" *ngIf="longitudeControl?.invalid">
+        <span *ngIf="longitudeControl?.errors?.['required']">Please enter a longitude</span>
+        <span *ngIf="longitudeControl?.errors?.['min']"
+          >Longitude must be greater than or equal to -180</span
+        >
+        <span *ngIf="longitudeControl?.errors?.['max']"
+          >Longitude must be less than or equal to 180</span
+        >
+      </mat-error>
+    </mat-form-field>
+    <div class="connected_cities">
+      <p>Connected</p>
+      <div class="cities-list" *ngFor="let control of connectedToControlAsFormControl">
+        <mat-form-field class="small" appearance="outline">
+          <mat-label>Connected City</mat-label>
+          <input
+            matInput
+            [formControl]="control"
+            placeholder="Enter connected city"
+            [matAutocomplete]="auto"
+          />
+          <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn.bind(this)">
+            <mat-option *ngFor="let station of stations" [value]="station.id">
+              {{ station.city }}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-error *ngIf="control.invalid">
+            <span *ngIf="control.errors?.['required']">Please enter a connected city</span>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <button class="save-btn" type="submit">Save</button>
+  </form>
+</div>

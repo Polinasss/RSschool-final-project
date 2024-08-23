@@ -1,0 +1,43 @@
+@import './../../../core/styles/variables.scss';
+
+::ng-deep .panel-item.active .mdc-list-item__primary-text {
+  color: $text-active;
+  font-weight: bold;
+}
+
+::ng-deep .panel-item .mdc-list-item__primary-text:hover {
+  font-weight: bold;
+}
+
+.admin-container {
+  display: flex;
+  margin: 0 auto;
+  height: 100vh;
+
+  .admin-left-side {
+    width: 200px;
+    background-color: $admin-panel;
+
+    .admin-panel {
+      margin-top: 10px;
+      width: 100%;
+      background-color: $admin-panel;
+      align-content: center;
+
+      .panel-item {
+        cursor: pointer;
+      }
+
+      mat-divider {
+        border-top-color: $divider;
+        margin: 0 auto;
+        width: 80%;
+      }
+    }
+  }
+
+  .admin-right-side {
+    margin-left: 30px;
+    flex-grow: 1;
+  }
+}

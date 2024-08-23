@@ -1,0 +1,44 @@
+@import './../../../core/styles/variables.scss';
+
+mat-card {
+  margin: 20px 0;
+  width: 94%;
+  border-color: $text;
+  position: relative;
+
+  mat-card-header {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    position: relative;
+  }
+
+  mat-card-content {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 0;
+
+    .card-text-title {
+      font-weight: bold;
+      margin-bottom: 0;
+    }
+
+    .delete-btn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      margin-left: 10px;
+
+      mat-icon {
+        font-size: 24px;
+      }
+    }
+  }
+}
