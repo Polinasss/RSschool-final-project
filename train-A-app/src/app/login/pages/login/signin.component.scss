@@ -1,0 +1,8 @@
+@import './../../../core/styles/function.scss';
+@import './../../../core/styles/variables.scss';
+
+.login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
