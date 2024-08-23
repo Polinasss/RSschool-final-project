@@ -51,14 +51,14 @@ export class SignupComponent implements OnDestroy {
       this.password?.setErrors({ serverError: message });
       this.repeatPassword?.setErrors({ serverError: message });
     },
-    invalidEmail: () => {
-      this.email?.setErrors({ serverError: 'Account with this email already exists' });
+    invalidEmail: (message: string) => {
+      this.email?.setErrors({ serverError: message });
     },
     invalidPassword: (message: string) => {
       this.password?.setErrors({ serverError: message });
     },
-    invalidUniqueKey: (message: string) => {
-      this.email?.setErrors({ serverError: message });
+    invalidUniqueKey: () => {
+      this.email?.setErrors({ serverError: 'Account with this email already exists' });
     },
   };
 
