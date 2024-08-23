@@ -1,6 +1,6 @@
 <div class="signup">
   <h2 class="form__title">Sign Up</h2>
-  <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="signup__form form">
+  <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="form">
     <label for="email" class="form__label">Email</label>
     <input
       id="email"
@@ -42,8 +42,4 @@
       <a class="form__link" routerLink="/signin" routerLinkActive="active">Sign In</a>
     </div>
   </form>
-  <!-- <pre>
-      Form Error - {{ signupForm.errors | json }}
-      Email Error - {{ this.email?.setErrors | json }}
-    </pre> -->
 </div>
