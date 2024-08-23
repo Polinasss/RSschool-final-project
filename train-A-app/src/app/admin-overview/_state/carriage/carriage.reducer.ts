@@ -29,5 +29,39 @@ export const carriageFeature = createFeature({
         isLoading: false,
       }),
     ),
+    on(
+      carriageActions.addNewCarriageToStore,
+      (state, { newCarriage }): CarriageState => ({
+        ...state,
+        carriage: [...state.carriage, newCarriage],
+        error: null,
+      }),
+    ),
+    on(
+      carriageActions.createNewCarriageFailure,
+      (state, { error }): CarriageState => ({
+        ...state,
+        error: error.message,
+        isLoading: false,
+      }),
+    ),
+    on(
+      carriageActions.updateCarriageInStore,
+      (state, { updateCarriage }): CarriageState => ({
+        ...state,
+        carriage: state.carriage.map((item) =>
+          item.code === updateCarriage.code ? { ...item, ...updateCarriage } : item,
+        ),
+        error: null,
+      }),
+    ),
+    on(
+      carriageActions.updateCarriageFailure,
+      (state, { error }): CarriageState => ({
+        ...state,
+        error: error.message,
+        isLoading: false,
+      }),
+    ),
   ),
 });
