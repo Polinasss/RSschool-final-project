@@ -20,8 +20,4 @@ export class CarriageService {
   public updateCarriage(newCarriage: Carriage): Observable<string> {
     return this.http.put<string>(`/api/carriage/${newCarriage.code}`, newCarriage);
   }
-
-  public retrieveCarriageWithId(code: string, newCarriage: Carriage): Carriage {
-    return { ...newCarriage, code };
-  }
 }
