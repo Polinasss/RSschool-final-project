@@ -1,17 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { CarriagesPageComponent } from './carriages-page.component';
 
-import { CarriageComponent } from './carriage.component';
-
-describe('CarriageComponent', () => {
-  let component: CarriageComponent;
-  let fixture: ComponentFixture<CarriageComponent>;
+describe('CarriagesComponent', () => {
+  let component: CarriagesPageComponent;
+  let fixture: ComponentFixture<CarriagesPageComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CarriageComponent],
+      imports: [CarriagesPageComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(CarriageComponent);
+    fixture = TestBed.createComponent(CarriagesPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

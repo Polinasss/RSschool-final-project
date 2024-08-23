@@ -28,7 +28,9 @@
   </div>
   <div class="admin-right-side">
     <app-stations-page *ngIf="selectedPanelItem === 'Stations'"></app-stations-page>
-    <div class="carriages-page" *ngIf="selectedPanelItem === 'Carriages'">Carriages</div>
+    <app-carriages-page class="carriages-page" *ngIf="selectedPanelItem === 'Carriages'"
+      >Carriages</app-carriages-page
+    >
     <div class="routes-page" *ngIf="selectedPanelItem === 'Routes'">Routes</div>
   </div>
 </div>

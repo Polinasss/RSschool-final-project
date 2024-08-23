@@ -3,7 +3,7 @@ import { Component, Input } from '@angular/core';
 import { Seat } from '../../types/seat';
 import { SeatComponent } from '../seat/seat.component';
 
-interface Carriage {
+interface CarriageSchema {
   code: string;
   name: string;
   rows: number;
@@ -12,20 +12,20 @@ interface Carriage {
 }
 
 @Component({
-  selector: 'app-carriage',
+  selector: 'app-carriage-schema',
   standalone: true,
   imports: [NgIf, NgFor, SeatComponent],
-  templateUrl: './carriage.component.html',
-  styleUrl: './carriage.component.scss',
+  templateUrl: './CarriageSchema.component.html',
+  styleUrl: './CarriageSchema.component.scss',
 })
-export class CarriageComponent {
-  @Input() public carriage!: Carriage;
+export class CarriageSchemaComponent {
+  @Input() public CarriageSchema!: CarriageSchema;
 
   public seats: Seat[] = [];
 
   constructor() {
-    if (this.carriage) {
-      const { rows, leftSeats, rightSeats } = this.carriage;
+    if (this.CarriageSchema) {
+      const { rows, leftSeats, rightSeats } = this.CarriageSchema;
       this.generateSeats(rows, leftSeats, rightSeats);
     }
   }
