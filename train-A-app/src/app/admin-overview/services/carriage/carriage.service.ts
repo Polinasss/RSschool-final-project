@@ -12,4 +12,16 @@ export class CarriageService {
   public loadCarriage(): Observable<Carriage[]> {
     return this.http.get<Carriage[]>('/api/carriage/');
   }
+
+  public addCarriage(newCarriage: Partial<Carriage>): Observable<string> {
+    return this.http.post<string>('/api/carriage/', newCarriage);
+  }
+
+  public updateCarriage(newCarriage: Carriage): Observable<string> {
+    return this.http.put<string>(`/api/carriage/${newCarriage.code}`, newCarriage);
+  }
+
+  public retrieveCarriageWithId(code: string, newCarriage: Carriage): Carriage {
+    return { ...newCarriage, code };
+  }
 }
