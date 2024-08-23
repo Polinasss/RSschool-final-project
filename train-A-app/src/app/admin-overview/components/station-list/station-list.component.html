@@ -1,0 +1,18 @@
+<mat-card class="stations-list" *ngFor="let station of stations">
+  <mat-card-header>{{ station.city }}</mat-card-header>
+  <mat-card-content>
+    <div class="card-info-container">
+      <p class="card-text">Latitude: {{ station.latitude }}, Longitude: {{ station.longitude }}</p>
+      <p class="card-text-title">Connected to:</p>
+      <p class="card-text">
+        <span *ngFor="let connection of station.connectedTo; let isLast = last">
+          {{ getCityNameById(connection.id) }}
+          <span *ngIf="!isLast">, </span>
+        </span>
+      </p>
+    </div>
+    <button class="delete-btn" type="button" (click)="deleteStation(station.id)">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </mat-card-content>
+</mat-card>
