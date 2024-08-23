@@ -1,5 +1,7 @@
+@import './../../../core/styles/variables.scss';
+
 ::ng-deep .panel-item.active .mdc-list-item__primary-text {
-  color: #007bff;
+  color: $text-active;
   font-weight: bold;
 }
 
@@ -14,12 +16,12 @@
 
   .admin-left-side {
     width: 200px;
-    background-color: #e9e9e9;
+    background-color: $admin-panel;
 
     .admin-panel {
       margin-top: 10px;
       width: 100%;
-      background-color: #e9e9e9;
+      background-color: $admin-panel;
       align-content: center;
 
       .panel-item {
@@ -27,7 +29,7 @@
       }
 
       mat-divider {
-        border-top-color: #ccc;
+        border-top-color: $divider;
         margin: 0 auto;
         width: 80%;
       }
