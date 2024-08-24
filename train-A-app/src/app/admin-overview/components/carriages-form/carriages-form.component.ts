@@ -9,10 +9,8 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule, NgIf } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
-import {
-  CarriageDataForSchema,
-  CarriageSchemaComponent,
-} from '../../../shared/components/carriageSchema/carriageSchema.component';
+import { CarriageDataForSchema } from 'app/admin-overview/models/carriages';
+import { CarriageSchemaComponent } from '../../../shared/components/carriageSchema/carriageSchema.component';
 
 @Component({
   selector: 'app-carriages-form',

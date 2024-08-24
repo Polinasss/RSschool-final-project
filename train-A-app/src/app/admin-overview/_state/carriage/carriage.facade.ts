@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { CarriageState } from './carriage.state';
 import { carriageFeature } from './carriage.reducer';
 import { carriageActions } from './carriage.action';
-import { Carriage } from '../../models/carriage';
+import { Carriage } from '../../models/carriages';
 
 @Injectable({ providedIn: 'root' })
 export class CarriageFacade {

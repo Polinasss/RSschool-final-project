@@ -1,14 +1,8 @@
 import { NgFor, NgIf } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
+import { CarriageDataForSchema } from 'app/admin-overview/models/carriages';
 import { Seat } from '../../models/seat';
 import { SeatComponent } from '../seat/seat.component';
-
-export interface CarriageDataForSchema {
-  name: string;
-  rows: string;
-  leftSeats: string;
-  rightSeats: string;
-}
 
 @Component({
   selector: 'app-carriage-schema',

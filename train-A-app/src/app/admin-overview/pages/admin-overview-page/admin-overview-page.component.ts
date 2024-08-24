@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
+import { CarriageFacade } from 'app/admin-overview/_state/carriage/carriage.facade';
 import { StationsPageComponent } from '../stations-page/stations-page.component';
 import { CarriagesPageComponent } from '../carriages-page/carriages-page.component';
 
@@ -18,8 +19,14 @@ import { CarriagesPageComponent } from '../carriages-page/carriages-page.compone
   templateUrl: './admin-overview-page.component.html',
   styleUrl: './admin-overview-page.component.scss',
 })
-export class AdminOverviewPageComponent {
+export class AdminOverviewPageComponent implements OnInit {
   selectedPanelItem: string = 'Stations';
+
+  private carriageFacade = inject(CarriageFacade);
+
+  public ngOnInit(): void {
+    this.carriageFacade.loadCarriage();
+  }
 
   selectPanelItem(panelItem: string): void {
     this.selectedPanelItem = panelItem;

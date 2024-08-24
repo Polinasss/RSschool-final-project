@@ -1,1 +1,9 @@
-<p>carriages-item works!</p>
+<mat-card class="item">
+  <div class="item__header">
+    <mat-card-title> {{ item.name }}</mat-card-title>
+    <button mat-flat-button>Update</button>
+  </div>
+  <div *ngIf="this.carriageData">
+    <app-carriage-schema [carriage]="this.carriageData"></app-carriage-schema>
+  </div>
+</mat-card>
