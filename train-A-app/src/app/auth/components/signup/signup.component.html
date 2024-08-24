@@ -1,0 +1,45 @@
+<div class="signup">
+  <h2 class="form__title">Sign Up</h2>
+  <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="form">
+    <label for="email" class="form__label">Email</label>
+    <input
+      id="email"
+      formControlName="email"
+      type="text"
+      class="form__input"
+      [class.form__input--error]="isControlInvalid('email')"
+    />
+    @if (isControlInvalid('email') && formWasFilled) {
+      <p class="form__error">{{ getErrorMessage('email') }}</p>
+    }
+    <label for="password" class="form__label">Password</label>
+    <input
+      id="password"
+      formControlName="password"
+      type="password"
+      class="form__input"
+      [class.form__input--error]="isControlInvalid('password')"
+    />
+    @if (isControlInvalid('password') && formWasFilled) {
+      <p class="form__error">{{ getErrorMessage('password') }}</p>
+    }
+    <label for="repeatPassword" class="form__label">Repeat password</label>
+    <input
+      id="repeatPassword"
+      formControlName="repeatPassword"
+      type="password"
+      class="form__input"
+      [class.form__input--error]="isRepeatPassInvalid"
+    />
+    @if (isRepeatPassInvalid) {
+      <p class="form__error">Passwords do not match</p>
+    }
+    @if (unknownServerError) {
+      <p class="form__error">Unknown server error: {{ this.signupForm.errors?.['serverError'] }}</p>
+    }
+    <div class="form__controls">
+      <button mat-flat-button [disabled]="disabledForm" type="submit">Register</button>
+      <a class="form__link" routerLink="/signin" routerLinkActive="active">Sign In</a>
+    </div>
+  </form>
+</div>
