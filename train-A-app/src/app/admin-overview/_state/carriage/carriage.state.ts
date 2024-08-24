@@ -1,4 +1,4 @@
-import { Carriage } from '../../models/carriage';
+import { Carriage } from '../../models/carriages';
 
 export type CarriageState = {
   carriage: Carriage[];

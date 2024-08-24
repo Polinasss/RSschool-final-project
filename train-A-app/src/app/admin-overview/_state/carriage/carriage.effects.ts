@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, exhaustMap, map, mergeMap, of } from 'rxjs';
 import { CarriageService } from '../../services/carriage/carriage.service';
 import { carriageActions } from './carriage.action';
-import { Carriage } from '../../models/carriage';
+import { Carriage } from '../../models/carriages';
 
 @Injectable()
 export class CarriageEffects {

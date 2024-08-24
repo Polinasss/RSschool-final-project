@@ -1,6 +1,6 @@
 import { NgClass } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { Seat } from '../../types/seat';
+import { Seat } from '../../models/seat';
 
 @Component({
   selector: 'app-seat',
@@ -11,6 +11,8 @@ import { Seat } from '../../types/seat';
 })
 export class SeatComponent {
   @Input() public seat!: Seat;
+
+  @Input() public isDisabled: boolean = false;
 
   public toggleSelectedSeat() {
     if (this.seat.isAvailable) {

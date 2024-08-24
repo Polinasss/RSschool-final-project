@@ -1,6 +1,6 @@
 import { NgFor, NgIf } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { Seat } from '../../types/seat';
+import { Seat } from '../../models/seat';
 import { SeatComponent } from '../seat/seat.component';
 
 export interface CarriageDataForSchema {
@@ -14,11 +14,13 @@ export interface CarriageDataForSchema {
   selector: 'app-carriage-schema',
   standalone: true,
   imports: [NgIf, NgFor, SeatComponent],
-  templateUrl: './CarriageSchema.component.html',
-  styleUrl: './CarriageSchema.component.scss',
+  templateUrl: './carriageSchema.component.html',
+  styleUrl: './carriageSchema.component.scss',
 })
 export class CarriageSchemaComponent implements OnInit {
   @Input() public carriage!: CarriageDataForSchema;
+
+  @Input() public isDisabled: boolean = false;
 
   public leftSeats: Seat[] = [];
 

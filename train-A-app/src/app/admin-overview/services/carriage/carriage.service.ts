@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { Carriage } from 'app/admin-overview/models/carriages';
 import { Observable } from 'rxjs';
-import { Carriage } from '../../models/carriage';
 
 @Injectable({
   providedIn: 'root',

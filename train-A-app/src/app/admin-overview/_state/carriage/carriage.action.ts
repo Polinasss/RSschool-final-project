@@ -1,5 +1,5 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
-import { Carriage } from '../../models/carriage';
+import { Carriage } from 'app/admin-overview/models/carriages';
 import { ServerError } from '../../../shared/models/error';
 
 export const carriageActions = createActionGroup({
