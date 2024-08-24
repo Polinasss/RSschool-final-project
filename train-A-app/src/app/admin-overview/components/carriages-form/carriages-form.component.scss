@@ -1,0 +1,14 @@
+.carriage__form {
+  display: flex;
+  align-items: center;
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    margin-right: 10px;
+  }
+
+  &__button {
+    margin-top: 45px;
+  }
+}

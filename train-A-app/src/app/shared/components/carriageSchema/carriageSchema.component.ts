@@ -3,12 +3,11 @@ import { Component, Input } from '@angular/core';
 import { Seat } from '../../types/seat';
 import { SeatComponent } from '../seat/seat.component';
 
-interface CarriageSchema {
-  code: string;
+export interface CarriageDataForSchema {
   name: string;
-  rows: number;
-  leftSeats: number;
-  rightSeats: number;
+  rows: string;
+  leftSeats: string;
+  rightSeats: string;
 }
 
 @Component({
@@ -19,18 +18,18 @@ interface CarriageSchema {
   styleUrl: './CarriageSchema.component.scss',
 })
 export class CarriageSchemaComponent {
-  @Input() public CarriageSchema!: CarriageSchema;
+  @Input() public carriage!: CarriageDataForSchema;
 
   public seats: Seat[] = [];
 
   constructor() {
-    if (this.CarriageSchema) {
-      const { rows, leftSeats, rightSeats } = this.CarriageSchema;
-      this.generateSeats(rows, leftSeats, rightSeats);
+    if (this.carriage) {
+      const { rows, leftSeats, rightSeats } = this.carriage;
+      this.generateSeats(Number(rows), Number(leftSeats), Number(rightSeats));
     }
   }
 
-  generateSeats(rowsNumber: number, leftNumber: number, rightNumber: number) {
+  private generateSeats(rowsNumber: number, leftNumber: number, rightNumber: number) {
     let seatNumber = 1;
     for (let row = 0; row < rowsNumber; row += 1) {
       for (let i = 0; i < leftNumber + rightNumber; i += 1) {

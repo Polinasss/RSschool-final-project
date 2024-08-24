@@ -1,1 +1,29 @@
-<p>carriages-form works!</p>
+<div>
+  <form [formGroup]="carriageForm" class="carriage__form">
+    <div class="carriage__form__field">
+      <p class="form__label">Name</p>
+      <input class="form__input" formControlName="name" />
+    </div>
+    <div class="carriage__form__field">
+      <p class="form__label">Number of rows</p>
+      <input type="number" class="form__input" formControlName="rows" />
+    </div>
+    <div class="carriage__form__field">
+      <p class="form__label">Number of left seats</p>
+      <input type="number" class="form__input" formControlName="leftSeats" />
+    </div>
+    <div class="carriage__form__field">
+      <p class="form__label">Number of right seats</p>
+      <input type="number" class="form__input" formControlName="rightSeats" />
+    </div>
+    <button
+      class="carriage__form__button"
+      mat-flat-button
+      [disabled]="!carriageForm.valid"
+      (click)="onSave()"
+    >
+      Save
+    </button>
+  </form>
+  <app-carriage-schema *ngIf="carriageForm.valid" [carriage]="carriageData" />
+</div>
