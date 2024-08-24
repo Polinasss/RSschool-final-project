@@ -1,5 +1,5 @@
 import { NgFor, NgIf } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Seat } from '../../types/seat';
 import { SeatComponent } from '../seat/seat.component';
 
@@ -17,15 +17,26 @@ export interface CarriageDataForSchema {
   templateUrl: './CarriageSchema.component.html',
   styleUrl: './CarriageSchema.component.scss',
 })
-export class CarriageSchemaComponent {
+export class CarriageSchemaComponent implements OnInit {
   @Input() public carriage!: CarriageDataForSchema;
 
-  public seats: Seat[] = [];
+  public leftSeats: Seat[] = [];
 
-  constructor() {
+  public rightSeats: Seat[] = [];
+
+  public leftSeatsInRows: Seat[][] = [];
+
+  public rightSeatsInRows: Seat[][] = [];
+
+  public numberOfRows: number = 0;
+
+  public ngOnInit() {
     if (this.carriage) {
       const { rows, leftSeats, rightSeats } = this.carriage;
-      this.generateSeats(Number(rows), Number(leftSeats), Number(rightSeats));
+      this.numberOfRows = Number(rows);
+      this.generateSeats(this.numberOfRows, Number(leftSeats), Number(rightSeats));
+      this.leftSeatsInRows = this.distributeSeats(this.leftSeats, Number(leftSeats));
+      this.rightSeatsInRows = this.distributeSeats(this.rightSeats, Number(rightSeats));
     }
   }
 
@@ -33,15 +44,32 @@ export class CarriageSchemaComponent {
     let seatNumber = 1;
     for (let row = 0; row < rowsNumber; row += 1) {
       for (let i = 0; i < leftNumber + rightNumber; i += 1) {
-        const position = i <= leftNumber ? 'left' : 'right';
-        this.seats.push({
-          seatNumber,
-          position,
-          isAvailable: true,
-          selected: false,
-        });
+        if (i < leftNumber) {
+          this.leftSeats.push({
+            seatNumber,
+            position: 'left',
+            isAvailable: true,
+            selected: false,
+          });
+        } else {
+          this.rightSeats.push({
+            seatNumber,
+            position: 'right',
+            isAvailable: true,
+            selected: false,
+          });
+        }
         seatNumber += 1;
       }
     }
+  }
+
+  private distributeSeats(seats: Seat[], seatsPerRow: number): Seat[][] {
+    const columns = [];
+    for (let i = 0; i < seats.length; i += seatsPerRow) {
+      const column = seats.slice(i, i + seatsPerRow);
+      columns.push(column.reverse());
+    }
+    return columns;
   }
 }

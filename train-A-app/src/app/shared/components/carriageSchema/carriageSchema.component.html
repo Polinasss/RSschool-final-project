@@ -1,4 +1,13 @@
 <div class="carriage__schema schema" *ngIf="carriage">
-  <p>ggg</p>
-  <!-- <app-seat *ngFor="let seat of seats" [seat]="seat" /> -->
+  <div class="schema__right" [style.--columns]="numberOfRows">
+    <div *ngFor="let column of rightSeatsInRows">
+      <app-seat *ngFor="let seat of column" [seat]="seat"></app-seat>
+    </div>
+  </div>
+  <div class="schema__aisle"></div>
+  <div class="schema__left" [style.--columns]="numberOfRows">
+    <div *ngFor="let column of leftSeatsInRows">
+      <app-seat *ngFor="let seat of column" [seat]="seat"></app-seat>
+    </div>
+  </div>
 </div>

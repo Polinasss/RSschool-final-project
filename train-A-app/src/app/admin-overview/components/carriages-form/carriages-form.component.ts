@@ -8,7 +8,7 @@ import {
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule, NgIf } from '@angular/common';
-import { Subscription } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import {
   CarriageDataForSchema,
   CarriageSchemaComponent,
@@ -24,6 +24,8 @@ import {
 export class CarriagesFormComponent implements OnInit, OnDestroy {
   private fb: FormBuilder = inject(FormBuilder);
 
+  private destroy$: Subject<void> = new Subject<void>();
+
   public carriageForm!: FormGroup<{
     name: FormControl<string>;
     rows: FormControl<string>;
@@ -33,8 +35,6 @@ export class CarriagesFormComponent implements OnInit, OnDestroy {
 
   public carriageData!: CarriageDataForSchema;
 
-  private formStatusSubscription!: Subscription;
-
   public ngOnInit() {
     this.carriageForm = this.fb.nonNullable.group({
       name: ['', Validators.required],
@@ -42,8 +42,9 @@ export class CarriagesFormComponent implements OnInit, OnDestroy {
       leftSeats: ['', [Validators.required, Validators.min(1)]],
       rightSeats: ['', [Validators.required, Validators.min(1)]],
     });
-    this.formStatusSubscription = this.carriageForm.statusChanges.subscribe((status) => {
-      if (status === 'VALID') {
+
+    this.carriageForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      if (this.carriageForm.valid) {
         this.updateCarriageData();
       }
     });
@@ -63,8 +64,7 @@ export class CarriagesFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.formStatusSubscription) {
-      this.formStatusSubscription.unsubscribe();
-    }
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

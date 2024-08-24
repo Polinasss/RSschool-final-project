@@ -1,0 +1,27 @@
+@import './../../../core/styles/variables.scss';
+
+.schema {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 90%;
+  margin: 10px 30px;
+  border: 1px solid $divider;
+  box-shadow: 2px 2px 2px 2px $divider;
+  border-radius: 5px;
+
+  &__aisle {
+    height: 30px;
+  }
+
+  &__right,
+  &__left {
+    display: inline-grid;
+    grid-template-columns: repeat(var(--columns, 1), 1fr);
+    margin: 10px;
+    padding: 5px;
+    gap: 8px;
+    border-left: 1px solid $label;
+    border-right: 1px solid $label;
+  }
+}
