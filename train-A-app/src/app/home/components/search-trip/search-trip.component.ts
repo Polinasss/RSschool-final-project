@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -7,13 +7,15 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { Station, Stations } from 'app/home/models/response.types';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { Observable, startWith, map } from 'rxjs';
+import { Observable, startWith, map, Subscription } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
+import { SearchService } from 'app/home/services/search.service';
 
 @Component({
   selector: 'app-search-trip',
@@ -35,49 +37,69 @@ import { MatButtonModule } from '@angular/material/button';
   templateUrl: './search-trip.component.html',
   styleUrl: './search-trip.component.scss',
 })
-export class SearchTripComponent implements OnInit {
-  // fromControl = new FormControl('');
-  // toControl = new FormControl('');
-  // dateControl = new FormControl('');
-  optionsFrom: string[] = ['One', 'Two', 'Three'];
+export class SearchTripComponent implements OnDestroy {
+  optionsFrom: Stations = [];
 
-  optionsTo: string[] = ['4', '5', '6'];
+  optionsTo: Stations = [];
 
-  filteredOptionsFrom: Observable<string[]> | undefined;
+  stations: Stations = [];
 
-  filteredOptionsTo: Observable<string[]> | undefined;
+  filteredStationsFrom: Observable<Stations> | undefined;
+
+  filteredStationsTo: Observable<Stations> | undefined;
 
   searchForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  subscription: Subscription;
+
+  fromStation?: Station;
+
+  toStation?: Station;
+
+  constructor(
+    private fb: FormBuilder,
+    private searchService: SearchService,
+  ) {
     this.searchForm = this.fb.group({
       from: ['', [Validators.required]],
       to: ['', [Validators.required]],
-      date: ['', [Validators.required]],
+      date: [new Date(), [Validators.required]],
+    });
+    this.subscription = this.searchService.getStations().subscribe((stations) => {
+      this.stations = stations;
+      this.filteredStationsFrom = this.searchForm.controls['from'].valueChanges.pipe(
+        startWith(''),
+        map((value) => this.filter(value || '', this.stations)),
+      );
+      this.filteredStationsTo = this.searchForm.controls['to'].valueChanges.pipe(
+        startWith(''),
+        map((value) => this.filter(value || '', this.stations)),
+      );
     });
   }
 
-  ngOnInit() {
-    this.filteredOptionsFrom = this.searchForm.controls['from'].valueChanges.pipe(
-      startWith(''),
-      map((value) => this.filter(value || '', this.optionsFrom)),
-    );
-    this.filteredOptionsTo = this.searchForm.controls['to'].valueChanges.pipe(
-      startWith(''),
-      map((value) => this.filter(value || '', this.optionsTo)),
-    );
-    // this.searchForm.controls['date'].valueChanges.subscribe((val) =>
-    //   console.log(new Date(val ?? '')),
-    // );
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
-  private filter(value: string, options: string[]): string[] {
+  private filter(value: string, stations: Stations): Stations {
     const filterValue = value.toLowerCase();
-    return options.filter((option) => option.toLowerCase().includes(filterValue));
+    const station = stations.filter((station) => station.city.toLowerCase().includes(filterValue));
+    return station;
+  }
+
+  setFromStation(st: Station): void {
+    console.log({ from: st });
+    this.fromStation = st;
+  }
+
+  setToStation(st: Station): void {
+    console.log({ to: st });
+    this.toStation = st;
   }
 
   get from() {
-    return this.searchForm.get('from');
+    return this.searchForm.controls['from'].value.city;
   }
 
   get to() {
@@ -94,5 +116,16 @@ export class SearchTripComponent implements OnInit {
 
   onSubmit(): void {
     console.log('data = ', this.searchForm.getRawValue());
+    this.searchService
+      .searchStations({
+        fromLatitude: this.fromStation!.latitude,
+        fromLongitude: this.fromStation!.longitude,
+        toLatitude: this.toStation!.latitude,
+        toLongitude: this.toStation!.longitude,
+        time: new Date(this.searchForm.controls['date'].value).getTime(),
+      })
+      .subscribe((stats) => {
+        console.log({ stats });
+      });
   }
 }

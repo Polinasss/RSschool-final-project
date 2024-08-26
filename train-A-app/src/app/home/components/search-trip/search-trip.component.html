@@ -11,8 +11,10 @@
         [matAutocomplete]="from"
       />
       <mat-autocomplete #from="matAutocomplete">
-        @for (option of filteredOptionsFrom | async; track option) {
-          <mat-option [value]="option">{{ option }}</mat-option>
+        @for (option of filteredStationsFrom | async; track option) {
+          <mat-option [value]="option.city" (click)="setFromStation(option)">{{
+            option.city
+          }}</mat-option>
         }
       </mat-autocomplete>
     </mat-form-field>
@@ -27,8 +29,10 @@
         [matAutocomplete]="to"
       />
       <mat-autocomplete #to="matAutocomplete">
-        @for (option of filteredOptionsTo | async; track option) {
-          <mat-option [value]="option">{{ option }}</mat-option>
+        @for (option of filteredStationsTo | async; track option) {
+          <mat-option [value]="option.city" (click)="setToStation(option)">{{
+            option.city
+          }}</mat-option>
         }
       </mat-autocomplete>
     </mat-form-field>
