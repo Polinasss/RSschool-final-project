@@ -5,6 +5,7 @@ import { AsyncPipe, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CarriagesPanelService } from 'app/admin-overview/services/carriages-panel/carriages-panel.service';
 import { CreateButtonComponent } from 'app/shared/components/create-button/create-button.component';
+import { CarriagesFormComponent } from 'app/admin-overview/components/carriages-form/carriages-form.component';
 import { CarriagesPanelComponent } from '../../components/carriages-panel/carriages-panel.component';
 
 @Component({
@@ -13,6 +14,7 @@ import { CarriagesPanelComponent } from '../../components/carriages-panel/carria
   imports: [
     CarriagesPanelComponent,
     CarriagesItemComponent,
+    CarriagesFormComponent,
     AsyncPipe,
     MatProgressSpinnerModule,
     NgFor,
@@ -34,7 +36,7 @@ export class CarriagesPageComponent {
 
   readonly isLoading$ = this.carriageFacade.isLoading$;
 
-  readonly editMode$ = this.panelService.panelState$;
+  readonly formState$ = this.panelService.panelState$;
 
   public openForm() {
     this.panelService.togglePanel('panel', 'create');

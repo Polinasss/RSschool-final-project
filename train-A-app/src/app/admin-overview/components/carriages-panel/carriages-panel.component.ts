@@ -28,25 +28,11 @@ export class CarriagesPanelComponent implements AfterViewInit, OnDestroy {
       if (updateInfo.panelId === 'panel') {
         if (this.panel.expanded && updateInfo.editMode === 'save') {
           this.panel.close();
-        } else if (this.panel.expanded && updateInfo.editMode === 'edit') {
-          this.editMode = updateInfo.editMode;
-          this.carriageForUpdating = this.ensureCarriage(updateInfo.carriage);
         } else {
           this.panel.open();
-          this.carriageForUpdating = this.ensureCarriage(updateInfo.carriage);
         }
       }
     });
-  }
-
-  private ensureCarriage(carriage?: Partial<Carriage>): Carriage {
-    return {
-      code: carriage?.code ?? '',
-      name: carriage?.name ?? '',
-      rows: carriage?.rows ?? 0,
-      leftSeats: carriage?.leftSeats ?? 0,
-      rightSeats: carriage?.rightSeats ?? 0,
-    };
   }
 
   public ngOnDestroy(): void {
