@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { CarriageDataForSchema } from 'app/admin-overview/models/carriage';
 import { Seat } from 'app/shared/models/seat';
 import { NgFor, NgIf } from '@angular/common';
@@ -11,7 +11,7 @@ import { SeatComponent } from '../seat/seat.component';
   templateUrl: './carriage-schema.component.html',
   styleUrl: './carriage-schema.component.scss',
 })
-export class CarriageSchemaComponent implements OnInit {
+export class CarriageSchemaComponent implements OnChanges {
   @Input() public carriage!: CarriageDataForSchema;
 
   @Input() public isDisabled: boolean = false;
@@ -26,14 +26,20 @@ export class CarriageSchemaComponent implements OnInit {
 
   public numberOfRows: number = 0;
 
-  public ngOnInit() {
-    if (this.carriage) {
-      const { rows, leftSeats, rightSeats } = this.carriage;
-      this.numberOfRows = Number(rows);
-      this.generateSeats(this.numberOfRows, Number(leftSeats), Number(rightSeats));
-      this.leftSeatsInRows = this.distributeSeats(this.leftSeats, Number(leftSeats));
-      this.rightSeatsInRows = this.distributeSeats(this.rightSeats, Number(rightSeats));
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (changes['carriage'] && this.carriage) {
+      this.initializeSeats();
     }
+  }
+
+  private initializeSeats() {
+    const { rows, leftSeats, rightSeats } = this.carriage;
+    this.numberOfRows = Number(rows);
+    this.leftSeats = [];
+    this.rightSeats = [];
+    this.generateSeats(this.numberOfRows, Number(leftSeats), Number(rightSeats));
+    this.leftSeatsInRows = this.distributeSeats(this.leftSeats, Number(leftSeats));
+    this.rightSeatsInRows = this.distributeSeats(this.rightSeats, Number(rightSeats));
   }
 
   private generateSeats(
