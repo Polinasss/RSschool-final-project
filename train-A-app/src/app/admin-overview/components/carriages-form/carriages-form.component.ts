@@ -77,8 +77,8 @@ export class CarriagesFormComponent implements OnInit, OnDestroy {
       const newCarriage: Omit<Carriage, 'code'> = {
         name: this.carriageForm.get('name')?.value || '',
         rows: Number(this.carriageForm.get('rows')?.value),
-        leftSeats: Number(this.carriageForm.get('leftSeats')),
-        rightSeats: Number(this.carriageForm.get('rightSeats')),
+        leftSeats: Number(this.carriageForm.get('leftSeats')?.value),
+        rightSeats: Number(this.carriageForm.get('rightSeats')?.value),
       };
       // if (true) {
       this.carriageFacade.addCarriage(newCarriage);

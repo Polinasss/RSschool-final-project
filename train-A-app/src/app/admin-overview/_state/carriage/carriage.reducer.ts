@@ -33,7 +33,7 @@ export const carriageFeature = createFeature({
       carriageActions.addNewCarriageToStore,
       (state, { newCarriage }): CarriageState => ({
         ...state,
-        carriage: [...state.carriage, newCarriage],
+        carriage: [newCarriage, ...state.carriage],
         error: null,
       }),
     ),
