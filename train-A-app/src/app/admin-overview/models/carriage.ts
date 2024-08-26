@@ -14,3 +14,7 @@ export interface CarriageDataForSchema {
 }
 
 export type CarriageFormEditMode = 'create' | 'edit' | 'save';
+
+export interface CarriageResponse {
+  code: string;
+}
