@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { MatCard, MatCardTitle } from '@angular/material/card';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIcon } from '@angular/material/icon';
 import { Carriage, CarriageDataForSchema } from 'app/admin-overview/models/carriage';
+import { CarriagesPanelService } from 'app/admin-overview/services/carriages-panel/carriages-panel.service';
 import { CarriageSchemaComponent } from 'app/shared/components/carriage-schema/carriage-schema.component';
 
 @Component({
@@ -23,6 +24,8 @@ import { CarriageSchemaComponent } from 'app/shared/components/carriage-schema/c
 export class CarriagesItemComponent implements OnInit {
   @Input() item!: Carriage;
 
+  private panelService = inject(CarriagesPanelService);
+
   public carriageData!: CarriageDataForSchema;
 
   public ngOnInit(): void {
@@ -36,5 +39,7 @@ export class CarriagesItemComponent implements OnInit {
     }
   }
 
-  public onUpdate(): void {}
+  public onUpdate(): void {
+    this.panelService.togglePanelAndUpdateItem('panel', 'edit', this.item);
+  }
 }

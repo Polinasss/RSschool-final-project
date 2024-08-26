@@ -12,3 +12,5 @@ export interface CarriageDataForSchema {
   leftSeats: string;
   rightSeats: string;
 }
+
+export type CarriageFormEditMode = 'create' | 'edit' | 'save';

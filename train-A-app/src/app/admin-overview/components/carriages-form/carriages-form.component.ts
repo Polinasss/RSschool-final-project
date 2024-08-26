@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, Input, OnDestroy, OnInit, AfterViewInit } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -9,9 +9,14 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule, NgIf } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
-import { Carriage, CarriageDataForSchema } from 'app/admin-overview/models/carriage';
+import {
+  Carriage,
+  CarriageDataForSchema,
+  CarriageFormEditMode,
+} from 'app/admin-overview/models/carriage';
 import { CarriageSchemaComponent } from 'app/shared/components/carriage-schema/carriage-schema.component';
 import { CarriageFacade } from 'app/admin-overview/_state/carriage/carriage.facade';
+import { CarriagesPanelService } from 'app/admin-overview/services/carriages-panel/carriages-panel.service';
 
 @Component({
   selector: 'app-carriages-form',
@@ -20,10 +25,12 @@ import { CarriageFacade } from 'app/admin-overview/_state/carriage/carriage.faca
   templateUrl: './carriages-form.component.html',
   styleUrls: ['./carriages-form.component.scss', './../../../core/styles/common.scss'],
 })
-export class CarriagesFormComponent implements OnInit, OnDestroy {
+export class CarriagesFormComponent implements OnInit, OnDestroy, AfterViewInit {
   private fb: FormBuilder = inject(FormBuilder);
 
   private carriageFacade = inject(CarriageFacade);
+
+  private panelService = inject(CarriagesPanelService);
 
   private destroy$: Subject<void> = new Subject<void>();
 
@@ -35,6 +42,10 @@ export class CarriagesFormComponent implements OnInit, OnDestroy {
   }>;
 
   public carriageData!: CarriageDataForSchema;
+
+  @Input() editMode: CarriageFormEditMode = 'create';
+
+  @Input() carriageForUpdating!: Carriage | null;
 
   public ngOnInit() {
     this.carriageForm = this.fb.nonNullable.group({
@@ -51,6 +62,20 @@ export class CarriagesFormComponent implements OnInit, OnDestroy {
     });
   }
 
+  ngAfterViewInit() {
+    this.panelService.panelState$.pipe(takeUntil(this.destroy$)).subscribe((updateInfo) => {
+      if (updateInfo.panelId === 'panel') {
+        this.editMode = updateInfo.editMode ?? 'create';
+        this.carriageForUpdating = updateInfo.carriage ?? null;
+        if (this.editMode && this.carriageForUpdating) {
+          this.updateFormValues();
+        } else {
+          this.carriageForm.reset();
+        }
+      }
+    });
+  }
+
   private updateCarriageData(): void {
     this.carriageData = {
       name: this.carriageForm.get('name')?.value || '',
@@ -60,19 +85,19 @@ export class CarriagesFormComponent implements OnInit, OnDestroy {
     };
   }
 
-  //   private updateFormValues() {
-  //     if (this.carriageData) {
-  //       this.carriageForm.setValue({
-  //         name: this.carriageData.name,
-  //         rows: this.carriageData.rows,
-  //         leftSeats: this.carriageData.leftSeats,
-  //         rightSeats: this.carriageData.rightSeats
-  //       });
-  //     }
-  //   }
-  // }
+  private updateFormValues() {
+    if (this.carriageForUpdating) {
+      this.carriageForm.setValue({
+        name: this.carriageForUpdating.name,
+        rows: this.carriageForUpdating.rows.toString(),
+        leftSeats: this.carriageForUpdating.leftSeats.toString(),
+        rightSeats: this.carriageForUpdating.rightSeats.toString(),
+      });
+    }
+  }
 
   public onSave() {
+    console.log(this.editMode);
     if (this.carriageForm.valid) {
       const newCarriage: Omit<Carriage, 'code'> = {
         name: this.carriageForm.get('name')?.value || '',
@@ -80,12 +105,14 @@ export class CarriagesFormComponent implements OnInit, OnDestroy {
         leftSeats: Number(this.carriageForm.get('leftSeats')?.value),
         rightSeats: Number(this.carriageForm.get('rightSeats')?.value),
       };
-      // if (true) {
-      this.carriageFacade.addCarriage(newCarriage);
+      if (this.editMode === 'edit' && this.carriageForUpdating) {
+        console.log({ code: this.carriageForUpdating.code, ...newCarriage });
+        // this.carriageFacade.updateCarriage({ code: this.carriageForUpdating.code, ...newCarriage });
+      } else {
+        this.carriageFacade.addCarriage(newCarriage);
+      }
       this.carriageForm.reset();
-      // } else {
-      //   this.carriageFacade.addCarriage(newCarriage);
-      // }
+      this.panelService.togglePanel('panel', 'save');
     }
   }
 

@@ -1,12 +1,9 @@
-.example-headers-align {
-  justify-content: center;
-  align-items: center;
+.mat-expansion-panel-header {
+  height: 0px;
 }
-
-.mat-expansion-panel-header-title {
-  justify-content: center;
+.mat-expansion-panel-header.mat-expanded {
+  height: 0px;
 }
-
 .mat-expansion-panel {
   width: 100%;
 }

@@ -1,6 +1,4 @@
-<mat-expansion-panel hideToggle>
-  <mat-expansion-panel-header>
-    <mat-panel-title> Create </mat-panel-title>
-  </mat-expansion-panel-header>
-  <app-carriages-form />
+<mat-expansion-panel hideToggle #panel>
+  <mat-expansion-panel-header> </mat-expansion-panel-header>
+  <app-carriages-form [editMode]="this.editMode" [carriageForUpdating]="this.carriageForUpdating" />
 </mat-expansion-panel>
