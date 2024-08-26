@@ -13,7 +13,7 @@ export const carriageActions = createActionGroup({
     createNewCarriageFailure: props<{ error: ServerError }>(),
     addNewCarriageToStore: props<{ newCarriage: Carriage }>(),
     updateCarriage: props<{ carriage: Carriage }>(),
-    updateCarriageSuccess: props<{ code: string; carriage: Carriage }>(),
+    updateCarriageSuccess: props<{ carriage: Carriage }>(),
     updateCarriageFailure: props<{ error: ServerError }>(),
     updateCarriageInStore: props<{ updateCarriage: Carriage }>(),
   },

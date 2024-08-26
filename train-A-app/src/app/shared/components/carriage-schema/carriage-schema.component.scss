@@ -8,7 +8,7 @@
   width: 100%;
   max-width: 1100px;
   max-height: 800px;
-  margin: 10px 30px;
+  margin-bottom: 30px;
   border: 1px solid $divider;
   box-shadow: 2px 2px 2px 2px $divider;
   border-radius: 10px;
@@ -21,8 +21,9 @@
     margin: 10px 40px;
     padding: 5px;
     gap: 5px;
-    border-left: 1px solid $label;
-    border-right: 1px solid $label;
+    border-radius: 5px;
+    border-left: 1px solid $divider;
+    border-right: 1px solid $divider;
   }
 }
 

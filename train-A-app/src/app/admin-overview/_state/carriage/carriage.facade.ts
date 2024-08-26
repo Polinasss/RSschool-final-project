@@ -24,6 +24,6 @@ export class CarriageFacade {
   }
 
   updateCarriage(updateCarriage: Carriage) {
-    this.store.dispatch(carriageActions.createNewCarriage({ carriage: updateCarriage }));
+    this.store.dispatch(carriageActions.updateCarriage({ carriage: updateCarriage }));
   }
 }

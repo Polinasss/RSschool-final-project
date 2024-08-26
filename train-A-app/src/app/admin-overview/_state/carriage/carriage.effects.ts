@@ -55,9 +55,8 @@ export class CarriageEffects {
       ofType(carriageActions.updateCarriage),
       mergeMap((action) =>
         this.carriageService.updateCarriage(action.carriage).pipe(
-          map((responseId) =>
+          map(() =>
             carriageActions.updateCarriageSuccess({
-              code: responseId,
               carriage: action.carriage,
             }),
           ),
@@ -71,8 +70,7 @@ export class CarriageEffects {
     return this.actions$.pipe(
       ofType(carriageActions.updateCarriageSuccess),
       mergeMap((action) => {
-        const newItem: Carriage = { ...action.carriage, code: action.code };
-        return of(carriageActions.updateCarriageInStore({ updateCarriage: newItem }));
+        return of(carriageActions.updateCarriageInStore({ updateCarriage: action.carriage }));
       }),
     );
   });

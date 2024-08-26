@@ -97,7 +97,6 @@ export class CarriagesFormComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   public onSave() {
-    console.log(this.editMode);
     if (this.carriageForm.valid) {
       const newCarriage: Omit<Carriage, 'code'> = {
         name: this.carriageForm.get('name')?.value || '',
@@ -106,8 +105,7 @@ export class CarriagesFormComponent implements OnInit, OnDestroy, AfterViewInit 
         rightSeats: Number(this.carriageForm.get('rightSeats')?.value),
       };
       if (this.editMode === 'edit' && this.carriageForUpdating) {
-        console.log({ code: this.carriageForUpdating.code, ...newCarriage });
-        // this.carriageFacade.updateCarriage({ code: this.carriageForUpdating.code, ...newCarriage });
+        this.carriageFacade.updateCarriage({ code: this.carriageForUpdating.code, ...newCarriage });
       } else {
         this.carriageFacade.addCarriage(newCarriage);
       }

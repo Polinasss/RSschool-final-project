@@ -14,5 +14,12 @@
 
   &__icon {
     color: $text;
+    cursor: pointer;
+  }
+
+  &__schema {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }
