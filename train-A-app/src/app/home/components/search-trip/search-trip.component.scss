@@ -1,0 +1,21 @@
+@import '@styles/function.scss';
+@import '@styles/variables.scss';
+@import '@styles/common.scss';
+
+.example-form {
+  display: flex;
+  align-items: center;
+  min-width: 150px;
+  max-width: 1200px;
+  width: 100%;
+}
+
+.example-full-width {
+  width: 300px;
+  margin: 10px;
+}
+
+.mdc-button {
+  border-radius: 4px;
+  margin: 0 10px 20px;
+}
