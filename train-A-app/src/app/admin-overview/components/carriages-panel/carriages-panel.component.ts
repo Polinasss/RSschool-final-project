@@ -1,6 +1,7 @@
-import { AfterViewInit, Component, inject, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, inject, OnDestroy, ViewChild } from '@angular/core';
 import { MatExpansionModule, MatExpansionPanel } from '@angular/material/expansion';
 import { Carriage, CarriageFormEditMode } from 'app/admin-overview/models/carriage';
+import { Subscription } from 'rxjs';
 import { CarriagesFormComponent } from '../carriages-form/carriages-form.component';
 import { CarriagesPanelService } from '../../services/carriages-panel/carriages-panel.service';
 
@@ -11,7 +12,7 @@ import { CarriagesPanelService } from '../../services/carriages-panel/carriages-
   templateUrl: './carriages-panel.component.html',
   styleUrl: './carriages-panel.component.scss',
 })
-export class CarriagesPanelComponent implements AfterViewInit {
+export class CarriagesPanelComponent implements AfterViewInit, OnDestroy {
   @ViewChild('panel') panel!: MatExpansionPanel;
 
   private panelService = inject(CarriagesPanelService);
@@ -20,8 +21,10 @@ export class CarriagesPanelComponent implements AfterViewInit {
 
   public carriageForUpdating: Carriage | null = null;
 
+  public subscriptions!: Subscription;
+
   ngAfterViewInit() {
-    this.panelService.panelState$.subscribe((updateInfo) => {
+    this.subscriptions = this.panelService.panelState$.subscribe((updateInfo) => {
       if (updateInfo.panelId === 'panel') {
         if (this.panel.expanded && updateInfo.editMode === 'save') {
           this.panel.close();
@@ -44,5 +47,9 @@ export class CarriagesPanelComponent implements AfterViewInit {
       leftSeats: carriage?.leftSeats ?? 0,
       rightSeats: carriage?.rightSeats ?? 0,
     };
+  }
+
+  public ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 }

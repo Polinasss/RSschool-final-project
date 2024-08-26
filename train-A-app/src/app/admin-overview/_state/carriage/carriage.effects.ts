@@ -55,8 +55,9 @@ export class CarriageEffects {
       ofType(carriageActions.updateCarriage),
       mergeMap((action) =>
         this.carriageService.updateCarriage(action.carriage).pipe(
-          map(() =>
+          map((responseId) =>
             carriageActions.updateCarriageSuccess({
+              code: responseId,
               carriage: action.carriage,
             }),
           ),

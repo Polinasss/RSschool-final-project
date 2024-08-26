@@ -1,7 +1,7 @@
 <div class="carriage">
-  <button class="carriage__button" mat-fab extended (click)="openForm()">
-    <mat-icon>add</mat-icon>Create
-  </button>
+  <div *ngIf="(editMode$ | async)?.editMode !== 'create'">
+    <app-create-button (clickOnButton)="openForm()"></app-create-button>
+  </div>
   <app-carriages-panel></app-carriages-panel>
   <div class="carriage__spinner" *ngIf="isLoading$ | async">
     <mat-spinner></mat-spinner>

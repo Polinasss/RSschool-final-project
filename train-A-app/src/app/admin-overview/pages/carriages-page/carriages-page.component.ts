@@ -4,8 +4,7 @@ import { CarriagesItemComponent } from 'app/admin-overview/components/carriages-
 import { AsyncPipe, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CarriagesPanelService } from 'app/admin-overview/services/carriages-panel/carriages-panel.service';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIcon } from '@angular/material/icon';
+import { CreateButtonComponent } from 'app/shared/components/create-button/create-button.component';
 import { CarriagesPanelComponent } from '../../components/carriages-panel/carriages-panel.component';
 
 @Component({
@@ -19,8 +18,7 @@ import { CarriagesPanelComponent } from '../../components/carriages-panel/carria
     NgFor,
     NgIf,
     NgTemplateOutlet,
-    MatButtonModule,
-    MatIcon,
+    CreateButtonComponent,
   ],
   templateUrl: './carriages-page.component.html',
   styleUrl: './carriages-page.component.scss',
@@ -35,6 +33,8 @@ export class CarriagesPageComponent {
   readonly error$ = this.carriageFacade.error$;
 
   readonly isLoading$ = this.carriageFacade.isLoading$;
+
+  readonly editMode$ = this.panelService.panelState$;
 
   public openForm() {
     this.panelService.togglePanel('panel', 'create');

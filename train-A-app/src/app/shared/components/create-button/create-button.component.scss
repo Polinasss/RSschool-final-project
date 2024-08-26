@@ -1,0 +1,10 @@
+@import './../../../core/styles/variables.scss';
+
+.create__button {
+  margin-bottom: 20px;
+  width: 120px;
+  height: 50px;
+  background-color: $secondary;
+  color: $white;
+  font-size: 16px;
+}
