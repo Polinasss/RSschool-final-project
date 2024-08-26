@@ -35,4 +35,6 @@ export class CarriagesItemComponent implements OnInit {
       };
     }
   }
+
+  public onUpdate(): void {}
 }

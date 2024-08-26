@@ -9,8 +9,9 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule, NgIf } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
-import { CarriageDataForSchema } from 'app/admin-overview/models/carriage';
+import { Carriage, CarriageDataForSchema } from 'app/admin-overview/models/carriage';
 import { CarriageSchemaComponent } from 'app/shared/components/carriage-schema/carriage-schema.component';
+import { CarriageFacade } from 'app/admin-overview/_state/carriage/carriage.facade';
 
 @Component({
   selector: 'app-carriages-form',
@@ -21,6 +22,8 @@ import { CarriageSchemaComponent } from 'app/shared/components/carriage-schema/c
 })
 export class CarriagesFormComponent implements OnInit, OnDestroy {
   private fb: FormBuilder = inject(FormBuilder);
+
+  private carriageFacade = inject(CarriageFacade);
 
   private destroy$: Subject<void> = new Subject<void>();
 
@@ -57,8 +60,33 @@ export class CarriagesFormComponent implements OnInit, OnDestroy {
     };
   }
 
+  //   private updateFormValues() {
+  //     if (this.carriageData) {
+  //       this.carriageForm.setValue({
+  //         name: this.carriageData.name,
+  //         rows: this.carriageData.rows,
+  //         leftSeats: this.carriageData.leftSeats,
+  //         rightSeats: this.carriageData.rightSeats
+  //       });
+  //     }
+  //   }
+  // }
+
   public onSave() {
-    console.log(this.carriageData);
+    if (this.carriageForm.valid) {
+      const newCarriage: Omit<Carriage, 'code'> = {
+        name: this.carriageForm.get('name')?.value || '',
+        rows: Number(this.carriageForm.get('rows')?.value),
+        leftSeats: Number(this.carriageForm.get('leftSeats')),
+        rightSeats: Number(this.carriageForm.get('rightSeats')),
+      };
+      // if (true) {
+      this.carriageFacade.addCarriage(newCarriage);
+      this.carriageForm.reset();
+      // } else {
+      //   this.carriageFacade.addCarriage(newCarriage);
+      // }
+    }
   }
 
   ngOnDestroy(): void {
