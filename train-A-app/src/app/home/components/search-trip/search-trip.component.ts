@@ -16,6 +16,7 @@ import { MatInputModule } from '@angular/material/input';
 import { Observable, startWith, map, Subscription } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 import { SearchService } from 'app/home/services/search.service';
+import { TripFacade } from 'app/home/_state/search.facade';
 
 @Component({
   selector: 'app-search-trip',
@@ -59,6 +60,7 @@ export class SearchTripComponent implements OnDestroy {
   constructor(
     private fb: FormBuilder,
     private searchService: SearchService,
+    private tripFacade: TripFacade,
   ) {
     this.searchForm = this.fb.group({
       from: ['', [Validators.required]],
@@ -116,16 +118,16 @@ export class SearchTripComponent implements OnDestroy {
 
   onSubmit(): void {
     console.log('data = ', this.searchForm.getRawValue());
-    this.searchService
-      .searchStations({
-        fromLatitude: this.fromStation!.latitude,
-        fromLongitude: this.fromStation!.longitude,
-        toLatitude: this.toStation!.latitude,
-        toLongitude: this.toStation!.longitude,
-        time: new Date(this.searchForm.controls['date'].value).getTime(),
-      })
-      .subscribe((stats) => {
-        console.log({ stats });
-      });
+    const params = {
+      fromLatitude: this.fromStation!.latitude,
+      fromLongitude: this.fromStation!.longitude,
+      toLatitude: this.toStation!.latitude,
+      toLongitude: this.toStation!.longitude,
+      time: new Date(this.searchForm.controls['date'].value).toISOString(),
+    };
+    this.tripFacade.loadTrip(params);
+    this.searchService.searchStations(params).subscribe((stats) => {
+      console.log({ stats });
+    });
   }
 }

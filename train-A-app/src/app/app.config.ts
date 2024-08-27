@@ -16,6 +16,8 @@ import { routes } from './app.routes';
 import { carriageFeature } from './admin-overview/_state/carriage/carriage.reducer';
 import { CarriageEffects } from './admin-overview/_state/carriage/carriage.effects';
 import { authInterceptor } from './auth/auth.interceptor';
+import { searchFeature } from './home/_state/search.reducer';
+import { TripEffects } from './home/_state/search.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -25,7 +27,9 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     provideStore(),
     provideState(carriageFeature),
+    provideState(searchFeature),
     provideEffects([CarriageEffects]),
+    provideEffects([TripEffects]),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
     importProvidersFrom(MatNativeDateModule),
   ],

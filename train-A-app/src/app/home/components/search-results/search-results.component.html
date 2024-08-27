@@ -1,0 +1,4 @@
+<!-- <app-search-result></app-search-result> -->
+@for (route of routes; track route) {
+  <app-search-result [route]="route" [toCity]="toCity" [fromCity]="fromCity"></app-search-result>
+}
