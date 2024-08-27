@@ -14,6 +14,8 @@ import { RoutesEffects } from './admin-overview/_state/route/route.effects';
 import { routeFeature } from './admin-overview/_state/route/route.reducer';
 import { stationFeature } from './admin-overview/_state/station/station.reducer';
 import { StationEffects } from './admin-overview/_state/station/station.effects';
+import { RoutesEffects } from './admin-overview/_state/route/route.effects';
+import { routeFeature } from './admin-overview/_state/route/route.reducer';
 
 export const appConfig: ApplicationConfig = {
   providers: [
