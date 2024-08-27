@@ -1,0 +1,27 @@
+<div>
+  <!-- <div *ngIf="(formState$ | async)?.editMode !== 'create'">
+    <app-create-button (clickOnButton)="openForm()"></app-create-button>
+  </div>
+  <app-carriages-panel>
+    <app-carriages-form
+      [editMode]="(formState$ | async)?.editMode || 'create'"
+      [carriageForUpdating]="(formState$ | async)?.carriage || null"
+    />
+  </app-carriages-panel> -->
+  <div class="route__spinner" *ngIf="isLoading$ | async">
+    <mat-spinner></mat-spinner>
+  </div>
+  <div class="route__error" *ngIf="error$ | async">
+    <p>{{ error$ | async }}</p>
+  </div>
+  <ng-container *ngIf="!(isLoading$ | async) && !(error$ | async)">
+    <ng-container *ngTemplateOutlet="routes"></ng-container>
+  </ng-container>
+  <ng-template #routes>
+    <ul>
+      <li *ngFor="let route of routes$ | async">
+        <app-route-item [item]="route"></app-route-item>
+      </li>
+    </ul>
+  </ng-template>
+</div>
