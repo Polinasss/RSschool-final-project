@@ -10,6 +10,8 @@ import { routes } from './app.routes';
 import { carriageFeature } from './admin-overview/_state/carriage/carriage.reducer';
 import { CarriageEffects } from './admin-overview/_state/carriage/carriage.effects';
 import { authInterceptor } from './auth/auth.interceptor';
+import { RoutesEffects } from './admin-overview/_state/route/route.effects';
+import { routeFeature } from './admin-overview/_state/route/route.reducer';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -19,7 +21,8 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     provideStore(),
     provideState(carriageFeature),
-    provideEffects([CarriageEffects]),
+    provideState(routeFeature),
+    provideEffects([CarriageEffects, RoutesEffects]),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
   ],
 };
