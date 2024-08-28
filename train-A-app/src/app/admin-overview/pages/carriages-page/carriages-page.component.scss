@@ -1,0 +1,12 @@
+.carriage {
+  display: flex;
+  flex-direction: column;
+  margin: 50px;
+
+  &__spinner {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
