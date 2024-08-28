@@ -1,6 +1,7 @@
 .route {
   display: flex;
-  padding: 0 30px;
+  flex-direction: column;
+  margin: 50px;
 
   &__spinner {
     position: absolute;
