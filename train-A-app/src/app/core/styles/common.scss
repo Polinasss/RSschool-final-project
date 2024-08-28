@@ -45,6 +45,11 @@
     &--error {
       border-bottom: 2px solid $error;
     }
+
+    &::placeholder {
+      font-size: 12px;
+      color: $label;
+    }
   }
 
   &__input-small {
@@ -90,6 +95,10 @@
     font-size: rem(12);
     line-height: rem(12);
     color: $error;
+  }
+
+  &__error-container {
+    min-height: 20px;
   }
 }
 

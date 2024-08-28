@@ -50,9 +50,9 @@ export class CarriagesFormComponent implements OnInit, OnDestroy, AfterViewInit 
   public ngOnInit() {
     this.carriageForm = this.fb.nonNullable.group({
       name: ['', Validators.required],
-      rows: ['', [Validators.required, Validators.min(1)]],
-      leftSeats: ['', [Validators.required, Validators.min(1)]],
-      rightSeats: ['', [Validators.required, Validators.min(1)]],
+      rows: ['', [Validators.required, Validators.min(1), Validators.max(50)]],
+      leftSeats: ['', [Validators.required, Validators.min(1), Validators.max(5)]],
+      rightSeats: ['', [Validators.required, Validators.min(1), Validators.max(5)]],
     });
 
     this.carriageForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
@@ -74,6 +74,18 @@ export class CarriagesFormComponent implements OnInit, OnDestroy, AfterViewInit 
         }
       }
     });
+  }
+
+  get rows() {
+    return this.carriageForm.get('rows');
+  }
+
+  get leftSeats() {
+    return this.carriageForm.get('leftSeats');
+  }
+
+  get rightSeats() {
+    return this.carriageForm.get('rightSeats');
   }
 
   private updateCarriageData(): void {
