@@ -1,1 +1,50 @@
-<p>route-form works!</p>
+<div>
+  <form [formGroup]="routesForm" class="route__form">
+    <div>
+      <h2 class="route__form__header">Stations</h2>
+      <div formArrayName="stations" class="route__form__fields">
+        @for (station of stations.controls; let i = $index; track station) {
+          <mat-form-field appearance="fill">
+            <mat-label>Select station</mat-label>
+            <mat-select
+              class="route__form__select"
+              [formControlName]="i"
+              (selectionChange)="onStationsChange(i)"
+            >
+              @for ((carriage of carriages$| async); track carriage) {
+                <mat-option [value]="carriage.code">{{ carriage.name }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        }
+      </div>
+    </div>
+    <div>
+      <h2 class="route__form__header">Carriages</h2>
+      <div formArrayName="carriages" class="route__form__fields">
+        @for (carriage of carriages.controls; let i = $index; track carriage) {
+          <mat-form-field appearance="fill">
+            <mat-label>Select carriage</mat-label>
+            <mat-select
+              class="route__form__select"
+              [formControlName]="i"
+              (selectionChange)="onCarriagesChange(i)"
+            >
+              @for ((carriage of carriages$| async); track carriage) {
+                <mat-option [value]="carriage.code">{{ carriage.name }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        }
+      </div>
+    </div>
+  </form>
+  <button
+    class="route__form__button"
+    mat-flat-button
+    [disabled]="!routesForm.valid"
+    (click)="onSubmit()"
+  >
+    Save
+  </button>
+</div>
