@@ -4,6 +4,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 import { Router, RouterModule } from '@angular/router';
 import { CarriageFacade } from 'app/admin-overview/_state/carriage/carriage.facade';
+import { StationFacade } from 'app/admin-overview/_state/station/station.facade';
 import { StationsPageComponent } from '../stations-page/stations-page.component';
 import { CarriagesPageComponent } from '../carriages-page/carriages-page.component';
 import { RoutesPageComponent } from '../routes-page/routes-page.component';
@@ -24,7 +25,7 @@ import { RoutesPageComponent } from '../routes-page/routes-page.component';
   styleUrl: './admin-overview-page.component.scss',
 })
 export class AdminOverviewPageComponent implements OnInit {
-  public selectedPanelItem: string = '';
+  public selectedPanelItem: string = 'Stations';
 
   private router: Router = inject(Router);
 
@@ -48,11 +49,14 @@ export class AdminOverviewPageComponent implements OnInit {
 
   private carriageFacade = inject(CarriageFacade);
 
-  public ngOnInit(): void {
-    this.carriageFacade.loadCarriage();
-  }
-
   selectPanelItem(panelItem: string): void {
     this.selectedPanelItem = panelItem;
+  }
+
+  private stationFacade = inject(StationFacade);
+
+  public ngOnInit(): void {
+    this.carriageFacade.loadCarriage();
+    this.stationFacade.loadStation();
   }
 }
