@@ -38,9 +38,9 @@
       <span *ngIf="i < item.path.length - 1"> - </span>
     </span>
     <h3 class="item__subheader">Carriage types</h3>
-    <span class="item__list" *ngFor="let carriage of item.carriages; let i = index"
+    <span class="item__list" *ngFor="let carriage of carriagesName; let i = index"
       >{{ carriage | capitalizeFirstLetter }}
-      <span *ngIf="i < item.carriages.length - 1"> - </span>
+      <span *ngIf="i < carriagesName.length - 1"> - </span>
     </span>
   </mat-card-content>
 </mat-card>

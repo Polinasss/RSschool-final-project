@@ -26,6 +26,8 @@ import { RouteDeleteComponent } from '../route-delete/route-delete.component';
 export class RouteItemComponent {
   @Input() item!: Route;
 
+  @Input() carriagesName!: string[];
+
   private router: Router = inject(Router);
 
   private panelService = inject(RoutePanelService);
