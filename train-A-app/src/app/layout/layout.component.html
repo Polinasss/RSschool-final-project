@@ -1,18 +1,22 @@
-<nav class="nav">
-  <div>
-    <a [routerLink]="['/home']" routerLinkActive="active">Home</a>
-    <a *ngIf="isAdmin || isClient" [routerLink]="['/profile']" routerLinkActive="active">Profile</a>
-    <a *ngIf="isAdmin || isClient" [routerLink]="['/orders']" routerLinkActive="active">{{
-      isAdmin ? 'Orders' : 'My orders'
-    }}</a>
-  </div>
-  <div *ngIf="isGuest">
-    <a [routerLink]="['/signin']" routerLinkActive="active">Sign in</a>
-    <a [routerLink]="['/registration']" routerLinkActive="active">Sign up</a>
-  </div>
-  <div *ngIf="isAdmin">
-    <a [routerLink]="['/admin-page']" routerLinkActive="active">Admin</a>
-  </div>
-</nav>
+<div *ngIf="role !== 'null'">
+  <nav class="nav">
+    <div>
+      <a [routerLink]="['/home']" routerLinkActive="active">Home</a>
+      <a *ngIf="isAdmin || isClient" [routerLink]="['/profile']" routerLinkActive="active"
+        >Profile</a
+      >
+      <a *ngIf="isAdmin || isClient" [routerLink]="['/orders']" routerLinkActive="active">{{
+        isAdmin ? 'Orders' : 'My orders'
+      }}</a>
+    </div>
+    <div *ngIf="isGuest">
+      <a [routerLink]="['/signin']" routerLinkActive="active">Sign in</a>
+      <a [routerLink]="['/signup']" routerLinkActive="active">Sign up</a>
+    </div>
+    <div *ngIf="isAdmin">
+      <a [routerLink]="['/admin-page']" routerLinkActive="active">Admin</a>
+    </div>
+  </nav>
 
-<router-outlet />
+  <router-outlet />
+</div>

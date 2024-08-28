@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { RoleService } from './role.service';
 
-describe('LoginService', () => {
+describe('RoleService', () => {
   let service: RoleService;
 
   beforeEach(() => {

@@ -11,6 +11,9 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { RoleService } from 'app/guards/role.service';
+import { Store } from '@ngrx/store';
+import { rolesListActions } from 'app/guards/redux/roles.actions';
 import { noSpaceValidator } from '../../../shared/utils/validators';
 
 @Component({
@@ -32,6 +35,10 @@ export class SigninComponent implements OnInit, OnDestroy {
   public isSubmitted: boolean = false;
 
   public isSubmitting: boolean = false;
+
+  private roleServise = inject(RoleService);
+
+  private store: Store<{ roleState: string }> = inject(Store);
 
   public loginForm!: FormGroup<{
     email: FormControl<string>;
@@ -87,6 +94,9 @@ export class SigninComponent implements OnInit, OnDestroy {
           // TODO: we need a flag inside service, pointing user is isAuthenticated or not
           // this.isAuthenticated = true
           localStorage.setItem('token', response.token);
+          this.roleServise.isAuthorized().subscribe((val) => {
+            this.store.dispatch(rolesListActions.changeRole({ role: val }));
+          });
           this.router.navigateByUrl('/');
         },
         error: () => {

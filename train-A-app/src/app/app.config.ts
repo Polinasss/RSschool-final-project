@@ -10,6 +10,7 @@ import { routes } from './app.routes';
 import { carriageFeature } from './admin-overview/_state/carriage/carriage.reducer';
 import { CarriageEffects } from './admin-overview/_state/carriage/carriage.effects';
 import { authInterceptor } from './auth/auth.interceptor';
+import { rolesReducer } from './guards/redux/roles.reducer';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -17,7 +18,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(withInterceptors([authInterceptor])),
     provideAnimationsAsync(),
-    provideStore(),
+    provideStore({ roleState: rolesReducer.reducer }),
     provideState(carriageFeature),
     provideEffects([CarriageEffects]),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),

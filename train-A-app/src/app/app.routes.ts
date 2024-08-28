@@ -1,18 +1,13 @@
 import { Routes } from '@angular/router';
-import { SigninGuard } from './auth/guards/signin.guard';
-import { SignupPageComponent } from './auth/pages/signup-page/signup-page.component';
-import { SigninPageComponent } from './auth/pages/signin-page/signin-page.component';
-import { AdminOverviewPageComponent } from './admin-overview/pages/admin-overview-page/admin-overview-page.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 export const routes: Routes = [
   {
-    path: 'signin',
-    component: SigninPageComponent,
-    canActivate: [SigninGuard],
+    path: '',
+    loadChildren: () => import('./layout/layout.routers').then((m) => m.layoutRoutes),
   },
-  { path: 'signup', component: SignupPageComponent },
   {
-    path: 'admin',
-    component: AdminOverviewPageComponent,
+    path: '**',
+    component: NotFoundComponent,
   },
 ];
