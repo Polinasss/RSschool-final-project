@@ -21,18 +21,20 @@ export class CarriagesPanelComponent implements AfterViewInit, OnDestroy {
 
   public carriageForUpdating: Carriage | null = null;
 
-  public subscriptions!: Subscription;
+  public subscriptions: Subscription = new Subscription();
 
   ngAfterViewInit() {
-    this.subscriptions = this.panelService.panelState$.subscribe((updateInfo) => {
-      if (updateInfo.panelId === 'panel') {
-        if (this.panel.expanded && updateInfo.editMode === 'save') {
-          this.panel.close();
-        } else {
-          this.panel.open();
+    this.subscriptions.add(
+      this.panelService.panelState$.subscribe((updateInfo) => {
+        if (updateInfo.panelId === 'panel') {
+          if (this.panel.expanded && updateInfo.editMode === 'save') {
+            this.panel.close();
+          } else {
+            this.panel.open();
+          }
         }
-      }
-    });
+      }),
+    );
   }
 
   public ngOnDestroy(): void {
