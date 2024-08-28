@@ -17,12 +17,12 @@ export class StationListComponent {
 
   @Output() stationDeleted = new EventEmitter<number>();
 
-  getCityNameById(id: string): string {
+  public getCityNameById(id: string): string {
     const station = this.stations.find((stationEl) => stationEl.id === parseInt(id, 10));
     return station ? station.city : 'Unknown City';
   }
 
-  deleteStation(stationId: number) {
+  public deleteStation(stationId: number) {
     this.stationDeleted.emit(stationId);
   }
 }

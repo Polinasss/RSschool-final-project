@@ -28,9 +28,9 @@ import { MOCK_STATIONS } from '../../models/mocked-data';
 export class StationsPageComponent {
   stationsConnectedForm: FormGroup;
 
-  selectedLocation: LocationData | null = null;
+  public selectedLocation: LocationData | null = null;
 
-  stations: Station[] = MOCK_STATIONS;
+  public stations: Station[] = MOCK_STATIONS;
 
   @ViewChild(StationMapComponent) mapComponent!: StationMapComponent;
 
@@ -45,7 +45,7 @@ export class StationsPageComponent {
     });
   }
 
-  onLocationSelected(locationData: LocationData): void {
+  public onLocationSelected(locationData: LocationData): void {
     this.selectedLocation = locationData;
     this.stationsConnectedForm.patchValue({
       city: locationData.city,
@@ -54,7 +54,7 @@ export class StationsPageComponent {
     });
   }
 
-  onAddStation(newStation: Station) {
+  public onAddStation(newStation: Station) {
     const stationExist = this.stations.find((station) => station.city === newStation.city);
 
     if (stationExist) {
@@ -66,7 +66,7 @@ export class StationsPageComponent {
     this.mapComponent.updateMapMarkers();
   }
 
-  onDeleteStation(stationId: number) {
+  public onDeleteStation(stationId: number) {
     const index = this.stations.findIndex((station) => station.id === stationId);
     if (index > -1) {
       const isConnected = this.stations.some((station) =>

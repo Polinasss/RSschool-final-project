@@ -2,12 +2,12 @@
 
 ::ng-deep .mdc-text-field--filled {
   background-color: $text-active !important;
-  border-radius: 4px !important;
+  border-radius: 0.25rem !important;
 }
 
 ::ng-deep .mdc-text-field:not(.mdc-text-field--disabled) .mdc-floating-label {
   color: $text !important;
-  letter-spacing: 0.4px;
+  letter-spacing: 0.025rem;
 }
 
 ::ng-deep .mdc-text-field--filled .mdc-line-ripple {
@@ -23,43 +23,66 @@
 }
 
 ::ng-deep .mat-form-field {
-  font-size: 12px;
+  font-size: 0.75rem;
 }
 
 mat-form-field.small {
-  --mat-form-field-container-height: 35px;
-  --mat-form-field-container-vertical-padding: 5px;
+  --mat-form-field-container-height: 2.19rem;
+  --mat-form-field-container-vertical-padding: 0.13rem;
 }
 
-.form-container {
-  width: 300px;
+.form__container {
+  width: 18.75rem;
 
-  form {
+  .form {
     display: flex;
     flex-direction: column;
     justify-content: center;
     gap: 0px;
-
-    .form-title {
-      font-size: 16px;
-    }
 
     mat-form-field {
       width: 80%;
 
       mat-error {
         margin-top: -0.2rem;
-        font-size: 10px;
+        font-size: 0.625rem;
       }
     }
 
-    p {
-      font-weight: bold;
+    .connected__cities {
+      &__header {
+        display: flex;
+        gap: 0.625rem;
+
+        p {
+          font-weight: bold;
+        }
+
+        &__add-btn {
+          background: none;
+          border: none;
+          padding: 0;
+          margin: 0;
+          cursor: pointer;
+          display: flex;
+          justify-content: center;
+
+          mat-icon {
+            font-size: 1.5rem;
+            color: $secondary;
+          }
+        }
+      }
+
+      &__controls {
+        max-height: 11.25rem;
+        overflow-y: auto;
+      }
     }
 
-    .save-btn {
+    &__save-btn {
       width: 80%;
-      height: 40px;
+      height: 2.5rem;
       cursor: pointer;
     }
   }
