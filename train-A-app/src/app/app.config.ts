@@ -12,6 +12,8 @@ import { CarriageEffects } from './admin-overview/_state/carriage/carriage.effec
 import { authInterceptor } from './auth/auth.interceptor';
 import { RoutesEffects } from './admin-overview/_state/route/route.effects';
 import { routeFeature } from './admin-overview/_state/route/route.reducer';
+import { stationFeature } from './admin-overview/_state/station/station.reducer';
+import { StationEffects } from './admin-overview/_state/station/station.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -20,9 +22,10 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([authInterceptor])),
     provideAnimationsAsync(),
     provideStore(),
+    provideState(stationFeature),
     provideState(carriageFeature),
     provideState(routeFeature),
-    provideEffects([CarriageEffects, RoutesEffects]),
+    provideEffects([StationEffects, CarriageEffects, RoutesEffects]),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
   ],
 };
