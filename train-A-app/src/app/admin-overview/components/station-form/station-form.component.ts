@@ -41,7 +41,7 @@ export class StationFormComponent implements OnInit, OnChanges {
 
   @Output() stationAdded = new EventEmitter<Station>();
 
-  stations: Station[] = MOCK_STATIONS;
+  public stations: Station[] = MOCK_STATIONS;
 
   constructor(private fb: FormBuilder) {}
 
@@ -55,7 +55,7 @@ export class StationFormComponent implements OnInit, OnChanges {
     }
   }
 
-  updateFormFields(): void {
+  private updateFormFields(): void {
     if (this.locationData) {
       this.formGroup.patchValue({
         city: this.locationData.city,
@@ -85,17 +85,17 @@ export class StationFormComponent implements OnInit, OnChanges {
     return this.connectedToControl.controls as FormControl[];
   }
 
-  addConnectedCity(): void {
+  public addConnectedCity(): void {
     this.connectedToControl.push(this.fb.control('', Validators.required));
   }
 
-  addInitialConnectedCities(): void {
+  private addInitialConnectedCities(): void {
     while (this.connectedToControl.length < 3) {
       this.addConnectedCity();
     }
   }
 
-  displayFn(id: number): string {
+  public displayFn(id: number): string {
     if (id) {
       const index = this.stations.findIndex((station) => station.id === id);
       return this.stations[index].city;
@@ -103,7 +103,7 @@ export class StationFormComponent implements OnInit, OnChanges {
     return '';
   }
 
-  calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  private calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
     const toRad = (x: number) => (x * Math.PI) / 180;
     const R = 6371;
     const dLat = toRad(lat2 - lat1);
@@ -115,7 +115,7 @@ export class StationFormComponent implements OnInit, OnChanges {
     return R * c;
   }
 
-  createStationCoordinates(): void {
+  public onSubmit(): void {
     if (this.formGroup.valid) {
       const { city, latitude, longitude, connectedTo } = this.formGroup.value;
       const maxId = this.stations.reduce((max, station) => Math.max(max, station.id), 0);
@@ -149,7 +149,7 @@ export class StationFormComponent implements OnInit, OnChanges {
     }
   }
 
-  resetForm(): void {
+  private resetForm(): void {
     this.formGroup.reset();
 
     this.connectedToControl.controls.forEach((control) => {

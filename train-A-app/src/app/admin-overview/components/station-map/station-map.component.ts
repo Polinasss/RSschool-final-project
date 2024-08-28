@@ -52,7 +52,7 @@ export class StationMapComponent implements AfterViewInit {
     this.initializeMap();
   }
 
-  initializeMap(): void {
+  private initializeMap(): void {
     if (this.map) {
       return;
     }

@@ -1,5 +1,5 @@
-<div class="stations-page-container">
-  <div class="map-form-container">
+<div class="stations__page">
+  <div class="stations__page__map-form">
     <app-station-map
       [stations]="stations"
       (locationSelected)="onLocationSelected($event)"
@@ -11,7 +11,7 @@
     >
     </app-station-form>
   </div>
-  <div class="station-list-container">
+  <div class="stations__page__stations-list">
     <app-station-list (stationDeleted)="onDeleteStation($event)"></app-station-list>
   </div>
 </div>
