@@ -34,7 +34,7 @@ mat-form-field.small {
 .form__container {
   width: 18.75rem;
 
-  .form {
+  .stations__form {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -51,6 +51,7 @@ mat-form-field.small {
 
     .connected__cities {
       &__header {
+        margin-top: 0.3rem;
         display: flex;
         gap: 0.625rem;
 
@@ -69,7 +70,7 @@ mat-form-field.small {
 
           mat-icon {
             font-size: 1.5rem;
-            color: $secondary;
+            color: $text-active;
           }
         }
       }
