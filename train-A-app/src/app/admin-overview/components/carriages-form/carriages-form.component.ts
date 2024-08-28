@@ -8,7 +8,7 @@ import {
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule, NgIf } from '@angular/common';
-import { Subject, takeUntil } from 'rxjs';
+import { map, Subject, takeUntil } from 'rxjs';
 import {
   Carriage,
   CarriageDataForSchema,
@@ -43,11 +43,14 @@ export class CarriagesFormComponent implements OnInit, OnDestroy, AfterViewInit 
 
   public carriageData!: CarriageDataForSchema;
 
+  public isDuplicateName!: boolean;
+
   @Input() editMode: CarriageFormEditMode = 'create';
 
   @Input() carriageForUpdating!: Carriage | null;
 
   public ngOnInit() {
+    this.isDuplicateName = false;
     this.carriageForm = this.fb.nonNullable.group({
       name: ['', Validators.required],
       rows: ['', [Validators.required, Validators.min(1), Validators.max(50)]],
@@ -55,8 +58,16 @@ export class CarriagesFormComponent implements OnInit, OnDestroy, AfterViewInit 
       rightSeats: ['', [Validators.required, Validators.min(1), Validators.max(5)]],
     });
 
+    this.carriageForm
+      .get('name')
+      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.isDuplicateName = false;
+      });
+
     this.carriageForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
       if (this.carriageForm.valid) {
+        this.isDuplicateName = false;
         this.updateCarriageData();
       }
     });
@@ -108,6 +119,11 @@ export class CarriagesFormComponent implements OnInit, OnDestroy, AfterViewInit 
     }
   }
 
+  private closeFormPanel() {
+    this.carriageForm.reset();
+    this.panelService.togglePanel('panel', 'save');
+  }
+
   public onSave() {
     if (this.carriageForm.valid) {
       const newCarriage: Omit<Carriage, 'code'> = {
@@ -116,13 +132,42 @@ export class CarriagesFormComponent implements OnInit, OnDestroy, AfterViewInit 
         leftSeats: Number(this.carriageForm.get('leftSeats')?.value),
         rightSeats: Number(this.carriageForm.get('rightSeats')?.value),
       };
-      if (this.editMode === 'edit' && this.carriageForUpdating) {
-        this.carriageFacade.updateCarriage({ code: this.carriageForUpdating.code, ...newCarriage });
+      if (this.editMode === 'edit') {
+        this.carriageFacade.carriage$
+          .pipe(
+            takeUntil(this.destroy$),
+            map((carriages) =>
+              carriages
+                .filter((carriage) => carriage.code !== this.carriageForUpdating?.code)
+                .some((carriage) => carriage.name === newCarriage.name),
+            ),
+          )
+          .subscribe((isDuplicate) => {
+            if (isDuplicate) {
+              this.isDuplicateName = true;
+            } else if (this.carriageForUpdating) {
+              this.carriageFacade.updateCarriage({
+                code: this.carriageForUpdating?.code,
+                ...newCarriage,
+              });
+              this.closeFormPanel();
+            }
+          });
       } else {
-        this.carriageFacade.addCarriage(newCarriage);
+        this.carriageFacade.carriage$
+          .pipe(
+            takeUntil(this.destroy$),
+            map((carriages) => carriages.some((carriage) => carriage.name === newCarriage.name)),
+          )
+          .subscribe((isDuplicate) => {
+            if (isDuplicate) {
+              this.isDuplicateName = true;
+            } else {
+              this.carriageFacade.addCarriage(newCarriage);
+              this.closeFormPanel();
+            }
+          });
       }
-      this.carriageForm.reset();
-      this.panelService.togglePanel('panel', 'save');
     }
   }
 

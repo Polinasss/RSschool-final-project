@@ -3,7 +3,11 @@
     <div class="carriage__form__field">
       <p class="form__label">Name</p>
       <input class="form__input" formControlName="name" />
-      <div class="form__error-container"></div>
+      <div class="form__error-container">
+        <p class="form__error" *ngIf="this.isDuplicateName">
+          The carriage with this name already exists
+        </p>
+      </div>
     </div>
     <div class="carriage__form__field">
       <p class="form__label">Rows</p>
@@ -32,7 +36,7 @@
           *ngIf="leftSeats?.invalid && leftSeats?.touched && leftSeats?.hasError('max')"
           class="form__error"
         >
-          max 50 seats
+          max 5 seats
         </p>
       </div>
     </div>
@@ -49,7 +53,7 @@
           *ngIf="rightSeats?.invalid && rightSeats?.touched && rightSeats?.hasError('max')"
           class="form__error"
         >
-          max 50 seats
+          max 5 seats
         </p>
       </div>
     </div>
