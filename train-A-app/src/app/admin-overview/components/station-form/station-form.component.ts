@@ -14,7 +14,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MOCK_STATIONS } from '../../models/mocked-data';
 import { LocationData, Station } from '../../models/station';
 
 @Component({
@@ -35,13 +34,13 @@ import { LocationData, Station } from '../../models/station';
   styleUrl: './station-form.component.scss',
 })
 export class StationFormComponent implements OnInit, OnChanges {
-  @Input() formGroup!: FormGroup;
+  @Input() stationFormGroup!: FormGroup;
 
   @Input() locationData: LocationData | null = null;
 
   @Output() stationAdded = new EventEmitter<Station>();
 
-  public stations: Station[] = MOCK_STATIONS;
+  @Input() stations!: Station[];
 
   constructor(private fb: FormBuilder) {}
 
@@ -57,7 +56,7 @@ export class StationFormComponent implements OnInit, OnChanges {
 
   private updateFormFields(): void {
     if (this.locationData) {
-      this.formGroup.patchValue({
+      this.stationFormGroup.patchValue({
         city: this.locationData.city,
         latitude: this.locationData.latitude,
         longitude: this.locationData.longitude,
@@ -66,19 +65,19 @@ export class StationFormComponent implements OnInit, OnChanges {
   }
 
   get cityControl() {
-    return this.formGroup.get('city');
+    return this.stationFormGroup.get('city');
   }
 
   get latitudeControl() {
-    return this.formGroup.get('latitude');
+    return this.stationFormGroup.get('latitude');
   }
 
   get longitudeControl() {
-    return this.formGroup.get('longitude');
+    return this.stationFormGroup.get('longitude');
   }
 
   get connectedToControl(): FormArray {
-    return this.formGroup.get('connectedTo') as FormArray;
+    return this.stationFormGroup.get('connectedTo') as FormArray;
   }
 
   get connectedToControlAsFormControl(): FormControl[] {
@@ -116,8 +115,8 @@ export class StationFormComponent implements OnInit, OnChanges {
   }
 
   public onSubmit(): void {
-    if (this.formGroup.valid) {
-      const { city, latitude, longitude, connectedTo } = this.formGroup.value;
+    if (this.stationFormGroup.valid) {
+      const { city, latitude, longitude, connectedTo } = this.stationFormGroup.value;
       const maxId = this.stations.reduce((max, station) => Math.max(max, station.id), 0);
 
       const connectedWithDistance = connectedTo.map((connectedId: string) => {
@@ -150,7 +149,7 @@ export class StationFormComponent implements OnInit, OnChanges {
   }
 
   private resetForm(): void {
-    this.formGroup.reset();
+    this.stationFormGroup.reset();
 
     this.connectedToControl.controls.forEach((control) => {
       control.reset();
