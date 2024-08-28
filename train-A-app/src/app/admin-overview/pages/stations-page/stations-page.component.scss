@@ -11,6 +11,20 @@
     gap: 1.875rem;
     align-items: center;
     justify-content: space-between;
+    position: relative;
+
+    &__map {
+      width: 43.75rem;
+      height: 25.625rem;
+      position: relative;
+
+      mat-spinner {
+        position: absolute;
+        top: 35%;
+        left: 40%;
+        z-index: 10;
+      }
+    }
   }
 
   &__stations-list {
