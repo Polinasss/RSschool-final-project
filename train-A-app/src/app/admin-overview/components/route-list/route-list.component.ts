@@ -4,10 +4,10 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RouterOutlet } from '@angular/router';
 import { RouteFacade } from 'app/admin-overview/_state/route/route.facade';
 import { CreateButtonComponent } from 'app/shared/components/create-button/create-button.component';
-import { CarriagesPanelService } from 'app/admin-overview/services/carriages-panel/carriages-panel.service';
+import { RoutePanelService } from 'app/admin-overview/services/route-panel.service';
 import { RouteItemComponent } from '../route-item/route-item.component';
-import { CarriagesPanelComponent } from '../carriages-panel/carriages-panel.component';
 import { RouteFormComponent } from '../route-form/route-form.component';
+import { RoutePanelComponent } from '../route-panel/route-panel.component';
 
 @Component({
   selector: 'app-route-list',
@@ -21,7 +21,7 @@ import { RouteFormComponent } from '../route-form/route-form.component';
     NgTemplateOutlet,
     RouterOutlet,
     CreateButtonComponent,
-    CarriagesPanelComponent,
+    RoutePanelComponent,
     RouteFormComponent,
   ],
   templateUrl: './route-list.component.html',
@@ -30,7 +30,7 @@ import { RouteFormComponent } from '../route-form/route-form.component';
 export class RouteListComponent implements OnInit {
   private routeFacade = inject(RouteFacade);
 
-  private panelService = inject(CarriagesPanelService);
+  private panelService = inject(RoutePanelService);
 
   readonly formState$ = this.panelService.panelState$;
 
@@ -45,6 +45,6 @@ export class RouteListComponent implements OnInit {
   }
 
   public openForm() {
-    this.panelService.togglePanel('panel', 'create');
+    this.panelService.togglePanel('panelRoute', 'create');
   }
 }

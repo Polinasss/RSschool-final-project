@@ -12,12 +12,12 @@
     <div *ngIf="(formState$ | async)?.editMode !== 'create'">
       <app-create-button (clickOnButton)="openForm()"></app-create-button>
     </div>
-    <app-carriages-panel>
+    <app-route-panel>
       <app-route-form
         [editMode]="(formState$ | async)?.editMode || 'create'"
-        [carriageForUpdating]="(formState$ | async)?.carriage || null"
+        [routeForUpdating]="(formState$ | async)?.route || null"
       />
-    </app-carriages-panel>
+    </app-route-panel>
     <ul>
       <li *ngFor="let route of routes$ | async">
         <app-route-item [item]="route"></app-route-item>

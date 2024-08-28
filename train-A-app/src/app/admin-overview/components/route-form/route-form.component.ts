@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { Carriage, CarriageFormEditMode } from 'app/admin-overview/models/carriage';
+import { CarriageFormEditMode } from 'app/admin-overview/models/carriage';
+import { Route } from 'app/admin-overview/models/route';
 
 @Component({
   selector: 'app-route-form',
@@ -11,5 +12,5 @@ import { Carriage, CarriageFormEditMode } from 'app/admin-overview/models/carria
 export class RouteFormComponent {
   @Input() editMode: CarriageFormEditMode = 'create';
 
-  @Input() carriageForUpdating!: Carriage | null;
+  @Input() routeForUpdating!: Route | null;
 }
