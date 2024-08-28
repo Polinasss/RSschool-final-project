@@ -10,6 +10,8 @@ import { routes } from './app.routes';
 import { carriageFeature } from './admin-overview/_state/carriage/carriage.reducer';
 import { CarriageEffects } from './admin-overview/_state/carriage/carriage.effects';
 import { authInterceptor } from './auth/auth.interceptor';
+import { stationFeature } from './admin-overview/_state/station/station.reducer';
+import { StationEffects } from './admin-overview/_state/station/station.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -18,8 +20,9 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([authInterceptor])),
     provideAnimationsAsync(),
     provideStore(),
+    provideState(stationFeature),
     provideState(carriageFeature),
-    provideEffects([CarriageEffects]),
+    provideEffects([StationEffects, CarriageEffects]),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
   ],
 };
