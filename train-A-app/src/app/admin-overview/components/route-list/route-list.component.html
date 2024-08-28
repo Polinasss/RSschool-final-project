@@ -19,8 +19,8 @@
       />
     </app-route-panel>
     <ul>
-      <li *ngFor="let route of routes$ | async">
-        <app-route-item [item]="route"></app-route-item>
+      <li *ngFor="let route of routesWithStationsAndCarriages$ | async">
+        <app-route-item [item]="route.route" [carriagesName]="route.carriageName"></app-route-item>
       </li>
     </ul>
   </ng-template>
