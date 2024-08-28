@@ -1,0 +1,27 @@
+<div class="carriage">
+  <div *ngIf="(formState$ | async)?.editMode !== 'create'">
+    <app-create-button (clickOnButton)="openForm()"></app-create-button>
+  </div>
+  <app-carriages-panel>
+    <app-carriages-form
+      [editMode]="(formState$ | async)?.editMode || 'create'"
+      [carriageForUpdating]="(formState$ | async)?.carriage || null"
+    />
+  </app-carriages-panel>
+  <div class="carriage__spinner" *ngIf="isLoading$ | async">
+    <mat-spinner></mat-spinner>
+  </div>
+  <div class="carriage__spinner" *ngIf="error$ | async">
+    <p>{{ error$ | async }}</p>
+  </div>
+  <ng-container *ngIf="!(isLoading$ | async) && !(error$ | async)">
+    <ng-container *ngTemplateOutlet="carriages"></ng-container>
+  </ng-container>
+  <ng-template #carriages>
+    <ul>
+      <li *ngFor="let carriage of carriages$ | async">
+        <app-carriages-item [item]="carriage"></app-carriages-item>
+      </li>
+    </ul>
+  </ng-template>
+</div>

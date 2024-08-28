@@ -1,0 +1,45 @@
+@import './../../../core/styles/variables.scss';
+
+.schema {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 1100px;
+  max-height: 800px;
+  margin-bottom: 30px;
+  border: 1px solid $divider;
+  box-shadow: 2px 2px 2px 2px $divider;
+  border-radius: 10px;
+  overflow: auto;
+
+  &__right,
+  &__left {
+    display: inline-grid;
+    grid-template-columns: repeat(var(--columns, 1), 1fr);
+    margin: 10px 40px;
+    padding: 5px;
+    gap: 5px;
+    border-radius: 5px;
+    border-left: 1px solid $divider;
+    border-right: 1px solid $divider;
+  }
+}
+
+@media (max-width: $layout-breakpoint-tablet) {
+  .schema {
+    max-width: 750px;
+  }
+}
+
+@media (max-width: $layout-breakpoint-mobile) {
+  .schema {
+    max-width: 300px;
+  }
+}
+@media (max-width: $layout-breakpoint-small-mobile) {
+  .schema {
+    max-width: 200px;
+  }
+}
