@@ -7,6 +7,7 @@ import { RoutesPageComponent } from './admin-overview/pages/routes-page/routes-p
 import { RidePageComponent } from './admin-overview/pages/ride-page/ride-page.component';
 import { StationsPageComponent } from './admin-overview/pages/stations-page/stations-page.component';
 import { RouteListComponent } from './admin-overview/components/route-list/route-list.component';
+import { CarriagesPageComponent } from './admin-overview/pages/carriages-page/carriages-page.component';
 
 export const routes: Routes = [
   {
@@ -25,7 +26,7 @@ export const routes: Routes = [
       },
       {
         path: 'carriages',
-        component: StationsPageComponent,
+        component: CarriagesPageComponent,
       },
       {
         path: 'routes',

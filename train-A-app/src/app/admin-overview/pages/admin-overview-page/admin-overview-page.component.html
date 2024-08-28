@@ -32,6 +32,8 @@
       class="carriages-page"
       *ngIf="selectedPanelItem === 'Carriages'"
     ></app-carriages-page>
-    <div class="routes-page" *ngIf="selectedPanelItem === 'Routes'">Routes</div>
+    <app-routes-page class="routes-page" *ngIf="selectedPanelItem === 'Routes'"
+      >Routes</app-routes-page
+    >
   </div>
 </div>
