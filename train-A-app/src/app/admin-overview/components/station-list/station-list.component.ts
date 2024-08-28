@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatCard, MatCardContent, MatCardHeader } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
-import { MOCK_STATIONS } from '../../models/mocked-data';
 import { Station } from '../../models/station';
 
 @Component({
@@ -13,7 +12,7 @@ import { Station } from '../../models/station';
   styleUrl: './station-list.component.scss',
 })
 export class StationListComponent {
-  @Input() stations: Station[] = MOCK_STATIONS;
+  @Input() stations!: Station[];
 
   @Output() stationDeleted = new EventEmitter<number>();
 

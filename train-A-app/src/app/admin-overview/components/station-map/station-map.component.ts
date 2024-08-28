@@ -1,13 +1,5 @@
-import {
-  Component,
-  AfterViewInit,
-  EventEmitter,
-  Output,
-  Input,
-  ChangeDetectorRef,
-} from '@angular/core';
+import { Component, AfterViewInit, EventEmitter, Output, Input } from '@angular/core';
 import * as L from 'leaflet';
-import { MOCK_STATIONS } from '../../models/mocked-data';
 import {
   GeocodingService,
   NominatimResponse,
@@ -22,7 +14,7 @@ import { LocationData, Station } from '../../models/station';
   styleUrl: './station-map.component.scss',
 })
 export class StationMapComponent implements AfterViewInit {
-  @Input() stations: Station[] = MOCK_STATIONS;
+  @Input() stations!: Station[];
 
   @Output() locationSelected = new EventEmitter<LocationData>();
 
@@ -32,10 +24,7 @@ export class StationMapComponent implements AfterViewInit {
 
   private markers: L.Marker[] = [];
 
-  constructor(
-    private geocodingService: GeocodingService,
-    private cdr: ChangeDetectorRef,
-  ) {
+  constructor(private geocodingService: GeocodingService) {
     this.customIcon = L.icon({
       iconRetinaUrl:
         'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
@@ -57,7 +46,10 @@ export class StationMapComponent implements AfterViewInit {
       return;
     }
 
-    this.map = L.map('map').setView([51.505, -0.09], 13);
+    this.map = L.map('map', {
+      zoom: 1,
+      minZoom: 1,
+    }).setView([51.505, -0.09], 1);
 
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
