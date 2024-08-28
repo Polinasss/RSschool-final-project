@@ -1,0 +1,17 @@
+.route__form {
+  display: flex;
+  justify-content: space-evenly;
+  gap: 20px;
+  padding: 20px;
+
+  &__header {
+    font-size: 30px;
+    font-weight: 600;
+  }
+
+  &__fields {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+}
