@@ -1,4 +1,4 @@
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -10,10 +10,11 @@ import { StationFacade } from 'app/admin-overview/_state/station/station.facade'
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CommonModule } from '@angular/common';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { Subject, takeUntil } from 'rxjs';
 import { StationMapComponent } from '../../components/station-map/station-map.component';
 import { StationFormComponent } from '../../components/station-form/station-form.component';
 import { StationListComponent } from '../../components/station-list/station-list.component';
-import { LocationData, Station } from '../../models/station';
+import { LocationData, Station, StationBody } from '../../models/station';
 
 @Component({
   selector: 'app-stations-page',
@@ -30,7 +31,7 @@ import { LocationData, Station } from '../../models/station';
   templateUrl: './stations-page.component.html',
   styleUrl: './stations-page.component.scss',
 })
-export class StationsPageComponent {
+export class StationsPageComponent implements OnInit, OnDestroy {
   stationsConnectedForm: FormGroup;
 
   public selectedLocation: LocationData | null = null;
@@ -45,9 +46,9 @@ export class StationsPageComponent {
 
   readonly isLoading$ = this.stationFacade.isLoading$;
 
-  @ViewChild(StationMapComponent) mapComponent!: StationMapComponent;
+  public stationList: Station[] = [];
 
-  @ViewChild(StationListComponent) listComponent!: StationListComponent;
+  private destroy$: Subject<void> = new Subject<void>();
 
   constructor(private fb: FormBuilder) {
     this.stationsConnectedForm = this.fb.group({
@@ -58,6 +59,20 @@ export class StationsPageComponent {
     });
   }
 
+  ngOnInit(): void {
+    this.error$.pipe(takeUntil(this.destroy$)).subscribe((error) => {
+      if (error) {
+        this.snackBar.open(error, 'OK', {
+          duration: 3000,
+          verticalPosition: 'top',
+        });
+      }
+    });
+    this.stations$.pipe(takeUntil(this.destroy$)).subscribe((stations: Station[]) => {
+      this.stationList = stations;
+    });
+  }
+
   public onLocationSelected(locationData: LocationData): void {
     this.selectedLocation = locationData;
     this.stationsConnectedForm.patchValue({
@@ -65,36 +80,27 @@ export class StationsPageComponent {
       latitude: locationData.latitude,
       longitude: locationData.longitude,
     });
-
-    this.error$.subscribe((error) => {
-      if (error) {
-        this.snackBar.open(error, 'Close', { duration: 3000 });
-      }
-    });
   }
 
-  public onAddStation(newStation: Station) {
-    this.stationFacade.addStation(newStation);
-    this.mapComponent.updateMapMarkers();
+  public onAddStation(newStation: StationBody) {
+    const stationExists = this.stationList.find((station) => station.city === newStation.city);
+
+    if (stationExists) {
+      this.snackBar.open('Maximum 1 station can be in one city!', 'OK', {
+        duration: 3000,
+        verticalPosition: 'top',
+      });
+    } else {
+      this.stationFacade.addStation(newStation);
+    }
   }
 
   public onDeleteStation(stationId: number) {
-    // const index = this.stations.findIndex((station) => station.id === stationId);
-    // if (index > -1) {
-    //   const isConnected = this.stations.some((station) =>
-    //     station.connectedTo.some((connection) => connection.id === stationId.toString()),
-    //   );
+    this.stationFacade.deleteStation(stationId);
+  }
 
-    //   if (isConnected) {
-    //     console.log('Cannot delete station with active rides!');
-    //     return;
-    //   }
-
-    //   this.stations.splice(index, 1);
-    //   if (this.mapComponent) {
-    //     this.mapComponent.updateMapMarkers();
-    //   }
-    // }
-    console.log('Station to delete:', stationId);
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
