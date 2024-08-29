@@ -7,7 +7,7 @@
           <div class="departure-time">
             <span class="time">{{ departureTime | date: 'HH:mm' : '0' }}</span>
             <span class="date">{{ departureTime | date: 'MMMM d' : '0' }}</span>
-            <span class="city">{{ fromCity }}</span>
+            <span class="city">{{ fromCity.city }}</span>
           </div>
           <div class="travel-duration">
             <img class="dleft" src="assets/durationl.svg" alt="" width="70" />
@@ -17,7 +17,7 @@
           <div class="arrival-time">
             <span class="time">{{ arrivalTime | date: 'HH:mm' : '0' }}</span>
             <span class="date">{{ arrivalTime | date: 'MMMM d' : '0' }}</span>
-            <span class="city">{{ toCity }}</span>
+            <span class="city">{{ toCity.city }}</span>
           </div>
         </div>
 

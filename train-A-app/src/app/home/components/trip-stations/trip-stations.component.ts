@@ -20,9 +20,13 @@ export class TripStationsComponent {
     @Inject(MAT_DIALOG_DATA)
     public data: { path: { stations: number[]; id: number }; schedule: Segment[] },
   ) {
-    this.durations = data.schedule.map((seg) =>
-      formatDuration(new Date(seg.time[1]).getTime() - new Date(seg.time[0]).getTime()),
-    );
+    // TODO: get city names by id
+    let arrivalTime = new Date(data.schedule[0].time[0]).getTime();
+    this.durations = data.schedule.map((seg) => {
+      const pause = formatDuration(new Date(seg.time[0]).getTime() - arrivalTime);
+      arrivalTime = new Date(seg.time[1]).getTime();
+      return pause;
+    });
   }
 
   onClose(): void {

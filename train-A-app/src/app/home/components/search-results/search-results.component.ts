@@ -22,16 +22,16 @@ export class SearchResultsComponent implements OnInit {
 
   routes: Route[] = [];
 
-  fromCity: string = '';
+  fromCity: { stationId: number; city: string } = { stationId: 0, city: '' };
 
-  toCity: string = '';
+  toCity: { stationId: number; city: string } = { stationId: 0, city: '' };
 
   ngOnInit() {
     this.trip$.subscribe((trip) => {
       console.log(trip);
       this.routes = trip.routes;
-      this.fromCity = trip.from?.city || '';
-      this.toCity = trip.to?.city || '';
+      this.fromCity = { stationId: trip.from?.stationId || 0, city: trip.from?.city || '' };
+      this.toCity = { stationId: trip.to?.stationId || 0, city: trip.to?.city || '' };
     });
   }
 }

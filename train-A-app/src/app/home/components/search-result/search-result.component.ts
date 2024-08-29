@@ -12,9 +12,9 @@ import { ScheduleItemComponent } from '../schedule-item/schedule-item.component'
 export class SearchResultComponent implements OnInit {
   @Input() route!: Route;
 
-  @Input() fromCity: string = '';
+  @Input() fromCity: { stationId: number; city: string } = { stationId: 0, city: '' };
 
-  @Input() toCity: string = '';
+  @Input() toCity: { stationId: number; city: string } = { stationId: 0, city: '' };
 
   ways: Schedule[] = [];
 

@@ -27,9 +27,9 @@ import { TripStationsComponent } from '../trip-stations/trip-stations.component'
 export class ScheduleItemComponent implements OnInit {
   @Input() way!: Schedule;
 
-  @Input() fromCity: string = '';
+  @Input() fromCity: { stationId: number; city: string } = { stationId: 0, city: '' };
 
-  @Input() toCity: string = '';
+  @Input() toCity: { stationId: number; city: string } = { stationId: 0, city: '' };
 
   @Input() path: { stations: number[]; id: number } = { stations: [], id: 0 };
 
@@ -43,13 +43,19 @@ export class ScheduleItemComponent implements OnInit {
 
   carriagePrices: { type: string; price: number }[] = [];
 
+  startStopStations: { start: number; stop: number } = { start: 0, stop: 0 };
+
   constructor(private dialog: MatDialog) {}
 
   openDialog(): void {
     // const dialogRef =
+    const { start, stop } = this.startStopStations;
     this.dialog.open(TripStationsComponent, {
       width: '400px',
-      data: { path: this.path, schedule: this.way.segments },
+      data: {
+        path: { stations: this.path.stations.slice(start, stop + 1), id: this.path.id },
+        schedule: this.way.segments.slice(start, stop),
+      },
     });
 
     // dialogRef.afterClosed().subscribe((result) => {
@@ -59,14 +65,17 @@ export class ScheduleItemComponent implements OnInit {
   }
 
   ngOnInit() {
-    const segments = [...this.way.segments];
+    const start = this.path.stations.indexOf(this.fromCity.stationId);
+    const stop = this.path.stations.indexOf(this.toCity.stationId, start);
+    this.startStopStations.start = start > 0 ? start : 0;
+    this.startStopStations.stop = stop > start ? stop : 0;
+    const segments = this.way.segments.slice(start, stop);
     const segmentsPrices = segments.map((seg) => seg.price);
     const carriageTypes = Object.keys(segmentsPrices[0]);
     this.carriagePrices = carriageTypes.map((type) => ({
       type,
       price: segmentsPrices.reduce((acc, cur) => acc + cur[type], 0),
     }));
-
     const [dt] = [...segments[0].time];
     this.departureTime = dt;
     const [, at] = segments[segments.length - 1].time;
