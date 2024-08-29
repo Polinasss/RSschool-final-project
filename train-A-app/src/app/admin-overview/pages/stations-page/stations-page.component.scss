@@ -8,10 +8,9 @@
   &__map-form {
     display: flex;
     flex-direction: row;
-    gap: 1.875rem;
+    gap: 2rem;
     align-items: center;
-    justify-content: space-between;
-    position: relative;
+    justify-content: center;
 
     &__map {
       width: 43.75rem;
