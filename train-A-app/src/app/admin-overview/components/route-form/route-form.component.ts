@@ -17,6 +17,7 @@ import { StationFacade } from 'app/admin-overview/_state/station/station.facade'
 import { CarriageFormEditMode } from 'app/admin-overview/models/carriage';
 import { Route } from 'app/admin-overview/models/route';
 import { Station } from 'app/admin-overview/models/station';
+import { RoutePanelService } from 'app/admin-overview/services/route-panel.service';
 import { combineLatest, map, Observable } from 'rxjs';
 
 @Component({
@@ -43,6 +44,8 @@ export class RouteFormComponent implements OnInit {
   private stationFacade = inject(StationFacade);
 
   private route = inject(RouteFacade);
+
+  private panelService = inject(RoutePanelService);
 
   private fb: FormBuilder = inject(FormBuilder);
 
@@ -120,11 +123,27 @@ export class RouteFormComponent implements OnInit {
     return array;
   }
 
+  private closeFormPanel() {
+    this.routesForm.reset();
+    this.clearFormArray(this.stations);
+    this.clearFormArray(this.carriages);
+    this.panelService.togglePanel('panelRoute', 'save');
+  }
+
+  private clearFormArray(formArray: FormArray) {
+    while (formArray.length > 1) {
+      formArray.removeAt(1);
+    }
+  }
+
   public onSubmit() {
-    const newRoute = {
-      path: this.removeLastElement(this.stations.value) as number[],
-      carriages: this.removeLastElement(this.carriages.value) as string[],
-    };
-    this.route.addRoute(newRoute);
+    if (this.routesForm.valid) {
+      const newRoute = {
+        path: this.removeLastElement(this.stations.value) as number[],
+        carriages: this.removeLastElement(this.carriages.value) as string[],
+      };
+      this.route.addRoute(newRoute);
+      this.closeFormPanel();
+    }
   }
 }
