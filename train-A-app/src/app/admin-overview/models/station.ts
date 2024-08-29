@@ -21,7 +21,7 @@ export interface StationBody {
   city: string;
   latitude: number;
   longitude: number;
-  relations: ConnectedCities[];
+  relations: number[];
 }
 
 export interface StationResponse {
