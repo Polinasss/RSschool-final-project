@@ -1,0 +1,128 @@
+/* Modal Structure */
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 400px;
+  max-width: 90%;
+}
+
+.modal-content {
+  padding: 20px;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+}
+
+.modal-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.modal-body {
+  padding-top: 10px;
+  max-height: 500px;
+  overflow-y: scroll;
+}
+
+/* Table Structure */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead th {
+  text-align: left;
+  color: #666;
+  font-size: 12px;
+  font-weight: normal;
+  padding-bottom: 10px;
+}
+
+tbody td {
+  padding: 5px 0;
+  vertical-align: top;
+  font-size: 14px;
+  color: #333;
+}
+
+thead th.right {
+  text-align: right;
+  padding: 5px 10px;
+}
+.station {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  margin: 10px auto;
+}
+
+.station-marker {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #ccc;
+  position: relative;
+  margin-right: 10px;
+  &::before {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: -16px;
+    width: 2px;
+    height: 16px;
+    background-color: #0071c2;
+  }
+  &::after {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 12px;
+    width: 2px;
+    height: 48px;
+    background-color: #0071c2;
+  }
+  &.active {
+    background-color: #0071c2;
+  }
+}
+
+.station-marker.first::before {
+  display: none;
+}
+.station-marker.last::after {
+  display: none;
+}
+
+.station-name {
+  font-weight: bold;
+  color: #333;
+}
+
+/* Style for stop information */
+tbody td:nth-child(3) {
+  text-align: right;
+  font-size: 14px;
+  line-height: 48px;
+  padding: 5px 10px;
+}
+
+.edge-station {
+  line-height: 48px;
+}

@@ -1,5 +1,11 @@
-<p>==========</p>
-<p>{{ fromCity + ' ' + (departureTime | date: 'MMMM d HH:mm' : '0') }}</p>
-<p>{{ toCity + ' ' + (arrivalTime | date: 'MMMM d HH:mm' : '0') }}</p>
-<p>{{ duration | date: "d 'd' h 'h' mm 'm'" : '0' }}</p>
-<p>==========</p>
+<div class="wrapper">
+  <h6>route ID: {{ route.id }}</h6>
+  @for (way of ways; track way) {
+    <app-schedule-item
+      [toCity]="toCity"
+      [fromCity]="fromCity"
+      [way]="way"
+      [path]="{ stations: route.path, id: route.id }"
+    ></app-schedule-item>
+  }
+</div>

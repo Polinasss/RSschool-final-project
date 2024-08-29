@@ -1,0 +1,139 @@
+@import '@styles/variables.scss';
+
+mat-card {
+  margin: 10px;
+  border-color: $text;
+  mat-card-header {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    position: relative;
+  }
+  mat-card-content {
+    display: flex;
+    justify-content: space-between;
+    padding: 0;
+  }
+}
+
+.travel-card {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  border-radius: 8px;
+  font-family: Arial, sans-serif;
+  padding: 10px 10px 5px;
+}
+
+.time-route-wrapper {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  max-width: 500px;
+}
+
+.time-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.departure-time,
+.arrival-time {
+  text-align: left;
+  width: 100px;
+}
+
+.time {
+  display: block;
+  font-size: 24px;
+  font-weight: bold;
+  color: #000;
+}
+
+.date {
+  display: block;
+  font-size: 14px;
+  color: #666;
+}
+
+.city {
+  display: block;
+  font-size: 16px;
+  color: #000;
+}
+
+.travel-duration {
+  text-align: center;
+  color: #0071c2;
+  font-size: 14px;
+  width: 300px;
+  margin: 0 10px;
+}
+
+.route-info {
+  display: flex;
+  gap: 10px;
+  text-align: left;
+}
+
+.route {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background-color: #f0f0f0;
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-size: 14px;
+  color: #333;
+  width: 160px;
+}
+.train {
+  margin-right: 5px;
+}
+
+.route-link {
+  display: block;
+  margin-top: 8px;
+  font-size: 14px;
+  color: #0071c2;
+  text-decoration: none;
+}
+
+.price-info {
+  display: flex;
+  flex-wrap: wrap;
+  text-align: right;
+  align-items: center;
+}
+
+.price {
+  height: 70px;
+  margin: 0 5px 5px;
+  background-color: #e0e2ec;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  &:hover {
+    background-color: #cfd1da;
+  }
+}
+
+.class-type {
+  display: block;
+  font-size: 16px;
+  color: #333;
+}
+
+.price-amount {
+  display: block;
+  font-size: 24px;
+  font-weight: bold;
+  color: #000;
+}
+
+.seats {
+  display: block;
+  font-size: 14px;
+  color: #666;
+}

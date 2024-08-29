@@ -6,10 +6,11 @@
   display: flex;
   align-items: center;
   align-content: center;
+  justify-content: center;
   flex-wrap: wrap;
   min-width: 150px;
   max-width: 1200px;
-  width: 100%;
+  margin: 0 auto;
 }
 
 .example-full-width {
@@ -27,4 +28,9 @@
 .mdc-button {
   border-radius: 4px;
   margin: 0 10px 20px;
+}
+
+.arrows {
+  margin: 0 0 13px;
+  cursor: pointer;
 }

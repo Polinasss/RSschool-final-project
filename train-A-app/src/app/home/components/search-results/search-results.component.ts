@@ -28,6 +28,7 @@ export class SearchResultsComponent implements OnInit {
 
   ngOnInit() {
     this.trip$.subscribe((trip) => {
+      console.log(trip);
       this.routes = trip.routes;
       this.fromCity = trip.from?.city || '';
       this.toCity = trip.to?.city || '';

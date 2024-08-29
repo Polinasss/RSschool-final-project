@@ -1,0 +1,44 @@
+<mat-card class="stations-list">
+  <mat-card-content>
+    <div class="travel-card">
+      <div class="time-route-wrapper">
+        <h5 class="time">RideId {{ way.rideId }}</h5>
+        <div class="time-info">
+          <div class="departure-time">
+            <span class="time">{{ departureTime | date: 'HH:mm' : '0' }}</span>
+            <span class="date">{{ departureTime | date: 'MMMM d' : '0' }}</span>
+            <span class="city">{{ fromCity }}</span>
+          </div>
+          <div class="travel-duration">
+            <img class="dleft" src="assets/durationl.svg" alt="" width="70" />
+            <span class="duration"> {{ duration }} </span>
+            <img class="dright" src="assets/durationr.svg" alt="" width="70" />
+          </div>
+          <div class="arrival-time">
+            <span class="time">{{ arrivalTime | date: 'HH:mm' : '0' }}</span>
+            <span class="date">{{ arrivalTime | date: 'MMMM d' : '0' }}</span>
+            <span class="city">{{ toCity }}</span>
+          </div>
+        </div>
+
+        <div class="route-info">
+          <div class="route">
+            <img class="train" src="assets/train.svg" alt="" height="30" />
+            <span>City77 → City11</span>
+          </div>
+          <button mat-button class="route-link" (click)="openDialog()">Route</button>
+        </div>
+      </div>
+
+      <div class="price-info">
+        @for (cp of carriagePrices; track cp) {
+          <div class="price">
+            <span class="class-type">{{ cp.type }}</span>
+            <span class="price-amount">${{ cp.price }}</span>
+            <span class="seats">75 seats</span>
+          </div>
+        }
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
