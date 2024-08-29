@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Route } from 'app/admin-overview/models/route';
+import { Route, RouteResponse } from 'app/admin-overview/models/route';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -13,8 +13,8 @@ export class RouteService {
     return this.http.get<Route[]>('/api/route/');
   }
 
-  public addRoute(newRoute: Partial<Route>): Observable<number> {
-    return this.http.post<number>('/api/route/', newRoute);
+  public addRoute(newRoute: Partial<Route>): Observable<RouteResponse> {
+    return this.http.post<RouteResponse>('/api/route/', newRoute);
   }
 
   public updateRoute(newRoute: Route): Observable<number> {

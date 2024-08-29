@@ -33,9 +33,9 @@
   </div>
   <mat-card-content>
     <h3 class="item__subheader">Cities</h3>
-    <span class="item__list" *ngFor="let city of item.path; let i = index"
-      >{{ city }}
-      <span *ngIf="i < item.path.length - 1"> - </span>
+    <span class="item__list" *ngFor="let city of stationsName; let i = index"
+      >{{ city | capitalizeFirstLetter }}
+      <span *ngIf="i < stationsName.length - 1"> - </span>
     </span>
     <h3 class="item__subheader">Carriage types</h3>
     <span class="item__list" *ngFor="let carriage of carriagesName; let i = index"
