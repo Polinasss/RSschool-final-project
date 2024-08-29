@@ -7,6 +7,21 @@ import {
 } from '../../services/geocoding-service/geocoding.service';
 import { LocationData } from '../../models/station';
 
+const iconRetinaUrl = '';
+const iconUrl = './assets/marker-icon.png';
+const shadowUrl = './assets/marker-shadow.png';
+const iconDefault = L.icon({
+  iconRetinaUrl,
+  iconUrl,
+  shadowUrl,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  tooltipAnchor: [16, -28],
+  shadowSize: [41, 41],
+});
+L.Marker.prototype.options.icon = iconDefault;
+
 @Component({
   selector: 'app-station-map',
   standalone: true,
@@ -19,25 +34,17 @@ export class StationMapComponent implements AfterViewInit, OnDestroy {
 
   private map!: L.Map;
 
-  private customIcon: L.Icon;
-
   private destroy$: Subject<void> = new Subject<void>();
 
-  constructor(private geocodingService: GeocodingService) {
-    this.customIcon = L.icon({
-      iconRetinaUrl:
-        'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
-      iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41],
-    });
-  }
+  constructor(private geocodingService: GeocodingService) {}
 
   ngAfterViewInit(): void {
     this.initializeMap();
+    if (this.map && iconDefault) {
+      this.geocodingService.updateMapMarkers(this.map);
+    }
+
+    this.map.on('click', this.handleMapClick.bind(this), { passive: true });
   }
 
   private initializeMap(): void {
@@ -45,7 +52,10 @@ export class StationMapComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
-    this.map = L.map('map').setView([51.505, -0.09], 1);
+    this.map = L.map('map', {
+      center: [51.505, -0.09],
+      zoom: 1,
+    });
 
     const titles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
@@ -54,10 +64,6 @@ export class StationMapComponent implements AfterViewInit, OnDestroy {
     });
 
     titles.addTo(this.map);
-
-    this.geocodingService.updateMapMarkers(this.map, this.customIcon);
-
-    this.map.on('click', this.handleMapClick.bind(this), { passive: true });
   }
 
   private handleMapClick(e: L.LeafletMouseEvent): void {

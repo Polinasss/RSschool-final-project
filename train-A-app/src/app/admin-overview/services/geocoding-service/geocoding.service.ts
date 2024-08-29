@@ -24,11 +24,11 @@ export interface NominatimResponse {
 export class GeocodingService {
   private apiUrl = 'https://nominatim.openstreetmap.org/reverse';
 
+  private autocompleteUrl = 'https://nominatim.openstreetmap.org/search';
+
   private stationFacade = inject(StationFacade);
 
   private stations$ = this.stationFacade.station$;
-
-  private markersMap = new Map<number, L.Marker>();
 
   constructor(private http: HttpClient) {}
 
@@ -37,24 +37,27 @@ export class GeocodingService {
     return this.http.get<NominatimResponse>(url);
   }
 
-  updateMapMarkers(map: L.Map, customIcon: L.Icon): void {
+  updateMapMarkers(map: L.Map): void {
+    const markersMap = new Map<number, L.Marker>();
+
     this.stations$.subscribe((stations) => {
-      // Удаление маркеров для удаленных станций
-      this.markersMap.forEach((marker, stationId) => {
+      if (!map) return;
+
+      markersMap.forEach((marker, stationId) => {
         if (!stations.some((station) => station.id === stationId)) {
           map.removeLayer(marker);
-          this.markersMap.delete(stationId);
+          markersMap.delete(stationId);
         }
       });
 
-      // Добавление и обновление маркеров для существующих станций
       stations.forEach((station) => {
-        if (!this.markersMap.has(station.id)) {
-          const marker = L.marker([station.latitude, station.longitude], { icon: customIcon });
-          marker.addTo(map).bindPopup(`${station.city}`);
-          this.markersMap.set(station.id, marker);
+        if (!markersMap.has(station.id)) {
+          const marker = L.marker([station.latitude, station.longitude])
+            .addTo(map)
+            .bindPopup(`${station.city}`);
+          markersMap.set(station.id, marker);
         } else {
-          const existingMarker = this.markersMap.get(station.id);
+          const existingMarker = markersMap.get(station.id);
           if (existingMarker) {
             existingMarker.setLatLng([station.latitude, station.longitude]);
             existingMarker.getPopup()?.setContent(`${station.city}`);
