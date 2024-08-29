@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Station } from 'app/admin-overview/models/station';
+import { StationBody } from 'app/admin-overview/models/station';
 import { StationState } from './station.state';
 import { stationFeature } from './station.reducer';
 import { stationActions } from './station.action';
@@ -19,7 +19,7 @@ export class StationFacade {
     this.store.dispatch(stationActions.loadAllStation());
   }
 
-  addStation(newStation: Omit<Station, 'id'>) {
+  addStation(newStation: Omit<StationBody, 'id'>) {
     this.store.dispatch(stationActions.createNewStation({ station: newStation }));
   }
 

@@ -1,5 +1,5 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
-import { Station } from 'app/admin-overview/models/station';
+import { Station, StationBody } from 'app/admin-overview/models/station';
 import { ServerError } from 'app/shared/models/error';
 
 export const stationActions = createActionGroup({
@@ -8,7 +8,7 @@ export const stationActions = createActionGroup({
     loadAllStation: emptyProps(),
     loadAllStationSuccess: props<{ station: Station[] }>(),
     loadAllStationFailure: props<{ error: ServerError }>(),
-    createNewStation: props<{ station: Omit<Station, 'id'> }>(),
+    createNewStation: props<{ station: Omit<StationBody, 'id'> }>(),
     createNewStationSuccess: props<{ id: number; station: Omit<Station, 'id'> }>(),
     createNewStationFailure: props<{ error: ServerError }>(),
     addNewStationToStore: props<{ newStation: Station }>(),
