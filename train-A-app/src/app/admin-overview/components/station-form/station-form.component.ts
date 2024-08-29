@@ -14,6 +14,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatButtonModule } from '@angular/material/button';
 import { LocationData, Station, StationBody } from '../../models/station';
 
 @Component({
@@ -29,6 +30,7 @@ import { LocationData, Station, StationBody } from '../../models/station';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    MatButtonModule,
   ],
   templateUrl: './station-form.component.html',
   styleUrl: './station-form.component.scss',
@@ -119,15 +121,15 @@ export class StationFormComponent implements OnInit, OnChanges {
   }
 
   private resetForm(): void {
+    this.locationData = null;
     this.stationFormGroup.reset();
+    this.cityControl?.setErrors(null);
+    this.latitudeControl?.setErrors(null);
+    this.longitudeControl?.setErrors(null);
 
     this.connectedToControl.controls.forEach((control) => {
       control.reset();
       control.setErrors(null);
     });
-
-    this.cityControl?.setErrors(null);
-    this.latitudeControl?.setErrors(null);
-    this.longitudeControl?.setErrors(null);
   }
 }

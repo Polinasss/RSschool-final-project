@@ -1,4 +1,4 @@
-@import './../../../core/styles/variables.scss';
+@import '@styles/variables.scss';
 
 ::ng-deep .panel-item.active .mdc-list-item__primary-text {
   color: $text-active;
