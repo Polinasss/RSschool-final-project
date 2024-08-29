@@ -46,6 +46,7 @@ export class RouteFormComponent implements OnInit {
 
   private fb: FormBuilder = inject(FormBuilder);
 
+  // TODO: fix when the page will be ready
   private MIN_ITEMS_IN_ROUTE = 1;
 
   readonly carriages$ = this.carriageFacade.carriage$;
