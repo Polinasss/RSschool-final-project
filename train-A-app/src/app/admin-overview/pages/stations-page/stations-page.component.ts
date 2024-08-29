@@ -7,10 +7,11 @@ import {
   Validators,
 } from '@angular/forms';
 import { StationFacade } from 'app/admin-overview/_state/station/station.facade';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { CommonModule } from '@angular/common';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Subject, takeUntil } from 'rxjs';
+import { NotificationService } from 'app/core/services/notification/notification.service';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { StationMapComponent } from '../../components/station-map/station-map.component';
 import { StationFormComponent } from '../../components/station-form/station-form.component';
 import { StationListComponent } from '../../components/station-list/station-list.component';
@@ -27,6 +28,7 @@ import { LocationData, Station, StationBody } from '../../models/station';
     MatProgressSpinnerModule,
     ReactiveFormsModule,
     CommonModule,
+    MatSnackBarModule,
   ],
   templateUrl: './stations-page.component.html',
   styleUrl: './stations-page.component.scss',
@@ -35,8 +37,6 @@ export class StationsPageComponent implements OnInit, OnDestroy {
   stationsConnectedForm: FormGroup;
 
   public selectedLocation: LocationData | null = null;
-
-  private snackBar = inject(MatSnackBar);
 
   private stationFacade = inject(StationFacade);
 
@@ -50,7 +50,10 @@ export class StationsPageComponent implements OnInit, OnDestroy {
 
   private destroy$: Subject<void> = new Subject<void>();
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private notificationService: NotificationService,
+  ) {
     this.stationsConnectedForm = this.fb.group({
       city: ['', Validators.required],
       latitude: ['', [Validators.required, Validators.min(-90), Validators.max(90)]],
@@ -62,10 +65,7 @@ export class StationsPageComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.error$.pipe(takeUntil(this.destroy$)).subscribe((error) => {
       if (error) {
-        this.snackBar.open(error, 'OK', {
-          duration: 3000,
-          verticalPosition: 'top',
-        });
+        this.notificationService.openFailureSnackBar(error);
       }
     });
     this.stations$.pipe(takeUntil(this.destroy$)).subscribe((stations: Station[]) => {
@@ -86,10 +86,8 @@ export class StationsPageComponent implements OnInit, OnDestroy {
     const stationExists = this.stationList.find((station) => station.city === newStation.city);
 
     if (stationExists) {
-      this.snackBar.open('Maximum 1 station can be in one city!', 'OK', {
-        duration: 3000,
-        verticalPosition: 'top',
-      });
+      const message = 'Maximum 1 station can be in one city!';
+      this.notificationService.openFailureSnackBar(message);
     } else {
       this.stationFacade.addStation(newStation);
     }
