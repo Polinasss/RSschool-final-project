@@ -1,5 +1,5 @@
-<div class="form-container">
-  <form (ngSubmit)="createStationCoordinates()" [formGroup]="formGroup">
+<div class="form__container">
+  <form class="stations__form" (ngSubmit)="onSubmit()" [formGroup]="stationFormGroup">
     <mat-form-field class="small" appearance="outline">
       <mat-label>City Name</mat-label>
       <input matInput type="text" formControlName="city" />
@@ -33,28 +33,38 @@
         >
       </mat-error>
     </mat-form-field>
-    <div class="connected_cities">
-      <p>Connected</p>
-      <div class="cities-list" *ngFor="let control of connectedToControlAsFormControl">
-        <mat-form-field class="small" appearance="outline">
-          <mat-label>Connected City</mat-label>
-          <input
-            matInput
-            [formControl]="control"
-            placeholder="Enter connected city"
-            [matAutocomplete]="auto"
-          />
-          <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn.bind(this)">
-            <mat-option *ngFor="let station of stations" [value]="station.id">
-              {{ station.city }}
-            </mat-option>
-          </mat-autocomplete>
-          <mat-error *ngIf="control.invalid">
-            <span *ngIf="control.errors?.['required']">Please enter a connected city</span>
-          </mat-error>
-        </mat-form-field>
+    <div class="connected__cities">
+      <div class="connected__cities__header">
+        <p>Connected</p>
+        <button class="connected__cities__header__add-btn" (click)="addConnectedCity()">
+          <mat-icon>add_box</mat-icon>
+        </button>
+      </div>
+      <div class="connected__cities__controls">
+        <div
+          class="connected__cities__controls__list"
+          *ngFor="let control of connectedToControlAsFormControl"
+        >
+          <mat-form-field class="small" appearance="outline">
+            <mat-label>Connected City</mat-label>
+            <input
+              matInput
+              [formControl]="control"
+              placeholder="Enter connected city"
+              [matAutocomplete]="auto"
+            />
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn.bind(this)">
+              <mat-option *ngFor="let station of stations" [value]="station.id">
+                {{ station.city }}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="control.invalid">
+              <span *ngIf="control.errors?.['required']">Please enter a connected city</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
       </div>
     </div>
-    <button class="save-btn" type="submit">Save</button>
+    <button class="stations__form__save-btn" type="submit">Save</button>
   </form>
 </div>
