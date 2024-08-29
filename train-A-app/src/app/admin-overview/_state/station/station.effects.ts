@@ -28,12 +28,18 @@ export class StationEffects {
       ofType(stationActions.createNewStation),
       mergeMap((action) =>
         this.stationService.addStation(action.station).pipe(
-          map((responseId) =>
-            stationActions.createNewStationSuccess({
-              id: responseId,
-              station: action.station,
-            }),
-          ),
+          map((response) => {
+            const newStation = {
+              city: action.station.city,
+              latitude: action.station.latitude,
+              longitude: action.station.longitude,
+              connectedTo: action.station.relations,
+            };
+            return stationActions.createNewStationSuccess({
+              id: response.id,
+              station: newStation,
+            });
+          }),
           catchError((error) => of(stationActions.createNewStationFailure({ error }))),
         ),
       ),
@@ -44,8 +50,11 @@ export class StationEffects {
     return this.actions$.pipe(
       ofType(stationActions.createNewStationSuccess),
       mergeMap((action) => {
-        const newItem: Station = { ...action.station, id: action.id };
-        return of(stationActions.addNewStationToStore({ newStation: newItem }));
+        return of(
+          stationActions.addNewStationToStore({
+            newStation: { id: action.id, ...action.station },
+          }),
+        );
       }),
     );
   });
