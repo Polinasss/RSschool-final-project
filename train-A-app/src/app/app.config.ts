@@ -11,6 +11,8 @@ import { CarriageEffects } from './admin-overview/_state/carriage/carriage.effec
 import { authInterceptor } from './auth/auth.interceptor';
 import { stationFeature } from './admin-overview/_state/station/station.reducer';
 import { StationEffects } from './admin-overview/_state/station/station.effects';
+import { routeFeature } from './admin-overview/_state/route/route.reducer';
+import { RoutesEffects } from './admin-overview/_state/route/route.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
