@@ -1,10 +1,11 @@
-import { Component, AfterViewInit, EventEmitter, Output, Input } from '@angular/core';
+import { Component, AfterViewInit, EventEmitter, Output, OnDestroy } from '@angular/core';
 import * as L from 'leaflet';
+import { Subject, takeUntil } from 'rxjs';
 import {
   GeocodingService,
   NominatimResponse,
 } from '../../services/geocoding-service/geocoding.service';
-import { LocationData, Station } from '../../models/station';
+import { LocationData } from '../../models/station';
 
 @Component({
   selector: 'app-station-map',
@@ -13,16 +14,14 @@ import { LocationData, Station } from '../../models/station';
   templateUrl: './station-map.component.html',
   styleUrl: './station-map.component.scss',
 })
-export class StationMapComponent implements AfterViewInit {
-  @Input() stations!: Station[];
-
+export class StationMapComponent implements AfterViewInit, OnDestroy {
   @Output() locationSelected = new EventEmitter<LocationData>();
 
   private map!: L.Map;
 
   private customIcon: L.Icon;
 
-  private markers: L.Marker[] = [];
+  private destroy$: Subject<void> = new Subject<void>();
 
   constructor(private geocodingService: GeocodingService) {
     this.customIcon = L.icon({
@@ -46,46 +45,45 @@ export class StationMapComponent implements AfterViewInit {
       return;
     }
 
-    this.map = L.map('map', {
-      zoom: 1,
-      minZoom: 1,
-    }).setView([51.505, -0.09], 1);
+    this.map = L.map('map').setView([51.505, -0.09], 1);
 
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    const titles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
+      minZoom: 1,
       attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-    }).addTo(this.map);
-
-    this.updateMapMarkers();
-
-    this.map.on('click', (e: L.LeafletMouseEvent) => {
-      const { lat, lng } = e.latlng;
-
-      this.map.panTo(e.latlng);
-
-      this.geocodingService
-        .getCityByCoordinates(lat, lng)
-        .subscribe((response: NominatimResponse) => {
-          const city =
-            response.address.city ||
-            response.address.town ||
-            response.address.village ||
-            'Unknown City';
-          this.locationSelected.emit({ city, latitude: lat, longitude: lng });
-        });
     });
+
+    titles.addTo(this.map);
+
+    this.geocodingService.updateMapMarkers(this.map, this.customIcon);
+
+    this.map.on('click', this.handleMapClick.bind(this), { passive: true });
   }
 
-  public updateMapMarkers(): void {
-    this.markers.forEach((marker) => this.map.removeLayer(marker));
-    this.markers = [];
+  private handleMapClick(e: L.LeafletMouseEvent): void {
+    const { lat, lng } = e.latlng;
 
-    this.stations.forEach((station) => {
-      const marker = L.marker([station.latitude, station.longitude], { icon: this.customIcon })
-        .addTo(this.map)
-        .bindPopup(`${station.city}`)
-        .openPopup();
-      this.markers.push(marker);
-    });
+    this.map.panTo(e.latlng);
+
+    this.geocodingService
+      .getCityByCoordinates(lat, lng)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((response: NominatimResponse) => {
+        const city =
+          response.address.city ||
+          response.address.town ||
+          response.address.village ||
+          'Unknown City';
+        this.locationSelected.emit({ city, latitude: lat, longitude: lng });
+      });
+  }
+
+  ngOnDestroy(): void {
+    if (this.map) {
+      this.map.off('click');
+      this.map.remove();
+    }
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

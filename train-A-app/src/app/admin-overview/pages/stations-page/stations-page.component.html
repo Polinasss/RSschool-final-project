@@ -2,23 +2,25 @@
   <div class="stations__page__map-form">
     <div class="stations__page__map-form__map">
       <mat-spinner *ngIf="isLoading$ | async"></mat-spinner>
+      <div class="stations__page__map-form__map__spinner" *ngIf="error$ | async">
+        <p>{{ error$ | async }}</p>
+      </div>
       <app-station-map
         *ngIf="!(isLoading$ | async) && !(error$ | async)"
-        [stations]="(stations$ | async)!"
         (locationSelected)="onLocationSelected($event)"
       ></app-station-map>
     </div>
     <app-station-form
       [stationFormGroup]="stationsConnectedForm"
       [locationData]="selectedLocation"
-      [stations]="(stations$ | async)!"
+      [stations]="stationList"
       (stationAdded)="onAddStation($event)"
     >
     </app-station-form>
   </div>
   <div class="stations__page__stations-list">
     <app-station-list
-      [stations]="(stations$ | async)!"
+      [stations]="stationList"
       (stationDeleted)="onDeleteStation($event)"
     ></app-station-list>
   </div>
