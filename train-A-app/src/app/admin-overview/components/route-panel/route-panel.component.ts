@@ -2,7 +2,7 @@ import { Component, inject, ViewChild, AfterViewInit, OnDestroy } from '@angular
 import { MatExpansionModule, MatExpansionPanel } from '@angular/material/expansion';
 import { CarriageFormEditMode } from 'app/admin-overview/models/carriage';
 import { Route } from 'app/admin-overview/models/route';
-import { RoutePanelService } from 'app/admin-overview/services/route-panel.service';
+import { RoutePanelService } from 'app/admin-overview/services/route-panel/route-panel.service';
 import { Subscription } from 'rxjs';
 
 @Component({

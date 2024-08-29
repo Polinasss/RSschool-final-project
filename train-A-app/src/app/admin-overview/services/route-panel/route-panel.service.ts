@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { CarriageFormEditMode } from '../models/carriage';
-import { Route } from '../models/route';
+import { CarriageFormEditMode } from '../../models/carriage';
+import { Route } from '../../models/route';
 
 interface RouteUpdate {
   panelId: string;

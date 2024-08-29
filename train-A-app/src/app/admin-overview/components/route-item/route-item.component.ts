@@ -6,7 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { Route } from 'app/admin-overview/models/route';
 import { CapitalizeFirstLetterPipe } from 'app/shared/pipe/capitalize-first-letter/capitalize-first-letter.pipe';
-import { RoutePanelService } from 'app/admin-overview/services/route-panel.service';
+import { RoutePanelService } from 'app/admin-overview/services/route-panel/route-panel.service';
 import { RouteDeleteComponent } from '../route-delete/route-delete.component';
 
 @Component({

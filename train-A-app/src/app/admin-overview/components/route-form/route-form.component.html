@@ -2,6 +2,7 @@
   <form [formGroup]="routesForm" class="route__form">
     <div class="route__form__column">
       <h2 class="route__form__header">Stations</h2>
+      <span class="route__form__subheader">*min 3 stations</span>
       <div formArrayName="selectStations" class="route__form__fields">
         <div *ngFor="let station of stations.controls; let i = index">
           <mat-form-field appearance="outline">
@@ -24,6 +25,7 @@
     </div>
     <div class="route__form__column">
       <h2 class="route__form__header">Carriages</h2>
+      <span class="route__form__subheader">*min 3 carriages</span>
       <div formArrayName="selectCarriages" class="route__form__fields">
         @for (carriage of carriages.controls; let i = $index; track carriage) {
           <mat-form-field appearance="outline">

@@ -2,9 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
-import { Router, RouterModule } from '@angular/router';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { CarriageFacade } from 'app/admin-overview/_state/carriage/carriage.facade';
 import { StationFacade } from 'app/admin-overview/_state/station/station.facade';
+import { filter } from 'rxjs';
 import { StationsPageComponent } from '../stations-page/stations-page.component';
 import { CarriagesPageComponent } from '../carriages-page/carriages-page.component';
 import { RoutesPageComponent } from '../routes-page/routes-page.component';
@@ -25,9 +26,27 @@ import { RoutesPageComponent } from '../routes-page/routes-page.component';
   styleUrl: './admin-overview-page.component.scss',
 })
 export class AdminOverviewPageComponent implements OnInit {
-  public selectedPanelItem: string = '';
+  public selectedPanelItem: string = 'Stations';
 
   private router: Router = inject(Router);
+
+  private stationFacade = inject(StationFacade);
+
+  private carriageFacade = inject(CarriageFacade);
+
+  public ngOnInit(): void {
+    this.stationFacade.loadStation();
+    this.carriageFacade.loadCarriage();
+    this.router.events
+      .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        const currentPath = event.urlAfterRedirects;
+        this.selectedPanelItem = this.getPanelNameFromPath(currentPath);
+      });
+
+    const initialPath = this.router.url;
+    this.selectedPanelItem = this.getPanelNameFromPath(initialPath);
+  }
 
   public navigateTo(path: string): void {
     this.selectedPanelItem = this.getPanelNameFromPath(path);
@@ -45,15 +64,6 @@ export class AdminOverviewPageComponent implements OnInit {
       default:
         return '';
     }
-  }
-
-  private stationFacade = inject(StationFacade);
-
-  private carriageFacade = inject(CarriageFacade);
-
-  public ngOnInit(): void {
-    this.stationFacade.loadStation();
-    this.carriageFacade.loadCarriage();
   }
 
   selectPanelItem(panelItem: string): void {
