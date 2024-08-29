@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Station } from 'app/admin-overview/models/station';
+import { Station, StationBody, StationResponse } from 'app/admin-overview/models/station';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -13,8 +13,8 @@ export class StationService {
     return this.http.get<Station[]>('/api/station');
   }
 
-  public addStation(newStation: Partial<Station>): Observable<number> {
-    return this.http.post<number>('/api/station', newStation);
+  public addStation(newStation: Partial<StationBody>): Observable<StationResponse> {
+    return this.http.post<StationResponse>('/api/station', newStation);
   }
 
   public deleteStation(id: number): Observable<number> {

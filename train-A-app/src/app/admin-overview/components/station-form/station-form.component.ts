@@ -14,7 +14,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { LocationData, Station } from '../../models/station';
+import { LocationData, Station, StationBody } from '../../models/station';
 
 @Component({
   selector: 'app-station-form',
@@ -38,7 +38,7 @@ export class StationFormComponent implements OnInit, OnChanges {
 
   @Input() locationData: LocationData | null = null;
 
-  @Output() stationAdded = new EventEmitter<Station>();
+  @Output() stationAdded = new EventEmitter<StationBody>();
 
   @Input() stations!: Station[];
 
@@ -102,45 +102,15 @@ export class StationFormComponent implements OnInit, OnChanges {
     return '';
   }
 
-  private calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
-    const toRad = (x: number) => (x * Math.PI) / 180;
-    const R = 6371;
-    const dLat = toRad(lat2 - lat1);
-    const dLon = toRad(lon2 - lon1);
-    const a =
-      Math.sin(dLat / 2) ** 2 +
-      Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c;
-  }
-
   public onSubmit(): void {
     if (this.stationFormGroup.valid) {
       const { city, latitude, longitude, connectedTo } = this.stationFormGroup.value;
-      const maxId = this.stations.reduce((max, station) => Math.max(max, station.id), 0);
 
-      const connectedWithDistance = connectedTo.map((connectedId: string) => {
-        const connectedStation = this.stations.find(
-          (station) => station.id === parseInt(connectedId, 10),
-        );
-        if (connectedStation) {
-          const distance = this.calculateDistance(
-            latitude,
-            longitude,
-            connectedStation.latitude,
-            connectedStation.longitude,
-          );
-          return { id: connectedId, distance: Math.round(distance) };
-        }
-        return { id: connectedId, distance: 0 };
-      });
-
-      const newStation: Station = {
-        id: maxId + 1,
+      const newStation: StationBody = {
         city,
         latitude,
         longitude,
-        connectedTo: connectedWithDistance,
+        relations: connectedTo,
       };
 
       this.stationAdded.emit(newStation);

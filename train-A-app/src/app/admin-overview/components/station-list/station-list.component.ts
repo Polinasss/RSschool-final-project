@@ -16,8 +16,8 @@ export class StationListComponent {
 
   @Output() stationDeleted = new EventEmitter<number>();
 
-  public getCityNameById(id: string): string {
-    const station = this.stations.find((stationEl) => stationEl.id === parseInt(id, 10));
+  public getCityNameById(id: number): string {
+    const station = this.stations.find((stationEl) => stationEl.id === id);
     return station ? station.city : 'Unknown City';
   }
 
