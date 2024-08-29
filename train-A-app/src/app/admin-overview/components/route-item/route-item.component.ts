@@ -28,6 +28,8 @@ export class RouteItemComponent {
 
   @Input() carriagesName!: string[];
 
+  @Input() stationsName!: string[];
+
   private router: Router = inject(Router);
 
   private panelService = inject(RoutePanelService);

@@ -8,6 +8,7 @@ import { RoutePanelService } from 'app/admin-overview/services/route-panel.servi
 import { combineLatest, map, Observable } from 'rxjs';
 import { CarriageFacade } from 'app/admin-overview/_state/carriage/carriage.facade';
 import { Route } from 'app/admin-overview/models/route';
+import { StationFacade } from 'app/admin-overview/_state/station/station.facade';
 import { RouteItemComponent } from '../route-item/route-item.component';
 import { RouteFormComponent } from '../route-form/route-form.component';
 import { RoutePanelComponent } from '../route-panel/route-panel.component';
@@ -35,6 +36,8 @@ export class RouteListComponent implements OnInit {
 
   private carriageFacade = inject(CarriageFacade);
 
+  private stationFacade = inject(StationFacade);
+
   private panelService = inject(RoutePanelService);
 
   readonly formState$ = this.panelService.panelState$;
@@ -43,23 +46,32 @@ export class RouteListComponent implements OnInit {
 
   readonly routes$ = this.routeFacade.routes$;
 
+  readonly stations$ = this.stationFacade.station$;
+
   readonly error$ = this.routeFacade.error$;
 
   readonly isLoading$ = this.routeFacade.isLoading$;
 
-  public routesWithStationsAndCarriages$!: Observable<{ route: Route; carriageName: string[] }[]>;
+  public routesWithStationsAndCarriages$!: Observable<
+    { route: Route; carriageName: string[]; stationName: string[] }[]
+  >;
 
   public ngOnInit() {
     this.routeFacade.loadRoutes();
-    this.routesWithStationsAndCarriages$ = combineLatest([this.routes$, this.carriages$]).pipe(
-      map(([routes, carriages]) => {
+    this.routesWithStationsAndCarriages$ = combineLatest([
+      this.routes$,
+      this.carriages$,
+      this.stations$,
+    ]).pipe(
+      map(([routes, carriages, stations]) => {
         return routes.map((route) => {
-          const routeCarriageCodes = route.carriages.map((carriage) => carriage);
           const carriageName = carriages
-            .filter((carriage) => routeCarriageCodes.includes(carriage.code))
+            .filter((carriage) => route.carriages.includes(carriage.code))
             .map((carriage) => carriage.name);
-
-          return { route, carriageName };
+          const stationName = stations
+            .filter((station) => route.path.includes(station.id))
+            .map((station) => station.city);
+          return { route, carriageName, stationName };
         });
       }),
     );

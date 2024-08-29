@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, exhaustMap, map, mergeMap, of } from 'rxjs';
+import { catchError, exhaustMap, map, mergeMap, of, switchMap } from 'rxjs';
 import { RouteService } from 'app/admin-overview/services/route/route.service';
 import { Route } from 'app/admin-overview/models/route';
 import { routeActions } from './route.action';
@@ -26,11 +26,11 @@ export class RoutesEffects {
   createItem$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(routeActions.createNewRoute),
-      mergeMap((action) =>
+      switchMap((action) =>
         this.routeService.addRoute(action.route).pipe(
           map((response) =>
             routeActions.createNewRouteSuccess({
-              id: response,
+              id: response.id,
               route: action.route,
             }),
           ),
@@ -43,8 +43,8 @@ export class RoutesEffects {
   addItemToStore$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(routeActions.createNewRouteSuccess),
-      mergeMap((action) => {
-        const newItem: Route = { ...action.route, id: Number(action.id) };
+      switchMap((action) => {
+        const newItem: Route = { ...action.route, id: action.id };
         return of(routeActions.addNewRouteToStore({ newRoute: newItem }));
       }),
     );
