@@ -1,6 +1,6 @@
 <div class="route__form route">
   <form [formGroup]="routesForm" class="route__form">
-    <div>
+    <div class="route__form__column">
       <h2 class="route__form__header">Stations</h2>
       <div formArrayName="selectStations" class="route__form__fields">
         <div *ngFor="let station of stations.controls; let i = index">
@@ -22,7 +22,7 @@
         </div>
       </div>
     </div>
-    <div>
+    <div class="route__form__column">
       <h2 class="route__form__header">Carriages</h2>
       <div formArrayName="selectCarriages" class="route__form__fields">
         @for (carriage of carriages.controls; let i = $index; track carriage) {

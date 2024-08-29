@@ -1,4 +1,4 @@
-@import './../../../core/styles/variables.scss';
+@import '@styles/variables.scss';
 
 .item {
   margin-top: 40px;
@@ -21,7 +21,7 @@
 
   &__buttons {
     display: flex;
-    gap: 30px;
+    gap: 25px;
   }
 
   &__button {
@@ -36,7 +36,7 @@
   }
 
   &__title {
-    font-size: 35px;
+    font-size: 24px;
     font-weight: 600;
   }
 

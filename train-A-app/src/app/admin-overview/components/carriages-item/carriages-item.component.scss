@@ -1,4 +1,4 @@
-@import './../../../core/styles/variables.scss';
+@import '@styles/variables.scss';
 
 .item {
   margin-top: 40px;
@@ -10,6 +10,11 @@
     display: flex;
     padding: 15px 30px;
     justify-content: space-between;
+  }
+
+  &__header-title {
+    font-size: 24px;
+    font-weight: 600;
   }
 
   &__icon {
