@@ -48,7 +48,7 @@ export class RouteFormComponent implements OnInit, AfterViewInit {
 
   private stationFacade = inject(StationFacade);
 
-  private route = inject(RouteFacade);
+  private routeFacade = inject(RouteFacade);
 
   private panelService = inject(RoutePanelService);
 
@@ -200,7 +200,14 @@ export class RouteFormComponent implements OnInit, AfterViewInit {
         path: this.removeLastElement(this.stations.value) as number[],
         carriages: this.removeLastElement(this.carriages.value) as string[],
       };
-      this.route.addRoute(newRoute);
+      if (this.editMode === 'edit' && this.routeForUpdating) {
+        this.routeFacade.updateRoute({
+          id: this.routeForUpdating?.id,
+          ...newRoute,
+        });
+      } else if (this.editMode === 'create') {
+        this.routeFacade.addRoute(newRoute);
+      }
       this.cleanFormPanel();
       this.panelService.togglePanel('panelRoute', 'save');
     }

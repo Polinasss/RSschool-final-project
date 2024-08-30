@@ -18,7 +18,7 @@ export class RouteService {
   }
 
   public updateRoute(newRoute: Route): Observable<number> {
-    return this.http.put<number>(`'/api/route/${newRoute.id}`, newRoute);
+    return this.http.put<number>(`/api/route/${newRoute.id}`, newRoute);
   }
 
   public deleteRoute(id: number): Observable<Route> {
