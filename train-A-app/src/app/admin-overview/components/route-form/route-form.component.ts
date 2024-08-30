@@ -54,8 +54,7 @@ export class RouteFormComponent implements OnInit, AfterViewInit {
 
   private fb: FormBuilder = inject(FormBuilder);
 
-  // TODO: fix when the page will be ready
-  private MIN_ITEMS_IN_ROUTE = 1;
+  private MIN_ITEMS_IN_ROUTE = 4;
 
   readonly carriages$ = this.carriageFacade.carriage$;
 
@@ -86,6 +85,7 @@ export class RouteFormComponent implements OnInit, AfterViewInit {
         this.editMode = updateInfo.editMode ?? 'create';
         this.routeForUpdating = updateInfo.route ?? null;
         this.cleanFormPanel();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         if (this.editMode === 'create') {
           this.updateFilteredStationOptions(0);
         } else if (this.editMode && this.routeForUpdating) {
@@ -111,10 +111,13 @@ export class RouteFormComponent implements OnInit, AfterViewInit {
     if (this.routeForUpdating) {
       this.stations.clear();
       this.carriages.clear();
-      this.routeForUpdating.path.forEach((station: number, index: number) => {
+      this.routeForUpdating.path.forEach((station: number, index: number, array: number[]) => {
         this.generateStationOptions(index, station).subscribe(() =>
           this.stations.push(this.createSelectControl(station)),
         );
+        if (index === array.length - 1) {
+          this.updateFilteredStationOptions(index + 1);
+        }
       });
       this.routeForUpdating.carriages.forEach((carriage) => {
         this.carriages.push(this.createSelectControl(carriage));
@@ -205,6 +208,7 @@ export class RouteFormComponent implements OnInit, AfterViewInit {
           id: this.routeForUpdating?.id,
           ...newRoute,
         });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       } else if (this.editMode === 'create') {
         this.routeFacade.addRoute(newRoute);
       }
