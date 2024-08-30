@@ -1,4 +1,13 @@
 <div class="route">
+  <div *ngIf="(formState$ | async)?.editMode !== 'create' && !(isLoading$ | async)">
+    <app-create-button (clickOnButton)="openForm()"></app-create-button>
+  </div>
+  <app-route-panel>
+    <app-route-form
+      [editMode]="(formState$ | async)?.editMode || 'create'"
+      [routeForUpdating]="(formState$ | async)?.route || null"
+    />
+  </app-route-panel>
   <div class="route__spinner" *ngIf="isLoading$ | async">
     <mat-spinner></mat-spinner>
   </div>
@@ -9,15 +18,6 @@
     <ng-container *ngTemplateOutlet="routes"></ng-container>
   </ng-container>
   <ng-template #routes>
-    <div *ngIf="(formState$ | async)?.editMode !== 'create'">
-      <app-create-button (clickOnButton)="openForm()"></app-create-button>
-    </div>
-    <app-route-panel>
-      <app-route-form
-        [editMode]="(formState$ | async)?.editMode || 'create'"
-        [routeForUpdating]="(formState$ | async)?.route || null"
-      />
-    </app-route-panel>
     <ul>
       <li *ngFor="let route of routesWithStationsAndCarriages$ | async">
         <app-route-item

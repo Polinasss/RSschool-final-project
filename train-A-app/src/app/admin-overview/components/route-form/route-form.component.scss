@@ -21,6 +21,7 @@
     }
 
     &__subheader {
+      font-size: 14px;
       color: $label;
     }
 
@@ -28,7 +29,7 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
-      margin-top: 10px;
+      margin-top: 15px;
     }
 
     &__button {

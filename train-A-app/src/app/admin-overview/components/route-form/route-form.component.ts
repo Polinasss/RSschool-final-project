@@ -1,5 +1,5 @@
 import { AsyncPipe, NgFor } from '@angular/common';
-import { AfterViewInit, Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, inject, Input, OnInit } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -18,7 +18,12 @@ import { CarriageFormEditMode } from 'app/admin-overview/models/carriage';
 import { Route } from 'app/admin-overview/models/route';
 import { Station } from 'app/admin-overview/models/station';
 import { RoutePanelService } from 'app/admin-overview/services/route-panel/route-panel.service';
-import { combineLatest, map, Observable, Subject, takeUntil } from 'rxjs';
+import { combineLatest, map, Observable } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+
+interface OptionsForStation {
+  [key: number]: Observable<Station[]>;
+}
 
 @Component({
   selector: 'app-route-form',
@@ -34,7 +39,7 @@ import { combineLatest, map, Observable, Subject, takeUntil } from 'rxjs';
   templateUrl: './route-form.component.html',
   styleUrl: './route-form.component.scss',
 })
-export class RouteFormComponent implements OnInit, AfterViewInit, OnDestroy {
+export class RouteFormComponent implements OnInit, AfterViewInit {
   @Input() editMode: CarriageFormEditMode = 'create';
 
   @Input() routeForUpdating!: Route | null;
@@ -49,8 +54,6 @@ export class RouteFormComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private fb: FormBuilder = inject(FormBuilder);
 
-  private destroy$: Subject<void> = new Subject<void>();
-
   // TODO: fix when the page will be ready
   private MIN_ITEMS_IN_ROUTE = 1;
 
@@ -58,9 +61,11 @@ export class RouteFormComponent implements OnInit, AfterViewInit, OnDestroy {
 
   readonly stations$ = this.stationFacade.station$;
 
-  public filteredStationOptionsMap: { [key: number]: Observable<Station[]> } = {};
+  public filteredStationOptionsMap: OptionsForStation = {};
 
   public routesForm!: FormGroup;
+
+  private panel$ = this.panelService.panelState$.pipe(takeUntilDestroyed());
 
   ngOnInit() {
     this.routesForm = this.fb.group({
@@ -73,40 +78,21 @@ export class RouteFormComponent implements OnInit, AfterViewInit, OnDestroy {
         Validators.minLength(this.MIN_ITEMS_IN_ROUTE),
       ),
     });
-
-    this.updateFilteredStationOptions(0);
   }
 
   ngAfterViewInit() {
-    this.panelService.panelState$.pipe(takeUntil(this.destroy$)).subscribe((updateInfo) => {
+    this.panel$.subscribe((updateInfo) => {
       if (updateInfo.panelId === 'panelRoute') {
         this.editMode = updateInfo.editMode ?? 'create';
         this.routeForUpdating = updateInfo.route ?? null;
-        if (this.editMode && this.routeForUpdating) {
+        this.cleanFormPanel();
+        if (this.editMode === 'create') {
+          this.updateFilteredStationOptions(0);
+        } else if (this.editMode && this.routeForUpdating) {
           this.updateFormValues();
-        } else {
-          this.cleanFormPanel();
         }
       }
     });
-  }
-
-  private updateFormValues() {
-    if (this.routeForUpdating) {
-      this.stations.clear();
-      this.carriages.clear();
-      this.routeForUpdating.path.forEach((station) => {
-        this.stations.push(this.fb.control(station));
-      });
-
-      this.routeForUpdating.carriages.forEach((carriage) => {
-        this.carriages.push(this.fb.control(carriage));
-      });
-      this.routesForm.setValue({
-        selectStations: [...this.routeForUpdating.path],
-        selectCarriages: [...this.routeForUpdating.carriages],
-      });
-    }
   }
 
   get stations(): FormArray {
@@ -117,8 +103,44 @@ export class RouteFormComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.routesForm.get('selectCarriages') as FormArray;
   }
 
-  private createSelectControl(): FormControl {
-    return this.fb.control(null);
+  private createSelectControl(value: number | string | null = null): FormControl {
+    return this.fb.control(value);
+  }
+
+  private updateFormValues() {
+    if (this.routeForUpdating) {
+      this.stations.clear();
+      this.carriages.clear();
+      this.routeForUpdating.path.forEach((station: number, index: number) => {
+        this.generateStationOptions(index, station).subscribe(() =>
+          this.stations.push(this.createSelectControl(station)),
+        );
+      });
+      this.routeForUpdating.carriages.forEach((carriage) => {
+        this.carriages.push(this.createSelectControl(carriage));
+      });
+      this.stations.push(this.createSelectControl());
+      this.carriages.push(this.createSelectControl());
+    }
+  }
+
+  private generateStationOptions(index: number, stationId: number): Observable<Station[]> {
+    this.filteredStationOptionsMap[index] = combineLatest([this.stations$]).pipe(
+      map(([stations]) => {
+        let filteredStations = stations.filter((station) =>
+          station.connectedTo.some((connection) => connection.id === stationId),
+        );
+
+        const specificStation = stations.find((station) => station.id === stationId);
+        if (specificStation && !filteredStations.includes(specificStation)) {
+          filteredStations = [specificStation, ...filteredStations];
+        }
+
+        return filteredStations;
+      }),
+    );
+
+    return this.filteredStationOptionsMap[index];
   }
 
   private updateFilteredStationOptions(index: number) {
@@ -161,6 +183,9 @@ export class RouteFormComponent implements OnInit, AfterViewInit, OnDestroy {
     this.routesForm.reset();
     this.clearFormArray(this.stations);
     this.clearFormArray(this.carriages);
+    Object.keys(this.filteredStationOptionsMap).forEach(
+      (key) => delete this.filteredStationOptionsMap[+key],
+    );
   }
 
   private clearFormArray(formArray: FormArray) {
@@ -179,10 +204,5 @@ export class RouteFormComponent implements OnInit, AfterViewInit, OnDestroy {
       this.cleanFormPanel();
       this.panelService.togglePanel('panelRoute', 'save');
     }
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 }
