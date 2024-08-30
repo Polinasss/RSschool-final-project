@@ -126,8 +126,5 @@ export class SearchTripComponent implements OnDestroy {
       time: new Date(this.searchForm.controls['date'].value).toISOString(),
     };
     this.tripFacade.loadTrip(params);
-    this.searchService.searchStations(params).subscribe((stats) => {
-      console.log({ stats });
-    });
   }
 }

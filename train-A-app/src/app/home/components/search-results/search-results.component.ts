@@ -1,17 +1,19 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { TripFacade } from 'app/home/_state/search.facade';
 import { AsyncPipe, JsonPipe } from '@angular/common';
 import { Route } from 'app/home/models/trip';
+import { Subscription } from 'rxjs';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { SearchResultComponent } from '../search-result/search-result.component';
 
 @Component({
   selector: 'app-search-results',
   standalone: true,
-  imports: [SearchResultComponent, AsyncPipe, JsonPipe],
+  imports: [SearchResultComponent, AsyncPipe, JsonPipe, MatProgressSpinnerModule],
   templateUrl: './search-results.component.html',
   styleUrl: './search-results.component.scss',
 })
-export class SearchResultsComponent implements OnInit {
+export class SearchResultsComponent implements OnInit, OnDestroy {
   private tripFacade = inject(TripFacade);
 
   readonly trip$ = this.tripFacade.trip$;
@@ -26,12 +28,18 @@ export class SearchResultsComponent implements OnInit {
 
   toCity: { stationId: number; city: string } = { stationId: 0, city: '' };
 
+  sb: Subscription = new Subscription();
+
   ngOnInit() {
-    this.trip$.subscribe((trip) => {
+    this.sb = this.trip$.subscribe((trip) => {
       console.log(trip);
       this.routes = trip.routes;
       this.fromCity = { stationId: trip.from?.stationId || 0, city: trip.from?.city || '' };
       this.toCity = { stationId: trip.to?.stationId || 0, city: trip.to?.city || '' };
     });
+  }
+
+  ngOnDestroy() {
+    this.sb.unsubscribe();
   }
 }
