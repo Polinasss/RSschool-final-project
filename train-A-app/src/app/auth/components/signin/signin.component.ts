@@ -75,13 +75,6 @@ export class SigninComponent implements OnInit, OnDestroy {
     this.signIn();
   }
 
-  // TODO: replace http request to auth service
-  // signIn(email: string, password: string): Observable<{ token: string }> {
-  //   return this.http.post<{ token: string }>('/api/signin', {
-  //     email,
-  //     password,
-  //   });
-  // }
   public signIn() {
     const { email, password } = this.loginForm.getRawValue();
     const sub = this.http
@@ -91,8 +84,6 @@ export class SigninComponent implements OnInit, OnDestroy {
       })
       .subscribe({
         next: (response) => {
-          // TODO: we need a flag inside service, pointing user is isAuthenticated or not
-          // this.isAuthenticated = true
           localStorage.setItem('token', response.token);
           this.roleService.isAuthorized().subscribe((val) => {
             this.store.dispatch(rolesListActions.changeRole({ role: val }));

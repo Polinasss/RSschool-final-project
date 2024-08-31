@@ -1,6 +1,3 @@
-/* eslint-disable @ngrx/prefer-selector-in-select */
-/* eslint-disable @ngrx/no-typed-global-store */
-
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -9,6 +6,7 @@ import { Observable } from 'rxjs';
 import { RoleService } from 'app/auth/services/role.service';
 import { rolesListActions } from 'app/auth/_state/roles.actions';
 import { initialState } from 'app/auth/_state/roles.reducer';
+import { selectRoleFeature } from 'app/auth/_state/roles.selectors';
 
 @Component({
   selector: 'app-layout',
@@ -26,12 +24,12 @@ export class LayoutComponent implements OnInit {
 
   private roleService = inject(RoleService);
 
-  public role$: Observable<string> = this.store.select('roleState');
+  public role$: Observable<string> = this.store.select(selectRoleFeature);
 
   public role: string = initialState;
 
-  constructor(private store: Store<{ roleState: string }>) {
-    this.role$ = this.store.select('roleState');
+  constructor(private store: Store) {
+    this.role$ = this.store.select(selectRoleFeature);
   }
 
   ngOnInit(): void {
