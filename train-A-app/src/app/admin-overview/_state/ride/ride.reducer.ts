@@ -17,7 +17,7 @@ export const rideFeature = createFeature({
       rideActions.loadRideByIdSuccess,
       (state, { ride }): RideState => ({
         ...state,
-        ride,
+        ride: { ...ride },
         isLoading: false,
       }),
     ),

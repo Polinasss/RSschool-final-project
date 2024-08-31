@@ -11,11 +11,11 @@ export interface Schedule {
 
 export interface Segment {
   time: [string, string];
-  price: Price[];
+  price: Price;
 }
 
 export interface Price {
-  [key: number]: string;
+  [key: string]: number;
 }
 
 export interface RideResponse {

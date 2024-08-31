@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { RideService } from 'app/admin-overview/services/ride/ride.service';
-import { catchError, map, mergeMap, of, switchMap } from 'rxjs';
+import { catchError, map, mergeMap, of, switchMap, tap } from 'rxjs';
 import { Ride } from 'app/admin-overview/models/ride';
 import { rideActions } from './ride.action';
 
@@ -16,6 +16,7 @@ export class RideEffects {
       ofType(rideActions.loadRideById),
       switchMap((action: { id: number }) =>
         this.rideService.loadRideById(action.id).pipe(
+          tap((ride) => console.log(ride)),
           map((ride: Ride) => rideActions.loadRideByIdSuccess({ ride })),
           catchError((error) => of(rideActions.loadRideByIdFailure({ error }))),
         ),

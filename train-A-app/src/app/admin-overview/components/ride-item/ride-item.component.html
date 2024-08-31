@@ -1,1 +1,14 @@
-<p>ride-item works!</p>
+<div *ngIf="ride">
+  <div>
+    <div *ngFor="let schedule of ride.schedule">
+      <h3>{{ schedule.rideId }}</h3>
+      <div *ngFor="let segment of schedule.segments">
+        <div>{{ segment.time[0] }}</div>
+        <div>{{ segment.time[1] }}</div>
+        <div *ngFor="let key of getKeys(segment.price)">
+          Key: {{ key }}, Value: {{ this.getValue(segment.price, key) }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

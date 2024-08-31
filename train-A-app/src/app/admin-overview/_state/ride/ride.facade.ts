@@ -9,7 +9,7 @@ import { rideActions } from './ride.action';
 export class RideFacade {
   private readonly store = inject<Store<RideState>>(Store);
 
-  readonly rides$ = this.store.select(rideFeature.selectRide);
+  readonly ride$ = this.store.select(rideFeature.selectRide);
 
   readonly error$ = this.store.select(rideFeature.selectError);
 
