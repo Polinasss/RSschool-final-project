@@ -6,7 +6,7 @@ import { rideFeature } from './ride.reducer';
 import { rideActions } from './ride.action';
 
 @Injectable({ providedIn: 'root' })
-export class RouteFacade {
+export class RideFacade {
   private readonly store = inject<Store<RideState>>(Store);
 
   readonly rides$ = this.store.select(rideFeature.selectRide);

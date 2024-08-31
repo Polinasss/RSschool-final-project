@@ -4,6 +4,7 @@
   </div>
   <app-route-panel>
     <app-route-form
+      *ngIf="!(isLoading$ | async)"
       [editMode]="(formState$ | async)?.editMode || 'create'"
       [routeForUpdating]="(formState$ | async)?.route || null"
     />

@@ -1,5 +1,5 @@
 import { ApplicationConfig, provideZoneChangeDetection, isDevMode } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideState, provideStore } from '@ngrx/store';
@@ -13,19 +13,21 @@ import { stationFeature } from './admin-overview/_state/station/station.reducer'
 import { StationEffects } from './admin-overview/_state/station/station.effects';
 import { routeFeature } from './admin-overview/_state/route/route.reducer';
 import { RoutesEffects } from './admin-overview/_state/route/route.effects';
+import { RideEffects } from './admin-overview/_state/ride/ride.effects';
+import { rideFeature } from './admin-overview/_state/ride/ride.reducer';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes),
+    provideRouter(routes, withComponentInputBinding()),
     provideHttpClient(withInterceptors([authInterceptor])),
     provideAnimationsAsync(),
     provideStore(),
     provideState(stationFeature),
     provideState(carriageFeature),
-    provideEffects([StationEffects, CarriageEffects]),
+    provideState(rideFeature),
     provideState(routeFeature),
-    provideEffects([CarriageEffects, RoutesEffects]),
+    provideEffects([StationEffects, CarriageEffects, RoutesEffects, RideEffects]),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
   ],
 };
