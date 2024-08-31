@@ -10,6 +10,8 @@ export class TripFacade {
 
   readonly trip$ = this.store.select(searchFeature.selectTrip);
 
+  readonly routes$ = this.store.select(searchFeature.selectRoutes);
+
   readonly error$ = this.store.select(searchFeature.selectError);
 
   readonly isLoading$ = this.store.select(searchFeature.selectIsLoading);

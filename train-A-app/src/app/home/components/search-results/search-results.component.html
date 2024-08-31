@@ -4,6 +4,9 @@
     <mat-spinner></mat-spinner>
   </div>
 }
+<p>
+  {{ routes$ | async | json }}
+</p>
 @if (error$ | async) {
   <div class="spinner">
     <p>{{ error$ | async }}</p>

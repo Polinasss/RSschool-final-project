@@ -1,4 +1,4 @@
-import { createFeature, createReducer, on } from '@ngrx/store';
+import { createFeature, createReducer, createSelector, on } from '@ngrx/store';
 import { TripState, initialTripState } from './search.state';
 import { searchActions } from './search.action';
 
@@ -30,4 +30,7 @@ export const searchFeature = createFeature({
       }),
     ),
   ),
+  extraSelectors: ({ selectTrip }) => ({
+    selectRoutes: createSelector(selectTrip, (trip) => trip.routes),
+  }),
 });

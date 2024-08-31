@@ -18,6 +18,8 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
 
   readonly trip$ = this.tripFacade.trip$;
 
+  readonly routes$ = this.tripFacade.routes$;
+
   readonly error$ = this.tripFacade.error$;
 
   readonly isLoading$ = this.tripFacade.isLoading$;
