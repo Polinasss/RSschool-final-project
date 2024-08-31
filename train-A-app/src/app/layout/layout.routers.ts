@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { IsAuthorizedGuard } from 'app/guards/isAuthorized.guard';
+import { IsAuthorizedGuard } from 'app/auth/guards/isAuthorized.guard';
 import { LayoutComponent } from './layout.component';
 
 export const layoutRoutes: Routes = [
@@ -39,7 +39,7 @@ export const layoutRoutes: Routes = [
         loadComponent: () => import('../profile/profile.component').then((m) => m.ProfileComponent),
         canActivate: [IsAuthorizedGuard],
         data: {
-          role: ['admin', 'user'],
+          role: ['manager', 'user'],
         },
       },
       {
@@ -47,7 +47,7 @@ export const layoutRoutes: Routes = [
         loadComponent: () => import('../orders/orders.component').then((m) => m.OrdersComponent),
         canActivate: [IsAuthorizedGuard],
         data: {
-          role: ['admin', 'user'],
+          role: ['manager', 'user'],
         },
       },
       {
@@ -58,7 +58,7 @@ export const layoutRoutes: Routes = [
           ),
         canActivate: [IsAuthorizedGuard],
         data: {
-          role: ['admin'],
+          role: ['manager'],
         },
       },
     ],

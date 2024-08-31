@@ -19,7 +19,7 @@ export class IsAuthorizedGuard implements CanActivate {
         if (route.data['role'].includes(userRole)) {
           return true;
         }
-        alert(`you cant access this page`);
+        alert(`You do not have access to this page. Please register or log in`);
         this.router.navigateByUrl('/');
         return false;
       }),

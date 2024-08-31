@@ -18,9 +18,9 @@ export class RoleService {
     const token = localStorage.getItem('token');
 
     if (token) {
-      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`); // ???
       return this.http.get<IProfile>('/api/profile/', { headers }).pipe(
-        map((responce) => responce.role),
+        map((response) => response.role),
         catchError(() => 'guest'),
       );
     }

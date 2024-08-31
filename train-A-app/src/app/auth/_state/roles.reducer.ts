@@ -1,7 +1,7 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
 import { rolesListActions } from './roles.actions';
 
-const initialState: string = 'null';
+export const initialState: string = 'null';
 
 export const rolesReducer = createFeature({
   name: 'roleState',
