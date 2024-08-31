@@ -3,22 +3,33 @@
   <div class="spinner">
     <mat-spinner></mat-spinner>
   </div>
+} @else {
+  @if (trip$ | async) {
+    @for (route of routes$ | async; track route.schedule[0].rideId) {
+      <app-search-result
+        [route]="route"
+        [toCity]="toCity"
+        [fromCity]="fromCity"
+      ></app-search-result>
+    } @empty {
+      @if (showFilter$ | async) {
+        <img class="noresults" src="assets/noresults.png" alt="noresults" height="400" />
+      }
+    }
+    <details>
+      <summary>All routes</summary>
+      @for (route of routes1$ | async; track route.id) {
+        <app-search-result
+          [route]="route"
+          [toCity]="toCity"
+          [fromCity]="fromCity"
+        ></app-search-result>
+      }
+    </details>
+  }
 }
 @if (error$ | async) {
   <div class="spinner">
     <p>{{ error$ | async }}</p>
   </div>
-}
-@if (trip$ | async) {
-  @for (route of routes$ | async; track route.id) {
-    <app-search-result [route]="route" [toCity]="toCity" [fromCity]="fromCity"></app-search-result>
-  } @empty {
-    @if (showFilter$ | async) {
-      <img class="noresults" src="assets/noresults.png" alt="noresults" height="400" />
-    }
-  }
-  <p>================================</p>
-  @for (route of routes1$ | async; track route.id) {
-    <app-search-result [route]="route" [toCity]="toCity" [fromCity]="fromCity"></app-search-result>
-  }
 }

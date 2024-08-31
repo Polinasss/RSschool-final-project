@@ -20,15 +20,15 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
 
   readonly trip$ = this.tripFacade.trip$;
 
-  // readonly routes$ = this.tripFacade.routes$;
-
-  routes1$ = this.tripFacade.routes$;
+  readonly routes1$ = this.tripFacade.routes$;
 
   routes$ = this.tripFacade.routes$;
 
   readonly error$ = this.tripFacade.error$;
 
   readonly isLoading$ = this.tripFacade.isLoading$;
+
+  readonly availableDates$ = this.tripFacade.availableDates$;
 
   fromCity: { stationId: number; city: string } = { stationId: 0, city: '' };
 
@@ -43,12 +43,12 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
       console.log(trip);
       this.fromCity = { stationId: trip.from?.stationId || 0, city: trip.from?.city || '' };
       this.toCity = { stationId: trip.to?.stationId || 0, city: trip.to?.city || '' };
-      if (trip.routes.length > 0) {
-        this.searchService.setFilterActiveState(true);
-      }
     });
     this.searchService.tripSearchParams$.subscribe((params) => {
       this.routes$ = this.tripFacade.getRoutesByDate(new Date(params.time));
+    });
+    this.availableDates$.subscribe((d) => {
+      console.log(d);
     });
   }
 

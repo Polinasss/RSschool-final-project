@@ -16,6 +16,8 @@ export class TripFacade {
   readonly getRoutesByDate = (date: Date) =>
     this.store.select(searchFeature.selectRoutesByStartDay(date));
 
+  readonly availableDates$ = this.store.select(searchFeature.selectAvailableDates);
+
   readonly error$ = this.store.select(searchFeature.selectError);
 
   readonly isLoading$ = this.store.select(searchFeature.selectIsLoading);

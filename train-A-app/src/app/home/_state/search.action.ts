@@ -10,6 +10,7 @@ export const searchActions = createActionGroup({
     loadTripSuccess: props<{ trip: Trip }>(),
     loadTripFailure: props<{ error: ServerError }>(),
     getRoutes: emptyProps(),
+    getAvailableDates: emptyProps(),
     getRoutesByStartTime: props<{ date: Date }>(),
   },
 });

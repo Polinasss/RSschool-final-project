@@ -47,14 +47,6 @@ export const searchFeature = createFeature({
                   new Date(sc.segments[stationNumber].time[0]).setHours(0, 0, 0, 0) ===
                   date.setHours(0, 0, 0, 0)
                 ) {
-                  const segm = new Date(sc.segments[stationNumber].time[0]).setHours(0, 0, 0, 0);
-                  const d = date.setHours(0, 0, 0, 0);
-                  console.log(
-                    `routeId ${route.id} rideId: ${sc.rideId} stationNumber: ${stationNumber}`,
-                  );
-
-                  console.log(`segm: ${segm}  ${new Date(segm).toISOString()} `);
-                  console.log(`date: ${d}  ${new Date(d).toISOString()} `);
                   routes.push({ ...route, schedule: [...schedules, sc] });
                 }
               });
@@ -65,6 +57,22 @@ export const searchFeature = createFeature({
 
         return routes;
       });
-    return { selectRoutes, selectRoutesByStartDay };
+    const selectAvailableDates = createSelector(selectTrip, (trip) => {
+      const dates: string[] = [];
+      trip.routes.forEach((route) => {
+        let stationNumber = -1;
+        if (trip.from?.stationId) {
+          stationNumber = route.path.indexOf(trip.from?.stationId);
+          if (stationNumber && stationNumber > 0) {
+            route.schedule.forEach((sc) => {
+              dates.push(sc.segments[stationNumber].time[0]);
+            });
+          }
+        }
+      });
+      console.log({ dates });
+      return dates;
+    });
+    return { selectRoutes, selectRoutesByStartDay, selectAvailableDates };
   },
 });

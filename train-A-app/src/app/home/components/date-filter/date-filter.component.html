@@ -5,7 +5,7 @@
     </button>
 
     <div class="tabs">
-      <ng-container *ngFor="let date of dates; let i = index">
+      @for (date of dates; track date; let i = $index) {
         <div
           class="tab"
           role="button"
@@ -14,10 +14,10 @@
           (click)="selectDate(i)"
           (keyup)="selectDate(i)"
         >
-          <div>{{ date.date | date: 'MMMM dd' }}</div>
-          <div>{{ date.date | date: 'EEEE' }}</div>
+          <div>{{ date | date: 'MMMM dd' }}</div>
+          <div>{{ date | date: 'EEEE' }}</div>
         </div>
-      </ng-container>
+      }
     </div>
 
     <button mat-icon-button (click)="nextDate()">

@@ -3,6 +3,7 @@ import { AsyncPipe, CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { SearchService } from 'app/home/services/search.service';
+import { TripFacade } from 'app/home/_state/search.facade';
 
 @Component({
   selector: 'app-date-filter',
@@ -12,64 +13,62 @@ import { SearchService } from 'app/home/services/search.service';
   styleUrls: ['./date-filter.component.scss'],
 })
 export class DateFilterComponent {
-  dates: { date: Date; availableRides: boolean }[] = [];
+  dates: Date[] = [];
+
+  availableDates: Date[] = [];
 
   selectedDateIndex: number = 0;
 
+  startDateIndex: number = 0;
+
   showFilter$ = this.searchService.filterIsActive$;
 
-  constructor(private searchService: SearchService) {
-    this.searchService.filterIsActive$.subscribe((active) => {
+  constructor(
+    private searchService: SearchService,
+    private tripFacade: TripFacade,
+  ) {
+    this.searchService.filterIsActive$.subscribe(() => {
       this.selectedDateIndex = 0;
-      if (active) {
-        const params = this.searchService.getSearchParams();
-        const date = new Date(params.time);
-        this.dates = this.generateDatesArray(date, 4);
-      }
+      this.startDateIndex = 0;
     });
-  }
-
-  private generateDatesArray(
-    startDate: Date,
-    numberOfDays: number,
-  ): {
-    date: Date;
-    availableRides: boolean;
-  }[] {
-    const datesArray = [];
-
-    for (let i = 0; i < numberOfDays; i += 1) {
-      const date = new Date(startDate);
-      date.setDate(startDate.getDate() + i);
-      datesArray.push({ date, availableRides: false });
-    }
-    return datesArray;
+    this.tripFacade.availableDates$.subscribe((dates) => {
+      const availableDates: number[] = [];
+      dates.forEach((date) => {
+        availableDates.push(new Date(date).setHours(0, 0, 0, 0));
+      });
+      this.availableDates = [...new Set(availableDates.sort())].map((d) => new Date(d));
+      this.dates = this.availableDates.slice(0, 4);
+      this.selectDate(0);
+    });
   }
 
   selectDate(index: number): void {
     this.selectedDateIndex = index;
     const params = this.searchService.getSearchParams();
-    this.searchService.setSearchParams({ ...params, time: this.dates[index].date.toISOString() });
+    this.searchService.setSearchParams({ ...params, time: this.dates[index].toISOString() });
   }
 
   previousDate(): void {
-    if (this.selectedDateIndex > 0) {
-      this.selectDate(this.selectedDateIndex - 1);
-    } else {
-      const prevDate = new Date(this.dates[0].date);
-      const prevDateNum = prevDate.getDate() - 1;
-      prevDate.setDate(prevDateNum);
-      this.dates = this.generateDatesArray(prevDate, 4);
-      this.selectDate(this.selectedDateIndex);
+    if (this.startDateIndex > 0) {
+      this.startDateIndex -= 1;
     }
+    console.log(this.startDateIndex);
+    const endDateIndex =
+      this.startDateIndex + 4 < this.availableDates.length
+        ? this.startDateIndex + 4
+        : this.availableDates.length;
+    this.dates = this.availableDates.slice(this.startDateIndex, endDateIndex);
   }
 
   nextDate(): void {
-    if (this.selectedDateIndex < this.dates.length - 1) {
-      this.selectDate(this.selectedDateIndex + 1);
-    } else {
-      this.dates = this.generateDatesArray(this.dates[1].date, 4);
-      this.selectDate(this.selectedDateIndex);
+    if (this.startDateIndex + 4 < this.availableDates.length) {
+      this.startDateIndex += 1;
     }
+    console.log(this.startDateIndex);
+    const endDateIndex =
+      this.startDateIndex + 4 < this.availableDates.length
+        ? this.startDateIndex + 4
+        : this.availableDates.length;
+    this.dates = this.availableDates.slice(this.startDateIndex, endDateIndex);
   }
 }
