@@ -1,4 +1,4 @@
-<form class="example-form" [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+<form class="example-form" [formGroup]="searchForm">
   <div class="direction">
     <mat-form-field class="example-full-width">
       <mat-label>From</mat-label>
@@ -47,6 +47,6 @@
     <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
   <div mat-dialog-actions>
-    <button mat-flat-button [disabled]="disabledForm" type="submit">Search</button>
+    <button mat-flat-button [disabled]="disabledForm" (click)="onSubmit()">Search</button>
   </div>
 </form>

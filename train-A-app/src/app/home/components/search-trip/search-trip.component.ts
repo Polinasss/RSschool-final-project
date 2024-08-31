@@ -15,7 +15,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { Observable, startWith, map, Subscription } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
-import { SearchService } from 'app/home/services/search.service';
+import { SearchParams, SearchService } from 'app/home/services/search.service';
 import { TripFacade } from 'app/home/_state/search.facade';
 
 @Component({
@@ -118,13 +118,15 @@ export class SearchTripComponent implements OnDestroy {
 
   onSubmit(): void {
     console.log('data = ', this.searchForm.getRawValue());
-    const params = {
+    const params: SearchParams = {
       fromLatitude: this.fromStation!.latitude,
       fromLongitude: this.fromStation!.longitude,
       toLatitude: this.toStation!.latitude,
       toLongitude: this.toStation!.longitude,
-      time: new Date(this.searchForm.controls['date'].value).toISOString(),
+      time: this.searchForm.controls['date'].value.toISOString(),
     };
+    this.searchService.setSearchParams(params);
+    this.searchService.setFilterActiveState(false);
     this.tripFacade.loadTrip(params);
   }
 }

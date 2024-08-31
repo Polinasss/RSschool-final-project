@@ -1,0 +1,27 @@
+@if (showFilter$ | async) {
+  <div class="date-filter">
+    <button mat-icon-button (click)="previousDate()">
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+
+    <div class="tabs">
+      <ng-container *ngFor="let date of dates; let i = index">
+        <div
+          class="tab"
+          role="button"
+          tabindex="i"
+          [class.active]="selectedDateIndex === i"
+          (click)="selectDate(i)"
+          (keyup)="selectDate(i)"
+        >
+          <div>{{ date.date | date: 'MMMM dd' }}</div>
+          <div>{{ date.date | date: 'EEEE' }}</div>
+        </div>
+      </ng-container>
+    </div>
+
+    <button mat-icon-button (click)="nextDate()">
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+  </div>
+}

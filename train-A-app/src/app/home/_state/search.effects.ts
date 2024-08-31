@@ -15,9 +15,7 @@ export class TripEffects {
     return this.actions$.pipe(
       ofType(searchActions.loadTrip),
       exhaustMap((params) => {
-        console.log({ params });
-
-        return this.searchService.searchStations(params).pipe(
+        return this.searchService.searchStations(params.params).pipe(
           map((trip: Trip) => searchActions.loadTripSuccess({ trip })),
           catchError((error) => of(searchActions.loadTripFailure({ error }))),
         );

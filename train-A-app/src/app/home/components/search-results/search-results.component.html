@@ -4,16 +4,21 @@
     <mat-spinner></mat-spinner>
   </div>
 }
-<p>
-  {{ routes$ | async | json }}
-</p>
 @if (error$ | async) {
   <div class="spinner">
     <p>{{ error$ | async }}</p>
   </div>
 }
 @if (trip$ | async) {
-  @for (route of routes; track route) {
+  @for (route of routes$ | async; track route.id) {
+    <app-search-result [route]="route" [toCity]="toCity" [fromCity]="fromCity"></app-search-result>
+  } @empty {
+    @if (showFilter$ | async) {
+      <img class="noresults" src="assets/noresults.png" alt="noresults" height="400" />
+    }
+  }
+  <p>================================</p>
+  @for (route of routes1$ | async; track route.id) {
     <app-search-result [route]="route" [toCity]="toCity" [fromCity]="fromCity"></app-search-result>
   }
 }

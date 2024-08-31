@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { SearchParams } from 'app/home/services/search.service';
 import { TripState } from './search.state';
 import { searchFeature } from './search.reducer';
 import { searchActions } from './search.action';
@@ -12,11 +13,14 @@ export class TripFacade {
 
   readonly routes$ = this.store.select(searchFeature.selectRoutes);
 
+  readonly getRoutesByDate = (date: Date) =>
+    this.store.select(searchFeature.selectRoutesByStartDay(date));
+
   readonly error$ = this.store.select(searchFeature.selectError);
 
   readonly isLoading$ = this.store.select(searchFeature.selectIsLoading);
 
-  loadTrip(params: { [param: string]: number | string }) {
-    this.store.dispatch(searchActions.loadTrip(params));
+  loadTrip(params: SearchParams) {
+    this.store.dispatch(searchActions.loadTrip({ params }));
   }
 }
