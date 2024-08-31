@@ -1,0 +1,25 @@
+<form class="user-profile__email" (ngSubmit)="onSubmit()" [formGroup]="userEmailForm">
+  <mat-form-field class="small" *ngIf="isEditingEmail; else viewEmail" appearance="outline">
+    <input matInput type="text" formControlName="userEmail" />
+    <mat-error class="hint" *ngIf="userEmailControl?.invalid">
+      <span *ngIf="userEmailControl?.errors?.['required']">Please enter a new user email</span>
+      <span *ngIf="userEmailControl?.errors?.['email']"
+        >The user email is invalid. Example: user&#64;mail.com</span
+      >
+    </mat-error>
+  </mat-form-field>
+  <ng-template #viewEmail>
+    <p class="user-profile__email__text">{{ userEmail }}</p>
+    <button mat-button class="user-profile__email__edit-btn" type="button" (click)="onEditEmail()">
+      <mat-icon>edit</mat-icon>
+    </button>
+  </ng-template>
+  <button
+    *ngIf="isEditingEmail"
+    mat-icon-button
+    class="user-profile__email__save-btn"
+    type="submit"
+  >
+    <mat-icon>save</mat-icon>
+  </button>
+</form>
