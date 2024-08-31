@@ -8,9 +8,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatCard, MatCardHeader, MatCardContent } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIcon } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
 import { EditNameFormComponent } from '../../components/edit-name-form/edit-name-form.component';
 import { EditEmailFormComponent } from '../../components/edit-email-form/edit-email-form.component';
 
@@ -21,9 +18,6 @@ import { EditEmailFormComponent } from '../../components/edit-email-form/edit-em
     MatCard,
     MatCardHeader,
     MatCardContent,
-    MatIcon,
-    MatFormFieldModule,
-    MatInputModule,
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
