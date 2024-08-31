@@ -1,6 +1,5 @@
 import { ApplicationConfig, provideZoneChangeDetection, isDevMode } from '@angular/core';
 import { provideRouter } from '@angular/router';
-
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideState, provideStore } from '@ngrx/store';
@@ -12,6 +11,8 @@ import { CarriageEffects } from './admin-overview/_state/carriage/carriage.effec
 import { authInterceptor } from './auth/auth.interceptor';
 import { stationFeature } from './admin-overview/_state/station/station.reducer';
 import { StationEffects } from './admin-overview/_state/station/station.effects';
+import { routeFeature } from './admin-overview/_state/route/route.reducer';
+import { RoutesEffects } from './admin-overview/_state/route/route.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -23,6 +24,8 @@ export const appConfig: ApplicationConfig = {
     provideState(stationFeature),
     provideState(carriageFeature),
     provideEffects([StationEffects, CarriageEffects]),
+    provideState(routeFeature),
+    provideEffects([CarriageEffects, RoutesEffects]),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
   ],
 };

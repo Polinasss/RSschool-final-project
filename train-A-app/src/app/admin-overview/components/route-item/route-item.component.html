@@ -1,0 +1,47 @@
+<mat-card class="item">
+  <div class="item__header">
+    <h2 class="item__title">Route {{ item.id }}</h2>
+    <div class="item__buttons">
+      <div class="item__button" (click)="onUpdate()">
+        <mat-icon
+          aria-hidden="false"
+          class="item__icon"
+          aria-label="Edit Icon"
+          fontIcon="edit"
+        ></mat-icon>
+        <span>Update</span>
+      </div>
+      <div class="item__button" (click)="assignRide()">
+        <mat-icon
+          aria-hidden="false"
+          class="item__icon"
+          aria-label="Ride Icon"
+          fontIcon="directions_subway"
+          (click)="assignRide()"
+        ></mat-icon>
+        <span>Assign ride</span>
+      </div>
+      <div class="item__button" (click)="onDelete('5ms', '5ms')">
+        <mat-icon
+          aria-hidden="false"
+          class="item__icon"
+          aria-label="Delete Icon"
+          fontIcon="delete"
+        ></mat-icon>
+        <span>Delete route</span>
+      </div>
+    </div>
+  </div>
+  <mat-card-content>
+    <h3 class="item__subheader">Cities</h3>
+    <span class="item__list" *ngFor="let city of stationsName; let i = index"
+      >{{ city | capitalizeFirstLetter }}
+      <span *ngIf="i < stationsName.length - 1"> - </span>
+    </span>
+    <h3 class="item__subheader">Carriage types</h3>
+    <span class="item__list" *ngFor="let carriage of carriagesName; let i = index"
+      >{{ carriage | capitalizeFirstLetter }}
+      <span *ngIf="i < carriagesName.length - 1"> - </span>
+    </span>
+  </mat-card-content>
+</mat-card>

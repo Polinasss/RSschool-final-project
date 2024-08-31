@@ -2,10 +2,13 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { CarriageFacade } from 'app/admin-overview/_state/carriage/carriage.facade';
 import { StationFacade } from 'app/admin-overview/_state/station/station.facade';
+import { filter } from 'rxjs';
 import { StationsPageComponent } from '../stations-page/stations-page.component';
 import { CarriagesPageComponent } from '../carriages-page/carriages-page.component';
+import { RoutesPageComponent } from '../routes-page/routes-page.component';
 
 @Component({
   selector: 'app-admin-overview-page',
@@ -16,12 +19,16 @@ import { CarriagesPageComponent } from '../carriages-page/carriages-page.compone
     CommonModule,
     StationsPageComponent,
     CarriagesPageComponent,
+    RoutesPageComponent,
+    RouterModule,
   ],
   templateUrl: './admin-overview-page.component.html',
   styleUrl: './admin-overview-page.component.scss',
 })
 export class AdminOverviewPageComponent implements OnInit {
-  selectedPanelItem: string = 'Stations';
+  public selectedPanelItem: string = 'Stations';
+
+  private router: Router = inject(Router);
 
   private stationFacade = inject(StationFacade);
 
@@ -30,6 +37,33 @@ export class AdminOverviewPageComponent implements OnInit {
   public ngOnInit(): void {
     this.stationFacade.loadStation();
     this.carriageFacade.loadCarriage();
+    this.router.events
+      .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        const currentPath = event.urlAfterRedirects;
+        this.selectedPanelItem = this.getPanelNameFromPath(currentPath);
+      });
+
+    const initialPath = this.router.url;
+    this.selectedPanelItem = this.getPanelNameFromPath(initialPath);
+  }
+
+  public navigateTo(path: string): void {
+    this.selectedPanelItem = this.getPanelNameFromPath(path);
+    this.router.navigate([path]);
+  }
+
+  private getPanelNameFromPath(path: string): string {
+    switch (path) {
+      case '/admin/stations':
+        return 'Stations';
+      case '/admin/carriages':
+        return 'Carriages';
+      case '/admin/routes':
+        return 'Routes';
+      default:
+        return '';
+    }
   }
 
   selectPanelItem(panelItem: string): void {
