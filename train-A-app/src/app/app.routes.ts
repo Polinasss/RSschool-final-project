@@ -8,6 +8,7 @@ import { RidePageComponent } from './admin-overview/pages/ride-page/ride-page.co
 import { StationsPageComponent } from './admin-overview/pages/stations-page/stations-page.component';
 import { RouteListComponent } from './admin-overview/components/route-list/route-list.component';
 import { CarriagesPageComponent } from './admin-overview/pages/carriages-page/carriages-page.component';
+import { UserProfilePageComponent } from './user-profile/pages/user-profile-page/user-profile-page.component';
 
 export const routes: Routes = [
   {
@@ -16,6 +17,7 @@ export const routes: Routes = [
     canActivate: [SigninGuard],
   },
   { path: 'signup', component: SignupPageComponent },
+  { path: 'profile', component: UserProfilePageComponent },
   {
     path: 'admin',
     component: AdminOverviewPageComponent,
