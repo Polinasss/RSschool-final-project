@@ -29,11 +29,13 @@ export class StationEffects {
       mergeMap((action) =>
         this.stationService.addStation(action.station).pipe(
           map((response) => {
+            const connectedTo = action.station.relations.map((relationId) => ({ id: relationId }));
+
             const newStation = {
               city: action.station.city,
               latitude: action.station.latitude,
               longitude: action.station.longitude,
-              connectedTo: action.station.relations,
+              connectedTo,
             };
             return stationActions.createNewStationSuccess({
               id: response.id,

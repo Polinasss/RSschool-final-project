@@ -1,0 +1,32 @@
+@import '@styles/variables.scss';
+
+::ng-deep .mdc-text-field--filled {
+  background-color: $text-active !important;
+  border-radius: 0.25rem !important;
+}
+
+::ng-deep .mdc-text-field:not(.mdc-text-field--disabled) .mdc-floating-label {
+  color: $text !important;
+  letter-spacing: 0.025rem;
+}
+
+:ng-deep .mdc-text-field--filled .mdc-line-ripple {
+  display: none;
+}
+
+::ng-deep .mdc-text-field--filled.mdc-text-field--invalid {
+  border: 1px solid $error !important;
+}
+
+::ng-deep .mat-mdc-form-fieldn:not(.mat-form-field-invalid) .mat-mdc-form-field-subscript-wrapper {
+  height: 0rem;
+}
+
+::ng-deep .mat-form-field {
+  font-size: 0.75rem;
+}
+
+mat-form-field.small {
+  --mat-form-field-container-height: 2.19rem;
+  --mat-form-field-container-vertical-padding: 0.13rem;
+}
