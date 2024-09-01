@@ -1,0 +1,56 @@
+@import '@styles/variables.scss';
+
+.ride {
+  display: flex;
+  flex-direction: column;
+
+  &__schedule {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid $divider;
+    border-radius: 5px;
+    box-shadow: 2px 2px 2px 2px $divider;
+    margin: 10px 30px 20px 0;
+  }
+}
+
+.schedule {
+  &__title {
+    font-size: 18px;
+    font-weight: 600;
+    border-bottom: 1px solid $divider;
+    padding: 10px;
+    margin-bottom: 0;
+  }
+
+  &__subtitle {
+    font-weight: 600;
+  }
+
+  &__name {
+    font-weight: 600;
+    padding: 10px;
+    background-color: $table-background;
+  }
+
+  &__segment {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  &__time {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  &__time__column {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  &__price {
+    display: flex;
+  }
+}

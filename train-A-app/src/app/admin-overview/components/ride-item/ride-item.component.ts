@@ -1,11 +1,11 @@
-import { NgFor, NgIf } from '@angular/common';
+import { CurrencyPipe, DatePipe, NgFor, NgIf } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { Ride } from 'app/admin-overview/models/ride';
 
 @Component({
   selector: 'app-ride-item',
   standalone: true,
-  imports: [NgIf, NgFor],
+  imports: [NgIf, NgFor, CurrencyPipe, DatePipe],
   templateUrl: './ride-item.component.html',
   styleUrl: './ride-item.component.scss',
 })
