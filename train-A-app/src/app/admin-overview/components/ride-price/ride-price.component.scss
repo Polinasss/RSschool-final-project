@@ -1,0 +1,26 @@
+@import '@styles/variables.scss';
+.schedule {
+  &__subtitle {
+    font-weight: 600;
+  }
+
+  &__price {
+    display: flex;
+  }
+
+  &__icon {
+    margin-top: 12px;
+    color: $secondary;
+  }
+
+  &__form {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__timework {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px 10px 10px;
+  }
+}

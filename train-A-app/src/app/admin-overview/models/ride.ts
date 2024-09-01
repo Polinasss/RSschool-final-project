@@ -10,8 +10,12 @@ export interface Schedule {
 }
 
 export interface Segment {
-  time: [string, string];
+  time: Time;
   price: Price;
+}
+
+export interface Time {
+  time: [string, string];
 }
 
 export interface Price {

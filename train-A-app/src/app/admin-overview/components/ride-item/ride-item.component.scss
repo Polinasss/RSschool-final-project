@@ -38,19 +38,17 @@
     grid-template-columns: repeat(3, 1fr);
   }
 
-  &__time {
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
-  }
-
-  &__time__column {
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
-  }
-
   &__price {
     display: flex;
+  }
+
+  &__icon {
+    margin-top: 12px;
+    color: $secondary;
+  }
+
+  &__form {
+    display: flex;
+    justify-content: space-between;
   }
 }
