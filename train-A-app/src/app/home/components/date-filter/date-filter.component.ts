@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { SearchService } from 'app/home/services/search.service';
 import { TripFacade } from 'app/home/_state/search.facade';
+import { CarriageFacade } from 'app/admin-overview/_state/carriage/carriage.facade';
 
 @Component({
   selector: 'app-date-filter',
@@ -26,6 +27,7 @@ export class DateFilterComponent {
   constructor(
     private searchService: SearchService,
     private tripFacade: TripFacade,
+    private carriageFacade: CarriageFacade,
   ) {
     this.searchService.filterIsActive$.subscribe(() => {
       this.selectedDateIndex = 0;
@@ -38,7 +40,10 @@ export class DateFilterComponent {
       });
       this.availableDates = [...new Set(availableDates.sort())].map((d) => new Date(d));
       this.dates = this.availableDates.slice(0, 4);
-      this.selectDate(0);
+      if (this.availableDates.length > 0) {
+        this.carriageFacade.loadCarriage();
+      }
+      if (dates.length > 0) this.selectDate(0);
     });
   }
 

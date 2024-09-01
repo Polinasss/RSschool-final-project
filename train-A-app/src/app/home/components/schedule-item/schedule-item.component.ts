@@ -1,10 +1,13 @@
 import { DatePipe } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
 import { Schedule } from 'app/home/models/trip';
 import { formatDuration } from 'app/shared/utils/datetime';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
+import { CarriageFacade } from 'app/admin-overview/_state/carriage/carriage.facade';
+import { Carriage } from 'app/admin-overview/models/carriage';
+import { Subscription } from 'rxjs';
 import { TripStationsComponent } from '../trip-stations/trip-stations.component';
 
 @Component({
@@ -24,14 +27,18 @@ import { TripStationsComponent } from '../trip-stations/trip-stations.component'
   templateUrl: './schedule-item.component.html',
   styleUrl: './schedule-item.component.scss',
 })
-export class ScheduleItemComponent implements OnInit {
+export class ScheduleItemComponent implements OnInit, OnDestroy {
   @Input() way!: Schedule;
 
   @Input() fromCity: { stationId: number; city: string } = { stationId: 0, city: '' };
 
   @Input() toCity: { stationId: number; city: string } = { stationId: 0, city: '' };
 
-  @Input() path: { stations: number[]; id: number } = { stations: [], id: 0 };
+  @Input() path: { stations: number[]; carriages: string[]; id: number } = {
+    stations: [],
+    carriages: [],
+    id: 0,
+  };
 
   departureTime = '';
 
@@ -41,7 +48,7 @@ export class ScheduleItemComponent implements OnInit {
 
   durationDateTime: number = 0;
 
-  carriagePrices: { type: string; price: number }[] = [];
+  carriagePrices: { type: string; price: number; seats: number }[] = [];
 
   startStopStations = { start: 0, stop: 0 };
 
@@ -50,10 +57,20 @@ export class ScheduleItemComponent implements OnInit {
     penult: 0,
   };
 
-  constructor(private dialog: MatDialog) {}
+  subscription: Subscription = new Subscription();
+
+  private carriageTypes: Carriage[] = [];
+
+  constructor(
+    private dialog: MatDialog,
+    private carriageFacade: CarriageFacade,
+  ) {}
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
 
   openDialog(): void {
-    // const dialogRef =
     const { start, stop } = this.startStopStations;
     this.dialog.open(TripStationsComponent, {
       width: '400px',
@@ -62,11 +79,6 @@ export class ScheduleItemComponent implements OnInit {
         schedule: this.way.segments.slice(start, stop),
       },
     });
-
-    // dialogRef.afterClosed().subscribe((result) => {
-    //   console.log('The dialog was closed');
-    //   console.log(result);
-    // });
   }
 
   ngOnInit() {
@@ -83,10 +95,30 @@ export class ScheduleItemComponent implements OnInit {
     };
     const segmentsPrices = segments.map((seg) => seg.price);
     const carriageTypes = Object.keys(segmentsPrices[0]);
-    this.carriagePrices = carriageTypes.map((type) => ({
-      type,
-      price: segmentsPrices.reduce((acc, cur) => acc + cur[type], 0),
-    }));
+
+    this.subscription = this.carriageFacade.carriage$.subscribe((carriages) => {
+      console.log({ carriages });
+      this.carriageTypes = carriages;
+      this.carriagePrices = carriageTypes.map((type) => {
+        // debugger;
+        const carriage = this.carriageTypes.find((carriage) => carriage.name === type);
+        let numberOfSeats = -1;
+        if (carriage) {
+          numberOfSeats = (carriage.leftSeats + carriage.rightSeats) * carriage.rows;
+        }
+        let numberOfAllSeats = 0;
+        if (numberOfSeats > 0) {
+          numberOfAllSeats =
+            this.path.carriages.filter((carriage) => type === carriage).length * numberOfSeats;
+        }
+        return {
+          type,
+          price: segmentsPrices.reduce((acc, cur) => acc + cur[type], 0),
+          seats: numberOfAllSeats,
+        };
+      });
+    });
+
     const [dt] = [...segments[0].time];
     this.departureTime = dt;
     const [, at] = segments[segments.length - 1].time;

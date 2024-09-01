@@ -110,6 +110,7 @@ mat-card {
 }
 
 .price {
+  min-width: 100px;
   margin: 0 5px 5px;
   background-color: #e0e2ec;
   padding: 5px;
@@ -124,6 +125,7 @@ mat-card {
   display: block;
   font-size: 16px;
   color: #333;
+  text-align: center;
 }
 
 .price-amount {
@@ -132,10 +134,12 @@ mat-card {
   font-weight: 500;
   color: #000;
   padding: 10px 0;
+  text-align: center;
 }
 
 .seats {
   display: block;
   font-size: 14px;
   color: #666;
+  text-align: center;
 }

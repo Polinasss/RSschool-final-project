@@ -31,10 +31,10 @@
       </div>
 
       <div class="price-info">
-        @for (cp of carriagePrices; track cp) {
+        @for (cp of carriagePrices; track cp.type) {
           <div class="price">
             <span class="class-type">{{ cp.type }}</span>
-            <span class="seats">75 seats</span>
+            <span class="seats">{{ cp.seats }} seats</span>
             <span class="price-amount">${{ cp.price }}</span>
           </div>
         }

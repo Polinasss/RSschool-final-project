@@ -47,9 +47,6 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
     this.searchService.tripSearchParams$.subscribe((params) => {
       this.routes$ = this.tripFacade.getRoutesByDate(new Date(params.time));
     });
-    this.availableDates$.subscribe((d) => {
-      console.log(d);
-    });
   }
 
   ngOnDestroy() {
