@@ -4,7 +4,7 @@
       <mat-list-item
         class="panel-item"
         [ngClass]="{ active: selectedPanelItem === 'Stations' }"
-        (click)="selectPanelItem('Stations')"
+        (click)="navigateTo('/admin/stations')"
       >
         Stations
       </mat-list-item>
@@ -12,7 +12,7 @@
       <mat-list-item
         class="panel-item"
         [ngClass]="{ active: selectedPanelItem === 'Carriages' }"
-        (click)="selectPanelItem('Carriages')"
+        (click)="navigateTo('/admin/carriages')"
       >
         Carriages
       </mat-list-item>
@@ -20,7 +20,7 @@
       <mat-list-item
         class="panel-item"
         [ngClass]="{ active: selectedPanelItem === 'Routes' }"
-        (click)="selectPanelItem('Routes')"
+        (click)="navigateTo('/admin/routes')"
       >
         Routes</mat-list-item
       >
@@ -28,7 +28,12 @@
   </div>
   <div class="admin-right-side">
     <app-stations-page *ngIf="selectedPanelItem === 'Stations'"></app-stations-page>
-    <div class="carriages-page" *ngIf="selectedPanelItem === 'Carriages'">Carriages</div>
-    <div class="routes-page" *ngIf="selectedPanelItem === 'Routes'">Routes</div>
+    <app-carriages-page
+      class="carriages-page"
+      *ngIf="selectedPanelItem === 'Carriages'"
+    ></app-carriages-page>
+    <app-routes-page class="routes-page" *ngIf="selectedPanelItem === 'Routes'"
+      >Routes</app-routes-page
+    >
   </div>
 </div>

@@ -1,0 +1,70 @@
+<div>
+  <form [formGroup]="carriageForm" class="carriage__form">
+    <div class="carriage__form__field">
+      <p class="form__label">Name</p>
+      <input class="form__input" formControlName="name" />
+      <div class="form__error-container">
+        <p class="form__error" *ngIf="this.isDuplicateName">
+          The carriage with this name already exists
+        </p>
+      </div>
+    </div>
+    <div class="carriage__form__field">
+      <p class="form__label">Rows</p>
+      <input
+        type="number"
+        class="form__input carriage__input"
+        formControlName="rows"
+        placeholder="*max 50 rows"
+      />
+      <div class="form__error-container">
+        <p *ngIf="rows?.invalid && rows?.touched && rows?.hasError('max')" class="form__error">
+          max 50 rows
+        </p>
+      </div>
+    </div>
+    <div class="carriage__form__field">
+      <p class="form__label">Left seats</p>
+      <input
+        type="number"
+        class="form__input"
+        formControlName="leftSeats"
+        placeholder="*max 5 seats"
+      />
+      <div class="form__error-container">
+        <p
+          *ngIf="leftSeats?.invalid && leftSeats?.touched && leftSeats?.hasError('max')"
+          class="form__error"
+        >
+          max 5 seats
+        </p>
+      </div>
+    </div>
+    <div class="carriage__form__field">
+      <p class="form__label">Right seats</p>
+      <input
+        type="number"
+        class="form__input"
+        formControlName="rightSeats"
+        placeholder="*max 5 seats"
+      />
+      <div class="form__error-container">
+        <p
+          *ngIf="rightSeats?.invalid && rightSeats?.touched && rightSeats?.hasError('max')"
+          class="form__error"
+        >
+          max 5 seats
+        </p>
+      </div>
+    </div>
+    <button
+      class="carriage__form__button"
+      mat-flat-button
+      [disabled]="!carriageForm.valid"
+      (click)="onSave()"
+    >
+      Save
+    </button>
+  </form>
+  <app-carriage-schema *ngIf="carriageForm.valid" [carriage]="carriageData" [isDisabled]="true" />
+</div>

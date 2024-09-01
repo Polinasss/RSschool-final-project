@@ -1,0 +1,15 @@
+<mat-card class="item">
+  <div class="item__header">
+    <mat-card-title class="item__header-title"> {{ item.name }}</mat-card-title>
+    <mat-icon
+      aria-hidden="false"
+      class="item__icon"
+      aria-label="Edit Icon"
+      fontIcon="edit"
+      (click)="onUpdate()"
+    ></mat-icon>
+  </div>
+  <div *ngIf="this.carriageData" class="item__schema">
+    <app-carriage-schema [carriage]="this.carriageData" [isDisabled]="true"></app-carriage-schema>
+  </div>
+</mat-card>

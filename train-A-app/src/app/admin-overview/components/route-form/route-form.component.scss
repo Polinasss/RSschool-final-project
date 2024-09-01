@@ -1,0 +1,48 @@
+@import '@styles/variables.scss';
+
+.route {
+  display: flex;
+  flex-direction: column;
+
+  &__form {
+    display: flex;
+    justify-content: space-evenly;
+    gap: 20px;
+    padding: 20px;
+
+    &__column {
+      width: 50%;
+    }
+
+    &__header {
+      font-size: 24px;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    &__subheader {
+      font-size: 14px;
+      color: $label;
+    }
+
+    &__fields {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 15px;
+    }
+
+    &__button {
+      width: 120px;
+      height: 50px;
+      background-color: $secondary;
+      color: $white;
+      font-size: 16px;
+      align-self: flex-end;
+    }
+  }
+}
+
+mat-form-field {
+  width: 80%;
+}

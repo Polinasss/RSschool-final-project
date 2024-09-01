@@ -5,7 +5,6 @@ import {
   importProvidersFrom,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
-
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideState, provideStore } from '@ngrx/store';
@@ -18,6 +17,10 @@ import { CarriageEffects } from './admin-overview/_state/carriage/carriage.effec
 import { authInterceptor } from './auth/auth.interceptor';
 import { searchFeature } from './home/_state/search.reducer';
 import { TripEffects } from './home/_state/search.effects';
+import { stationFeature } from './admin-overview/_state/station/station.reducer';
+import { StationEffects } from './admin-overview/_state/station/station.effects';
+import { routeFeature } from './admin-overview/_state/route/route.reducer';
+import { RoutesEffects } from './admin-overview/_state/route/route.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -26,10 +29,14 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([authInterceptor])),
     provideAnimationsAsync(),
     provideStore(),
+    provideState(stationFeature),
     provideState(carriageFeature),
     provideState(searchFeature),
     provideEffects([CarriageEffects]),
     provideEffects([TripEffects]),
+    provideEffects([StationEffects, CarriageEffects]),
+    provideState(routeFeature),
+    provideEffects([CarriageEffects, RoutesEffects]),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
     importProvidersFrom(MatNativeDateModule),
   ],

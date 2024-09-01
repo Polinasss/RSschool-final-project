@@ -1,0 +1,30 @@
+@import '@styles/variables.scss';
+
+.item {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 1px 1px 1px 1px $divider;
+
+  &__header {
+    display: flex;
+    padding: 15px 30px;
+    justify-content: space-between;
+  }
+
+  &__header-title {
+    font-size: 24px;
+    font-weight: 600;
+  }
+
+  &__icon {
+    color: $text;
+    cursor: pointer;
+  }
+
+  &__schema {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}

@@ -1,0 +1,30 @@
+@import './../../../core/styles/variables.scss';
+
+.seat {
+  width: 30px;
+  height: 30px;
+  margin: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  background-color: $secondary;
+  color: $white;
+  box-shadow: 1px 1px 1px 1px $divider;
+  cursor: pointer;
+  outline: none;
+  border: none;
+}
+
+.selected {
+  background-color: $seat-selected;
+}
+
+.unavailable {
+  background-color: $label;
+  cursor: not-allowed;
+}
+
+.seat:disabled {
+  cursor: not-allowed;
+}
