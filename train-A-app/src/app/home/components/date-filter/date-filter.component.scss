@@ -24,6 +24,7 @@
   padding: 10px 15px;
   cursor: pointer;
   white-space: nowrap;
+  border-bottom: 2px solid transparent;
   div {
     &:first-child {
       font-size: 14px;
@@ -33,6 +34,9 @@
       color: $home-day-color;
     }
   }
+}
+.tab:hover {
+  background-color: $primary;
 }
 .tab.active {
   color: $home-blue;

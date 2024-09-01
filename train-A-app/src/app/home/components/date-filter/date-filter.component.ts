@@ -18,7 +18,7 @@ export class DateFilterComponent {
 
   availableDates: Date[] = [];
 
-  selectedDateIndex: number = 0;
+  selectedDate?: Date;
 
   startDateIndex: number = 0;
 
@@ -30,7 +30,6 @@ export class DateFilterComponent {
     private carriageFacade: CarriageFacade,
   ) {
     this.searchService.filterIsActive$.subscribe(() => {
-      this.selectedDateIndex = 0;
       this.startDateIndex = 0;
     });
     this.tripFacade.availableDates$.subscribe((dates) => {
@@ -40,17 +39,18 @@ export class DateFilterComponent {
       });
       this.availableDates = [...new Set(availableDates.sort())].map((d) => new Date(d));
       this.dates = this.availableDates.slice(0, 4);
+      console.log({ availableDates });
       if (this.availableDates.length > 0) {
         this.carriageFacade.loadCarriage();
+        this.selectDate(new Date(availableDates[0]));
       }
-      if (dates.length > 0) this.selectDate(0);
     });
   }
 
-  selectDate(index: number): void {
-    this.selectedDateIndex = index;
+  selectDate(date: Date): void {
+    this.selectedDate = date;
     const params = this.searchService.getSearchParams();
-    this.searchService.setSearchParams({ ...params, time: this.dates[index].toISOString() });
+    this.searchService.setSearchParams({ ...params, time: this.selectedDate.toISOString() });
   }
 
   previousDate(): void {

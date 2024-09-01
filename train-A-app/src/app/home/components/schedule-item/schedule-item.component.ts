@@ -97,7 +97,6 @@ export class ScheduleItemComponent implements OnInit, OnDestroy {
     const carriageTypes = Object.keys(segmentsPrices[0]);
 
     this.subscription = this.carriageFacade.carriage$.subscribe((carriages) => {
-      console.log({ carriages });
       this.carriageTypes = carriages;
       this.carriagePrices = carriageTypes.map((type) => {
         // debugger;
@@ -125,7 +124,6 @@ export class ScheduleItemComponent implements OnInit, OnDestroy {
     this.arrivalTime = at;
     const arrivalTimeStamp = new Date(this.departureTime).getTime();
     const departureTimeStamp = new Date(this.arrivalTime).getTime();
-
     this.durationDateTime = departureTimeStamp - arrivalTimeStamp;
     this.duration = formatDuration(this.durationDateTime);
   }

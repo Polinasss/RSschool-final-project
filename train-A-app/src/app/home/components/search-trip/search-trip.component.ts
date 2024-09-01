@@ -117,7 +117,6 @@ export class SearchTripComponent implements OnDestroy {
   }
 
   onSubmit(): void {
-    console.log('data = ', this.searchForm.getRawValue());
     const params: SearchParams = {
       fromLatitude: this.fromStation!.latitude,
       fromLongitude: this.fromStation!.longitude,
@@ -128,5 +127,16 @@ export class SearchTripComponent implements OnDestroy {
     this.searchService.setSearchParams(params);
     this.searchService.setFilterActiveState(true);
     this.tripFacade.loadTrip(params);
+  }
+
+  swapCities(): void {
+    const fromControl = this.searchForm.controls['from'];
+    const toControl = this.searchForm.controls['to'];
+    const temp = this.fromStation;
+    this.fromStation = this.toStation;
+    this.toStation = temp;
+    fromControl.setValue(this.fromStation?.city);
+    toControl.setValue(this.toStation?.city);
+    console.log({ fromControl, toControl, temp });
   }
 }
