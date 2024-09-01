@@ -34,11 +34,13 @@ export class EditNameFormComponent {
 
   onEditName() {
     this.isEditingName = !this.isEditingName;
+    this.userNameForm.patchValue({ userName: this.userName });
   }
 
   onSubmit() {
     if (this.userNameForm.valid) {
-      this.nameChanged.emit(this.userNameForm.value.userName);
+      const { userName } = this.userNameForm.value;
+      this.nameChanged.emit(userName);
       this.isEditingName = !this.isEditingName;
     }
   }

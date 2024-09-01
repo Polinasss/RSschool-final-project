@@ -34,11 +34,13 @@ export class EditEmailFormComponent {
 
   onEditEmail() {
     this.isEditingEmail = !this.isEditingEmail;
+    this.userEmailForm.patchValue({ userEmail: this.userEmail });
   }
 
   onSubmit() {
     if (this.userEmailForm.valid) {
-      this.emailChanged.emit(this.userEmailForm.value.userEmail);
+      const { userEmail } = this.userEmailForm.value;
+      this.emailChanged.emit(userEmail);
       this.isEditingEmail = !this.isEditingEmail;
     }
   }

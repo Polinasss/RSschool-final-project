@@ -1,14 +1,14 @@
 <mat-card class="user-profile">
   <mat-card-header class="user-profile__header">Profile</mat-card-header>
   <mat-card-content class="user-profile__content">
-    <p class="user-profile__content__role">My Role</p>
+    <p class="user-profile__content__role">{{ userProfile.role }}</p>
     <button class="user-profile__content__change-btn edit-btn" type="button">
       Change password
     </button>
     <p class="user-profile__content__text-title">Name:</p>
     <app-edit-name-form
       [userNameForm]="userNameForm"
-      [userName]="userName"
+      [userName]="userProfile.name"
       (nameChanged)="onNameChanged($event)"
     >
     </app-edit-name-form>
@@ -16,10 +16,12 @@
     <p class="user-profile__content__text-title">Email:</p>
     <app-edit-email-form
       [userEmailForm]="userEmailForm"
-      [userEmail]="userEmail"
+      [userEmail]="userProfile.email"
       (emailChanged)="onEmailChanged($event)"
     >
     </app-edit-email-form>
-    <button class="user-profile__content__logout-btn" type="button">Logout</button>
+    <button class="user-profile__content__logout-btn" type="button" (click)="onLogout()">
+      Logout
+    </button>
   </mat-card-content>
 </mat-card>
