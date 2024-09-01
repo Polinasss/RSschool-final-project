@@ -13,6 +13,8 @@ import { stationFeature } from './admin-overview/_state/station/station.reducer'
 import { StationEffects } from './admin-overview/_state/station/station.effects';
 import { routeFeature } from './admin-overview/_state/route/route.reducer';
 import { RoutesEffects } from './admin-overview/_state/route/route.effects';
+import { userProfileFeature } from './user-profile/_state/user-profile.reducer';
+import { UserProfileEffects } from './user-profile/_state/user-profile.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -26,6 +28,8 @@ export const appConfig: ApplicationConfig = {
     provideEffects([StationEffects, CarriageEffects]),
     provideState(routeFeature),
     provideEffects([CarriageEffects, RoutesEffects]),
+    provideState(userProfileFeature),
+    provideEffects([UserProfileEffects]),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
   ],
 };

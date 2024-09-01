@@ -5,8 +5,8 @@ export interface UserProfile {
 }
 
 export interface UserProfileBody {
-  name: string;
-  email: string;
+  name?: string;
+  email?: string;
 }
 
 export interface UserProfilePasswordBody {
