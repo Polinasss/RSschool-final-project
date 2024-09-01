@@ -43,7 +43,12 @@ export class ScheduleItemComponent implements OnInit {
 
   carriagePrices: { type: string; price: number }[] = [];
 
-  startStopStations: { start: number; stop: number } = { start: 0, stop: 0 };
+  startStopStations = { start: 0, stop: 0 };
+
+  middleStations = {
+    second: 0,
+    penult: 0,
+  };
 
   constructor(private dialog: MatDialog) {}
 
@@ -70,6 +75,12 @@ export class ScheduleItemComponent implements OnInit {
     this.startStopStations.start = start > 0 ? start : 0;
     this.startStopStations.stop = stop > start ? stop : 0;
     const segments = this.way.segments.slice(start, stop);
+    const second = segments.length > 2 ? start + 1 : start;
+    const penult = segments.length > 2 ? stop - 1 : stop;
+    this.middleStations = {
+      second: this.path.stations[second],
+      penult: this.path.stations[penult],
+    };
     const segmentsPrices = segments.map((seg) => seg.price);
     const carriageTypes = Object.keys(segmentsPrices[0]);
     this.carriagePrices = carriageTypes.map((type) => ({

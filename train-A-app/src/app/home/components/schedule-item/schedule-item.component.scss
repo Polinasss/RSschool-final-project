@@ -82,11 +82,12 @@ mat-card {
   align-items: center;
   justify-content: space-around;
   background-color: #f0f0f0;
-  padding: 5px 10px;
+  padding: 0px 10px;
   border-radius: 12px;
   font-size: 14px;
   color: #333;
   width: 160px;
+  height: 40px;
 }
 .train {
   margin-right: 5px;
@@ -94,7 +95,7 @@ mat-card {
 
 .route-link {
   display: block;
-  margin-top: 8px;
+  margin-top: 0px;
   font-size: 14px;
   color: #0071c2;
   text-decoration: none;
@@ -109,10 +110,9 @@ mat-card {
 }
 
 .price {
-  height: 70px;
   margin: 0 5px 5px;
   background-color: #e0e2ec;
-  padding: 10px;
+  padding: 5px;
   cursor: pointer;
   border-radius: 5px;
   &:hover {
@@ -129,8 +129,9 @@ mat-card {
 .price-amount {
   display: block;
   font-size: 24px;
-  font-weight: bold;
+  font-weight: 500;
   color: #000;
+  padding: 10px 0;
 }
 
 .seats {
