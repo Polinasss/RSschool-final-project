@@ -6,6 +6,7 @@
 
   &__price {
     display: flex;
+    align-items: center;
   }
 
   &__icon {
@@ -17,9 +18,15 @@
     }
   }
 
+  &__input {
+    padding: 5px;
+    margin: 5px;
+  }
+
   &__form {
     display: flex;
     justify-content: space-between;
+    gap: 8px;
   }
 
   &__timework {

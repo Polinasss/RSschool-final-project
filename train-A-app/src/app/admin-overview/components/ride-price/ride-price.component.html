@@ -1,13 +1,13 @@
 <div class="schedule__timework">
   <ng-container *ngIf="editPriceIndex === i; else showPrice">
-    <div class="schedule__time__column">
+    <form [formGroup]="priceForm" class="schedule__time__column">
       <p class="schedule__subtitle">Price</p>
       <div *ngFor="let key of carriageNames$ | async" class="schedule__price">
         <p>{{ key }}</p>
         <p>-</p>
-        <input type="number" class="schedule__input" />
+        <input type="number" class="schedule__input" [formControlName]="key" />
       </div>
-    </div>
+    </form>
     <mat-icon
       aria-hidden="false"
       class="schedule__icon"
@@ -23,7 +23,7 @@
         <div class="schedule__form">
           <p>{{ key }}</p>
           <p>-</p>
-          <p>{{ this.getValue(price, key) | currency: 'USD' : 'symbol' : '1.0-0' }}</p>
+          <p>{{ priceForm.get(key)?.value | currency: 'USD' : 'symbol' : '1.0-0' }}</p>
         </div>
       </div>
     </div>

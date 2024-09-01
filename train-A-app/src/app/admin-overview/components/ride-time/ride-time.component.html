@@ -1,15 +1,15 @@
 <div class="schedule" *ngIf="time">
   <ng-container *ngIf="editTimeIndex === i; else showTime">
-    <div class="schedule__timeform">
+    <form [formGroup]="timeForm" class="schedule__timeform">
       <div *ngIf="i !== 0">
         Arrival:
-        <input type="number" class="schedule__input" />
+        <input type="datetime-local" class="schedule__input" formControlName="arrivalTime" />
       </div>
       <div *ngIf="i !== length - 1">
         Departure:
-        <input type="number" class="schedule__input" />
+        <input type="datetime-local" class="schedule__input" formControlName="departureTime" />
       </div>
-    </div>
+    </form>
     <mat-icon
       aria-hidden="false"
       class="schedule__icon"
@@ -20,9 +20,11 @@
   </ng-container>
   <ng-template #showTime>
     <div class="schedule__time">
-      <p *ngIf="i !== 0">Arrival: {{ this.arrivalTime | date: 'yyyy-MM-dd hh:mm a' }}</p>
+      <p *ngIf="i !== 0">
+        Arrival: {{ timeForm.get('arrivalTime')?.value | date: 'yyyy-MM-dd hh:mm a' }}
+      </p>
       <p *ngIf="i !== length - 1">
-        Departure: {{ this.departureTime | date: 'yyyy-MM-dd hh:mm a' }}
+        Departure: {{ timeForm.get('departureTime')?.value | date: 'yyyy-MM-dd hh:mm a' }}
       </p>
     </div>
     <mat-icon
