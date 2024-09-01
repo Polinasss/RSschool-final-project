@@ -1,7 +1,6 @@
 import { DatePipe, NgIf } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
-import { Time } from 'app/admin-overview/models/ride';
 
 @Component({
   selector: 'app-ride-time',
@@ -11,7 +10,7 @@ import { Time } from 'app/admin-overview/models/ride';
   styleUrl: './ride-time.component.scss',
 })
 export class RideTimeComponent implements OnInit {
-  @Input() time: Time = { time: ['', ''] };
+  @Input() time!: [string, string];
 
   @Input() i!: number;
 
@@ -24,8 +23,8 @@ export class RideTimeComponent implements OnInit {
   public arrivalTime!: string;
 
   ngOnInit() {
-    if (this.time && this.time.time) {
-      [this.departureTime, this.arrivalTime] = [this.time.time[0], this.time.time[1]];
+    if (this.time) {
+      [this.departureTime, this.arrivalTime] = this.time as [string, string];
     }
   }
 

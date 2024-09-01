@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Ride, RideResponse } from 'app/admin-overview/models/ride';
-import { Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -10,12 +10,6 @@ export class RideService {
   private http = inject(HttpClient);
 
   public loadRideById(id: number): Observable<Ride> {
-    this.http.get<Ride>(`/api/route/${id}`).pipe(
-      tap({
-        next: (ride: Ride) => console.log('Loaded Ride:', ride),
-        error: (error) => console.error('Error loading ride:', error),
-      }),
-    );
     return this.http.get<Ride>(`/api/route/${id}`);
   }
 

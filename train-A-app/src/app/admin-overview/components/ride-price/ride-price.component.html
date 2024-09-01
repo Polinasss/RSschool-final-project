@@ -2,7 +2,7 @@
   <ng-container *ngIf="editPriceIndex === i; else showPrice">
     <div class="schedule__time__column">
       <p class="schedule__subtitle">Price</p>
-      <div *ngFor="let key of getKeys(price)" class="schedule__price">
+      <div *ngFor="let key of carriageNames$ | async" class="schedule__price">
         <p>{{ key }}</p>
         <p>-</p>
         <input type="number" class="schedule__input" />
@@ -19,7 +19,7 @@
   <ng-template #showPrice>
     <div class="schedule__time__column">
       <p class="schedule__subtitle">Price</p>
-      <div *ngFor="let key of getKeys(price)" class="schedule__price">
+      <div *ngFor="let key of carriageNames$ | async" class="schedule__price">
         <div class="schedule__form">
           <p>{{ key }}</p>
           <p>-</p>

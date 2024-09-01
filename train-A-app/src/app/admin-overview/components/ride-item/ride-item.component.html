@@ -2,7 +2,7 @@
   <div *ngFor="let schedule of ride.schedule" class="ride__schedule schedule">
     <h3 class="schedule__title">Ride {{ schedule.rideId }}</h3>
     <div *ngFor="let segment of schedule.segments; let i = index" class="schedule__segment">
-      <div class="schedule__name">Name</div>
+      <div class="schedule__name">{{ (rideStations$ | async)?.[i] }}</div>
       <app-ride-time
         [time]="segment.time"
         [i]="i"

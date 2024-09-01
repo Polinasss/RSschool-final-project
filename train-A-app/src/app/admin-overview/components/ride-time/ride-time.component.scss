@@ -29,5 +29,9 @@
   &__icon {
     margin-top: 12px;
     color: $secondary;
+    cursor: pointer;
+    &:hover {
+      opacity: 0.3;
+    }
   }
 }
