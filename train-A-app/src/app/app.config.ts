@@ -14,7 +14,7 @@ import { StationEffects } from './admin-overview/_state/station/station.effects'
 import { routeFeature } from './admin-overview/_state/route/route.reducer';
 import { RoutesEffects } from './admin-overview/_state/route/route.effects';
 import { userProfileFeature } from './user-profile/_state/user-profile.reducer';
-import { UserProfileEffects } from './user-profile/_state/user-profile.effects';
+import { UserProfileEffects } from './user-profile/_state/user-profile/user-profile.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [

@@ -8,13 +8,16 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatCard, MatCardHeader, MatCardContent } from '@angular/material/card';
-import { UserProfileFacade } from 'app/user-profile/_state/user-profile.facade';
+import { UserProfileFacade } from 'app/user-profile/_state/user-profile/user-profile.facade';
 import { Subject, takeUntil } from 'rxjs';
 import { NotificationService } from 'app/core/services/notification/notification.service';
 import { UserProfile, UserProfileBody } from 'app/user-profile/models/user-profile';
 import { Router } from '@angular/router';
-import { EditEmailFormComponent } from '../../components/edit-email-form/edit-email-form.component';
+import { MatDialog } from '@angular/material/dialog';
+import { ChangePasswordDialogComponent } from 'app/user-profile/components/change-password-dialog/change-password-dialog.component';
+import { MatIconModule } from '@angular/material/icon';
 import { EditNameFormComponent } from '../../components/edit-name-form/edit-name-form.component';
+import { EditEmailFormComponent } from '../../components/edit-email-form/edit-email-form.component';
 
 @Component({
   selector: 'app-user-profile-page',
@@ -23,6 +26,7 @@ import { EditNameFormComponent } from '../../components/edit-name-form/edit-name
     MatCard,
     MatCardHeader,
     MatCardContent,
+    MatIconModule,
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
@@ -33,9 +37,9 @@ import { EditNameFormComponent } from '../../components/edit-name-form/edit-name
   styleUrl: './user-profile-page.component.scss',
 })
 export class UserProfilePageComponent implements OnInit, OnDestroy {
-  userNameForm: FormGroup;
+  public userNameForm: FormGroup;
 
-  userEmailForm: FormGroup;
+  public userEmailForm: FormGroup;
 
   private userProfileFacade = inject(UserProfileFacade);
 
@@ -46,6 +50,10 @@ export class UserProfilePageComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
 
   public userProfile: UserProfile = { name: '', email: '', role: '' };
+
+  readonly dialog = inject(MatDialog);
+
+  public userPassword = '';
 
   constructor(
     private fb: FormBuilder,
@@ -73,7 +81,7 @@ export class UserProfilePageComponent implements OnInit, OnDestroy {
     });
   }
 
-  onNameChanged(userName: string) {
+  onNameChanged(userName: string): void {
     const updatedUserProfile: UserProfileBody = {
       ...this.userProfile,
       name: userName,
@@ -81,7 +89,7 @@ export class UserProfilePageComponent implements OnInit, OnDestroy {
     this.userProfileFacade.updateUserProfile(updatedUserProfile);
   }
 
-  onEmailChanged(userEmail: string) {
+  onEmailChanged(userEmail: string): void {
     const updatedUserProfile: UserProfileBody = {
       ...this.userProfile,
       email: userEmail,
@@ -89,9 +97,22 @@ export class UserProfilePageComponent implements OnInit, OnDestroy {
     this.userProfileFacade.updateUserProfile(updatedUserProfile);
   }
 
-  onLogout() {
+  onChangePasswordDialog(): void {
+    const dialogRef = this.dialog.open(ChangePasswordDialogComponent, {
+      data: { password: this.userPassword },
+    });
+
+    dialogRef.afterClosed().subscribe((newPassword) => {
+      if (newPassword !== undefined) {
+        this.userPassword = newPassword;
+        this.userProfileFacade.updateUserProfilePassword({ password: this.userPassword });
+      }
+    });
+  }
+
+  onLogout(): void {
     this.userProfileFacade.logoutUserProfile();
-    this.router.navigate(['/signin']);
+    this.router.navigate(['signin']);
   }
 
   ngOnDestroy(): void {

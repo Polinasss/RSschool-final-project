@@ -1,9 +1,10 @@
 import { Injectable, inject } from '@angular/core';
-import { exhaustMap, map, catchError, of, mergeMap } from 'rxjs';
+import { exhaustMap, map, catchError, of, mergeMap, tap } from 'rxjs';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { UserProfileService } from '../services/user-profile.service';
+import { NotificationService } from 'app/core/services/notification/notification.service';
+import { UserProfileService } from '../../services/user-profile.service';
 import { userProfileActions } from './user-profile.actions';
-import { UserProfile } from '../models/user-profile';
+import { UserProfile } from '../../models/user-profile';
 
 @Injectable()
 export class UserProfileEffects {
@@ -11,13 +12,14 @@ export class UserProfileEffects {
 
   private readonly userService = inject(UserProfileService);
 
+  private readonly notificationService = inject(NotificationService);
+
   getUser$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(userProfileActions.loadUserProfile),
       exhaustMap(() =>
         this.userService.loadUserProfile().pipe(
           map((user: UserProfile) => {
-            console.log('User profile loaded:', user);
             return userProfileActions.loadUserProfileSuccess({ user });
           }),
           catchError((error) => of(userProfileActions.loadUserProfileFailure({ error }))),
@@ -56,6 +58,7 @@ export class UserProfileEffects {
       ofType(userProfileActions.updateUserProfilePassword),
       mergeMap((action) =>
         this.userService.updateUserPassword(action.password).pipe(
+          tap(() => this.notificationService.openSuccessSnackBar('Password changed successfully!')),
           map(() => userProfileActions.updateUserProfilePasswordSuccess()),
           catchError((error) => of(userProfileActions.updateUserProfilePasswordFailure({ error }))),
         ),

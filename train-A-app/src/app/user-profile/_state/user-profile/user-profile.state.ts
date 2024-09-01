@@ -1,4 +1,4 @@
-import { UserProfile } from '../models/user-profile';
+import { UserProfile } from '../../models/user-profile';
 
 export type UserProfileState = {
   user: UserProfile;

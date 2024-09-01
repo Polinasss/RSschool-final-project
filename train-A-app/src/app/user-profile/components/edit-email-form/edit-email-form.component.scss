@@ -28,14 +28,9 @@
     padding: 0;
 
     mat-icon {
-      font-size: 1.5rem;
-      color: $text-active;
-    }
-  }
-
-  &__save-btn {
-    mat-icon {
       margin-top: -1.25rem;
+      font-size: 1.5rem;
+      color: $secondary;
     }
   }
 }

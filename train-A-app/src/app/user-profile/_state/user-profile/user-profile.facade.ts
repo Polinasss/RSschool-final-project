@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { userProfileActions } from './user-profile.actions';
-import { UserProfileBody } from '../models/user-profile';
+import { UserProfileBody, UserProfilePasswordBody } from '../../models/user-profile';
 import { UserProfileState } from './user-profile.state';
 import { userProfileFeature } from './user-profile.reducer';
 
@@ -17,8 +17,14 @@ export class UserProfileFacade {
     this.store.dispatch(userProfileActions.loadUserProfile());
   }
 
-  updateUserProfile(updateUser: UserProfileBody) {
-    this.store.dispatch(userProfileActions.updateUserProfile({ user: updateUser }));
+  updateUserProfile(newUserProfile: UserProfileBody) {
+    this.store.dispatch(userProfileActions.updateUserProfile({ user: newUserProfile }));
+  }
+
+  updateUserProfilePassword(newUserPassword: UserProfilePasswordBody) {
+    this.store.dispatch(
+      userProfileActions.updateUserProfilePassword({ password: newUserPassword }),
+    );
   }
 
   logoutUserProfile() {
