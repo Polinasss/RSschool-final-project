@@ -100,33 +100,28 @@ export class SearchTripComponent implements OnDestroy {
     this.toStation = st;
   }
 
-  get from() {
-    return this.searchForm.controls['from'].value.city;
-  }
-
-  get to() {
-    return this.searchForm.get('to');
-  }
-
-  get date() {
-    return this.searchForm.get('date');
-  }
-
   get disabledForm() {
     return this.searchForm.invalid;
   }
 
-  onSubmit(): void {
-    const params: SearchParams = {
-      fromLatitude: this.fromStation!.latitude,
-      fromLongitude: this.fromStation!.longitude,
-      toLatitude: this.toStation!.latitude,
-      toLongitude: this.toStation!.longitude,
-      time: this.searchForm.controls['date'].value.toISOString(),
-    };
-    this.searchService.setSearchParams(params);
-    this.searchService.setFilterActiveState(true);
-    this.tripFacade.loadTrip(params);
+  onSearch(): void {
+    if (this.fromStation && this.toStation) {
+      const params: SearchParams = {
+        fromLatitude: this.fromStation?.latitude,
+        fromLongitude: this.fromStation?.longitude,
+        toLatitude: this.toStation?.latitude,
+        toLongitude: this.toStation?.longitude,
+        time: this.searchForm.controls['date'].value.toISOString(),
+      };
+      this.searchService.setSearchParams(params);
+      this.searchService.setFilterActiveState(true);
+      this.tripFacade.loadTrip(params);
+    } else {
+      const fromControl = this.searchForm.controls['from'];
+      const toControl = this.searchForm.controls['to'];
+      fromControl.setValue('');
+      toControl.setValue('');
+    }
   }
 
   swapCities(): void {
@@ -137,6 +132,6 @@ export class SearchTripComponent implements OnDestroy {
     this.toStation = temp;
     fromControl.setValue(this.fromStation?.city);
     toControl.setValue(this.toStation?.city);
-    console.log({ fromControl, toControl, temp });
+    this.onSearch();
   }
 }

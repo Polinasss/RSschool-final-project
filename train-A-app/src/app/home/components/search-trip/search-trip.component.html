@@ -11,14 +11,23 @@
         [matAutocomplete]="from"
       />
       <mat-autocomplete #from="matAutocomplete">
-        @for (option of filteredStationsFrom | async; track option) {
+        @for (option of filteredStationsFrom | async; track option.id) {
           <mat-option [value]="option.city" (click)="setFromStation(option)">{{
             option.city
           }}</mat-option>
         }
       </mat-autocomplete>
     </mat-form-field>
-    <img class="arrows" src="assets/arrows.svg" alt="" width="30" (click)="swapCities()" />
+    <img
+      role="button"
+      tabindex="swap"
+      class="arrows"
+      src="assets/arrows.svg"
+      alt=""
+      width="30"
+      (click)="swapCities()"
+      (keyup)="swapCities()"
+    />
 
     <mat-form-field class="example-full-width">
       <mat-label>To</mat-label>
@@ -31,7 +40,7 @@
         [matAutocomplete]="to"
       />
       <mat-autocomplete #to="matAutocomplete">
-        @for (option of filteredStationsTo | async; track option) {
+        @for (option of filteredStationsTo | async; track option.id) {
           <mat-option [value]="option.city" (click)="setToStation(option)">{{
             option.city
           }}</mat-option>
@@ -47,6 +56,6 @@
     <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
   <div mat-dialog-actions>
-    <button mat-flat-button [disabled]="disabledForm" (click)="onSubmit()">Search</button>
+    <button mat-flat-button [disabled]="disabledForm" (click)="onSearch()">Search</button>
   </div>
 </form>

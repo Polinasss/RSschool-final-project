@@ -48,24 +48,24 @@ mat-card {
   display: block;
   font-size: 24px;
   font-weight: bold;
-  color: #000;
+  color: $home-ride-time-color;
 }
 
 .date {
   display: block;
   font-size: 14px;
-  color: #666;
+  color: $home-ride-date-color;
 }
 
 .city {
   display: block;
   font-size: 16px;
-  color: #000;
+  color: $home-ride-city-color;
 }
 
 .travel-duration {
   text-align: center;
-  color: #0071c2;
+  color: $home-blue;
   font-size: 14px;
   width: 300px;
   margin: 0 10px;
@@ -81,11 +81,11 @@ mat-card {
   display: flex;
   align-items: center;
   justify-content: space-around;
-  background-color: #f0f0f0;
+  background-color: $home-route-backg-color;
   padding: 0px 10px;
   border-radius: 12px;
   font-size: 14px;
-  color: #333;
+  color: $home-route-text-color;
   width: 160px;
   height: 40px;
 }
@@ -97,7 +97,7 @@ mat-card {
   display: block;
   margin-top: 0px;
   font-size: 14px;
-  color: #0071c2;
+  color: $home-blue;
   text-decoration: none;
 }
 
@@ -112,19 +112,19 @@ mat-card {
 .price {
   min-width: 100px;
   margin: 0 5px 5px;
-  background-color: #e0e2ec;
+  background-color: $home-price-backg-color;
   padding: 5px;
   cursor: pointer;
   border-radius: 5px;
   &:hover {
-    background-color: #cfd1da;
+    background-color: $home-price-hover-color;
   }
 }
 
 .class-type {
   display: block;
   font-size: 16px;
-  color: #333;
+  color: $home-route-text-color;
   text-align: center;
 }
 
@@ -132,7 +132,7 @@ mat-card {
   display: block;
   font-size: 24px;
   font-weight: 500;
-  color: #000;
+  color: $home-ride-city-color;
   padding: 10px 0;
   text-align: center;
 }
@@ -140,6 +140,6 @@ mat-card {
 .seats {
   display: block;
   font-size: 14px;
-  color: #666;
+  color: $home-ride-date-color;
   text-align: center;
 }
