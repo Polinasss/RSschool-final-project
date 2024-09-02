@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Ride } from 'app/admin-overview/models/ride';
+import { Ride, Segment } from 'app/admin-overview/models/ride';
 import { RideState } from './ride.state';
 import { rideFeature } from './ride.reducer';
 import { rideActions } from './ride.action';
@@ -23,8 +23,10 @@ export class RideFacade {
     this.store.dispatch(rideActions.createNewRide({ routeId, ride: newRide }));
   }
 
-  updateRide(routeId: number, rideId: number, updateRide: Ride) {
-    this.store.dispatch(rideActions.updateRide({ routeId, rideId, ride: updateRide }));
+  updateRide(routeId: number, rideId: number, segmentId: number, updateRide: Segment) {
+    this.store.dispatch(
+      rideActions.updateRide({ routeId, rideId, segmentId, segment: updateRide }),
+    );
   }
 
   deleteRide(routeId: number, rideId: number) {

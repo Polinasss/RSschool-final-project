@@ -1,7 +1,9 @@
 import { DatePipe, NgIf } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatIcon } from '@angular/material/icon';
+import { RideFacade } from 'app/admin-overview/_state/ride/ride.facade';
+import { Ride, Segment } from 'app/admin-overview/models/ride';
 
 @Component({
   selector: 'app-ride-time',
@@ -17,6 +19,10 @@ export class RideTimeComponent implements OnInit {
 
   @Input() length!: number;
 
+  @Input() ride!: Ride;
+
+  @Input() rideId!: number;
+
   public editTimeIndex: number | null = null;
 
   public departureTime!: string;
@@ -24,6 +30,8 @@ export class RideTimeComponent implements OnInit {
   public arrivalTime!: string;
 
   public timeForm!: FormGroup;
+
+  private rideFacade = inject(RideFacade);
 
   constructor(private fb: FormBuilder) {}
 
@@ -62,7 +70,27 @@ export class RideTimeComponent implements OnInit {
 
   public onSaveTime() {
     if (this.timeForm.valid) {
+      const { arrivalTime, departureTime } = this.timeForm.value;
       this.editTimeIndex = null;
+      const scheduleForUpdate = this.ride.schedule.find(
+        (schedule) => schedule.rideId === this.rideId,
+      );
+      const segmentForUpdate = scheduleForUpdate?.segments[this.i];
+      const updatedSegment = {
+        ...segmentForUpdate,
+        time: [departureTime, arrivalTime],
+      } as Segment;
+      const updatedSchedule = {
+        ...scheduleForUpdate,
+        segments: scheduleForUpdate?.segments.map((segment, index) =>
+          index === this.i ? updatedSegment : segment,
+        ),
+      };
+      const newRide: Segment = {
+        ...updatedSegment,
+      };
+      console.log(this.ride, updatedSchedule);
+      this.rideFacade.updateRide(this.ride.id, this.rideId, this.i, newRide);
     }
   }
 }

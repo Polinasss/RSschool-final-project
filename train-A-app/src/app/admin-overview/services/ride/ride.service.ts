@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Ride, RideResponse } from 'app/admin-overview/models/ride';
+import { Ride, RideResponse, Segment } from 'app/admin-overview/models/ride';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -17,7 +17,7 @@ export class RideService {
     return this.http.post<RideResponse>(`/api/route/${routeId}/ride`, newRide);
   }
 
-  public updateRide(routeId: number, rideId: number, newRide: Ride): Observable<number> {
+  public updateRide(routeId: number, rideId: number, newRide: Segment): Observable<number> {
     return this.http.put<number>(`/api/route/${routeId}/ride/${rideId}`, newRide);
   }
 

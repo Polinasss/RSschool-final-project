@@ -1,5 +1,5 @@
 import { createActionGroup, props } from '@ngrx/store';
-import { Ride } from 'app/admin-overview/models/ride';
+import { Ride, Segment } from 'app/admin-overview/models/ride';
 import { ServerError } from '../../../shared/models/error';
 
 export const rideActions = createActionGroup({
@@ -12,10 +12,20 @@ export const rideActions = createActionGroup({
     createNewRideSuccess: props<{ id: number; ride: Omit<Ride, 'id'> }>(),
     createNewRideFailure: props<{ error: ServerError }>(),
     addNewRideToStore: props<{ newRide: Ride }>(),
-    updateRide: props<{ routeId: number; rideId: number; ride: Ride }>(),
-    updateRideSuccess: props<{ ride: Ride }>(),
+    updateRide: props<{ routeId: number; rideId: number; segmentId: number; segment: Segment }>(),
+    updateRideSuccess: props<{
+      routeId: number;
+      rideId: number;
+      segmentId: number;
+      segment: Segment;
+    }>(),
     updateRideFailure: props<{ error: ServerError }>(),
-    updateRideInStore: props<{ updateRide: Ride }>(),
+    updateRideInStore: props<{
+      routeId: number;
+      rideId: number;
+      segmentId: number;
+      updateRide: Segment;
+    }>(),
     deleteRide: props<{ routeId: number; rideId: number }>(),
     deleteRideSuccess: props<{ routeId: number; rideId: number }>(),
     deleteRideFailure: props<{ error: ServerError }>(),
