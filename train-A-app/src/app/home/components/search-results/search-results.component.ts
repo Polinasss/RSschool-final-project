@@ -40,7 +40,6 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.sb = this.trip$.subscribe((trip) => {
-      console.log(trip);
       this.fromCity = { stationId: trip.from?.stationId || 0, city: trip.from?.city || '' };
       this.toCity = { stationId: trip.to?.stationId || 0, city: trip.to?.city || '' };
     });

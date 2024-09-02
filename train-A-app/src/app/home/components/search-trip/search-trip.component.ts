@@ -91,12 +91,10 @@ export class SearchTripComponent implements OnDestroy {
   }
 
   setFromStation(st: Station): void {
-    console.log({ from: st });
     this.fromStation = st;
   }
 
   setToStation(st: Station): void {
-    console.log({ to: st });
     this.toStation = st;
   }
 

@@ -53,8 +53,6 @@ export const searchFeature = createFeature({
             }
           }
         });
-        console.log({ routes });
-
         return routes;
       });
     const selectAvailableDates = createSelector(selectTrip, (trip) => {
@@ -70,7 +68,6 @@ export const searchFeature = createFeature({
           }
         }
       });
-      console.log({ dates });
       return dates;
     });
     return { selectRoutes, selectRoutesByStartDay, selectAvailableDates };

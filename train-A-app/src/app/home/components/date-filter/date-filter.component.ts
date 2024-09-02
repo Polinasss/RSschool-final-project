@@ -39,7 +39,6 @@ export class DateFilterComponent {
       });
       this.availableDates = [...new Set(availableDates.sort())].map((d) => new Date(d));
       this.dates = this.availableDates.slice(0, 4);
-      console.log({ availableDates });
       if (this.availableDates.length > 0) {
         this.carriageFacade.loadCarriage();
         this.selectDate(new Date(availableDates[0]));
