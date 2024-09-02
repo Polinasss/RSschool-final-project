@@ -9,7 +9,9 @@
         matInput
         formControlName="from"
         [matAutocomplete]="from"
+        (change)="setFromStationByType()"
       />
+      <mat-hint class="error">{{ fromError }}</mat-hint>
       <mat-autocomplete #from="matAutocomplete">
         @for (option of filteredStationsFrom | async; track option.id) {
           <mat-option [value]="option.city" (click)="setFromStation(option)">{{
@@ -38,7 +40,9 @@
         matInput
         formControlName="to"
         [matAutocomplete]="to"
+        (change)="setToStationByType()"
       />
+      <mat-hint class="error">{{ toError }}</mat-hint>
       <mat-autocomplete #to="matAutocomplete">
         @for (option of filteredStationsTo | async; track option.id) {
           <mat-option [value]="option.city" (click)="setToStation(option)">{{
