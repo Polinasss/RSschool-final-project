@@ -2,9 +2,9 @@ import { Injectable, inject } from '@angular/core';
 import { exhaustMap, map, catchError, of, mergeMap, tap } from 'rxjs';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { NotificationService } from 'app/core/services/notification/notification.service';
-import { UserProfileService } from '../../services/user-profile.service';
+import { UserProfileService } from '../services/user-profile.service';
 import { userProfileActions } from './user-profile.actions';
-import { UserProfile } from '../../models/user-profile';
+import { UserProfile } from '../models/user-profile';
 
 @Injectable()
 export class UserProfileEffects {

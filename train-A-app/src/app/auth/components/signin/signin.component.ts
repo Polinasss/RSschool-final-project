@@ -11,6 +11,9 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { RoleService } from 'app/auth/services/role.service';
+import { Store } from '@ngrx/store';
+import { rolesListActions } from 'app/auth/_state/roles.actions';
 import { noSpaceValidator } from '../../../shared/utils/validators';
 
 @Component({
@@ -32,6 +35,10 @@ export class SigninComponent implements OnInit, OnDestroy {
   public isSubmitted: boolean = false;
 
   public isSubmitting: boolean = false;
+
+  private roleService = inject(RoleService);
+
+  private store: Store<{ roleState: string }> = inject(Store);
 
   public loginForm!: FormGroup<{
     email: FormControl<string>;
@@ -68,13 +75,6 @@ export class SigninComponent implements OnInit, OnDestroy {
     this.signIn();
   }
 
-  // TODO: replace http request to auth service
-  // signIn(email: string, password: string): Observable<{ token: string }> {
-  //   return this.http.post<{ token: string }>('/api/signin', {
-  //     email,
-  //     password,
-  //   });
-  // }
   public signIn() {
     const { email, password } = this.loginForm.getRawValue();
     const sub = this.http
@@ -84,9 +84,10 @@ export class SigninComponent implements OnInit, OnDestroy {
       })
       .subscribe({
         next: (response) => {
-          // TODO: we need a flag inside service, pointing user is isAuthenticated or not
-          // this.isAuthenticated = true
           localStorage.setItem('token', response.token);
+          this.roleService.isAuthorized().subscribe((val) => {
+            this.store.dispatch(rolesListActions.changeRole({ role: val }));
+          });
           this.router.navigateByUrl('/');
         },
         error: () => {

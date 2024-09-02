@@ -50,6 +50,6 @@ export class RouteItemComponent {
   }
 
   public assignRide() {
-    this.router.navigate(['/admin/routes', this.item.id]);
+    this.router.navigate(['/admin-page/routes', this.item.id]);
   }
 }

@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { userProfileActions } from './user-profile.actions';
-import { UserProfileBody, UserProfilePasswordBody } from '../../models/user-profile';
+import { UserProfileBody, UserProfilePasswordBody } from '../models/user-profile';
 import { UserProfileState } from './user-profile.state';
 import { userProfileFeature } from './user-profile.reducer';
 

@@ -1,6 +1,6 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 import { ServerError } from 'app/shared/models/error';
-import { UserProfile, UserProfileBody, UserProfilePasswordBody } from '../../models/user-profile';
+import { UserProfile, UserProfileBody, UserProfilePasswordBody } from '../models/user-profile';
 
 export const userProfileActions = createActionGroup({
   source: 'USER',

@@ -8,7 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatCard, MatCardHeader, MatCardContent } from '@angular/material/card';
-import { UserProfileFacade } from 'app/user-profile/_state/user-profile/user-profile.facade';
+import { UserProfileFacade } from 'app/user-profile/_state//user-profile.facade';
 import { Subject, takeUntil } from 'rxjs';
 import { NotificationService } from 'app/core/services/notification/notification.service';
 import { UserProfile, UserProfileBody } from 'app/user-profile/models/user-profile';

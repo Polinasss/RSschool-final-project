@@ -100,8 +100,6 @@ export class SignupComponent implements OnDestroy {
   onSubmit(): void {
     if (this.signupForm.valid) {
       this.isSubmitting = true;
-      console.log(this.signupForm.getRawValue());
-      // this.authService.signup(this.signupForm.value);
       const { email, password } = this.signupForm.getRawValue();
       const sub = this.http
         .post<{ token: string }>('/api/signup/', {
@@ -110,8 +108,6 @@ export class SignupComponent implements OnDestroy {
         })
         .subscribe({
           next: () => {
-            // TODO: we need a flag inside service, pointing user is isAuthenticated or not
-            // this.isAuthenticated = true
             this.router.navigate(['/signin']);
           },
           error: (error) => {
