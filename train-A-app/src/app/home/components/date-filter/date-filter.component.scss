@@ -1,0 +1,48 @@
+@import '@styles/variables.scss';
+
+.date-filter {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  background: $home-filter-color;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px $home-shadow-color;
+}
+.tabs {
+  display: flex;
+  overflow-x: auto;
+  flex-grow: 1;
+  justify-content: space-evenly;
+}
+.tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 15px;
+  cursor: pointer;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  div {
+    &:first-child {
+      font-size: 14px;
+    }
+    &:last-child {
+      font-size: 12px;
+      color: $home-day-color;
+    }
+  }
+}
+.tab:hover {
+  background-color: $primary;
+}
+.tab.active {
+  color: $home-blue;
+  font-weight: bold;
+  border-bottom: 2px solid $home-blue;
+}
+button[mat-icon-button] {
+  border: none;
+}
