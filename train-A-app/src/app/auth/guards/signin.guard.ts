@@ -5,8 +5,9 @@ import { CanActivate, Router } from '@angular/router';
   providedIn: 'root',
 })
 export class SigninGuard implements CanActivate {
-  // TODO: get it from the service
   private isAuthenticated: boolean = false;
+
+  public userRole = 'manager';
 
   private router: Router = inject(Router);
 

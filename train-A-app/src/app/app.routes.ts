@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { NotFoundComponent } from './not-found/not-found.component';
 import { SigninGuard } from './auth/guards/signin.guard';
 import { SignupPageComponent } from './auth/pages/signup-page/signup-page.component';
 import { SigninPageComponent } from './auth/pages/signin-page/signin-page.component';
@@ -11,12 +12,12 @@ import { CarriagesPageComponent } from './admin-overview/pages/carriages-page/ca
 
 export const routes: Routes = [
   {
-    path: 'signin',
-    component: SigninPageComponent,
-    canActivate: [SigninGuard],
+    path: '',
+    loadChildren: () => import('./layout/layout.routers').then((m) => m.layoutRoutes),
   },
-  { path: 'signup', component: SignupPageComponent },
   {
+    path: '**',
+    component: NotFoundComponent,
     path: 'admin',
     component: AdminOverviewPageComponent,
     children: [

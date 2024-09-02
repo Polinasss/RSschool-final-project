@@ -9,6 +9,7 @@ import { routes } from './app.routes';
 import { carriageFeature } from './admin-overview/_state/carriage/carriage.reducer';
 import { CarriageEffects } from './admin-overview/_state/carriage/carriage.effects';
 import { authInterceptor } from './auth/auth.interceptor';
+import { rolesReducer } from './auth/_state/roles.reducer';
 import { stationFeature } from './admin-overview/_state/station/station.reducer';
 import { StationEffects } from './admin-overview/_state/station/station.effects';
 import { routeFeature } from './admin-overview/_state/route/route.reducer';
@@ -21,6 +22,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([authInterceptor])),
     provideAnimationsAsync(),
     provideStore(),
+    provideStore({ roleState: rolesReducer.reducer }),
     provideState(stationFeature),
     provideState(carriageFeature),
     provideEffects([StationEffects, CarriageEffects]),
