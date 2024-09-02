@@ -1,0 +1,39 @@
+<mat-card class="user-profile">
+  <mat-card-header class="user-profile__header"
+    ><mat-icon>account_circle</mat-icon>Profile</mat-card-header
+  >
+  <mat-card-content class="user-profile__content">
+    <p class="user-profile__content__role">{{ userProfile.role }}</p>
+    <button
+      mat-flat-button
+      class="user-profile__content__change-btn edit-btn"
+      type="button"
+      (click)="onChangePasswordDialog()"
+    >
+      Change password
+    </button>
+    <p class="user-profile__content__text-title">Name:</p>
+    <app-edit-name-form
+      [userNameForm]="userNameForm"
+      [userName]="userProfile.name"
+      (nameChanged)="onNameChanged($event)"
+    >
+    </app-edit-name-form>
+
+    <p class="user-profile__content__text-title">Email:</p>
+    <app-edit-email-form
+      [userEmailForm]="userEmailForm"
+      [userEmail]="userProfile.email"
+      (emailChanged)="onEmailChanged($event)"
+    >
+    </app-edit-email-form>
+    <button
+      mat-flat-button
+      class="user-profile__content__logout-btn"
+      type="button"
+      (click)="onLogout()"
+    >
+      Logout
+    </button>
+  </mat-card-content>
+</mat-card>

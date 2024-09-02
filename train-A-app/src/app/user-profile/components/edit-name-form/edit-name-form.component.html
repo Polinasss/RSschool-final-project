@@ -1,0 +1,25 @@
+<form class="user-profile__name" (ngSubmit)="onSubmit()" [formGroup]="userNameForm">
+  <mat-form-field class="small" *ngIf="isEditingName; else viewName" appearance="outline">
+    <input matInput type="text" formControlName="userName" />
+    <mat-error class="hint" *ngIf="userNameControl?.invalid">
+      <span *ngIf="userNameControl?.errors?.['required']">Please enter a new user name</span>
+      <span *ngIf="userNameControl?.errors?.['minlength']"
+        >Name must be at least 3 characters long</span
+      >
+    </mat-error>
+  </mat-form-field>
+  <ng-template #viewName>
+    <p class="user-profile__name__text">{{ userName }}</p>
+    <button
+      mat-icon-button
+      class="user-profile__name__edit-btn"
+      type="button"
+      (click)="onEditName()"
+    >
+      <mat-icon>edit</mat-icon>
+    </button>
+  </ng-template>
+  <button *ngIf="isEditingName" mat-button class="user-profile__name__save-btn" type="submit">
+    <mat-icon>save</mat-icon>
+  </button>
+</form>

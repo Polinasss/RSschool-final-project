@@ -37,7 +37,10 @@ export const layoutRoutes: Routes = [
       },
       {
         path: 'profile',
-        loadComponent: () => import('../profile/profile.component').then((m) => m.ProfileComponent),
+        loadComponent: () =>
+          import('../user-profile/pages/user-profile-page/user-profile-page.component').then(
+            (m) => m.UserProfilePageComponent,
+          ),
         canActivate: [IsAuthorizedGuard],
         data: {
           role: ['manager', 'user'],

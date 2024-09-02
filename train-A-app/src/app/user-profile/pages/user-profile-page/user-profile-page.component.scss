@@ -1,0 +1,67 @@
+@import '@styles/variables.scss';
+
+.user-profile {
+  margin: 1.25rem auto;
+  padding: 1.25rem 2.5rem;
+  width: 37.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  &__header {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 0.625rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    mat-icon {
+      color: $secondary;
+      font-size: 1.5rem;
+    }
+  }
+
+  &__content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-bottom: 0;
+
+    &__change-btn,
+    &__logout-btn {
+      margin-top: 1rem;
+      height: 2.5rem;
+      border: none;
+      border-radius: 0.5rem;
+      font-weight: bold;
+      color: $white;
+      cursor: pointer;
+      box-shadow: 0 4px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    &__change-btn {
+      margin-left: auto;
+      width: 9.38rem;
+      background-color: $secondary;
+    }
+
+    &__logout-btn {
+      margin-right: auto;
+      width: 6.25rem;
+      background-color: $error;
+    }
+
+    &__role {
+      margin-left: auto;
+      font-weight: bold;
+    }
+
+    &__text-title {
+      font-weight: bold;
+    }
+  }
+}
