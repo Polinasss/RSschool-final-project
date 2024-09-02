@@ -102,12 +102,15 @@ export class UserProfilePageComponent implements OnInit, OnDestroy {
       data: { password: this.userPassword },
     });
 
-    dialogRef.afterClosed().subscribe((newPassword) => {
-      if (newPassword !== undefined) {
-        this.userPassword = newPassword;
-        this.userProfileFacade.updateUserProfilePassword({ password: this.userPassword });
-      }
-    });
+    dialogRef
+      .afterClosed()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((newPassword) => {
+        if (newPassword !== undefined) {
+          this.userPassword = newPassword;
+          this.userProfileFacade.updateUserProfilePassword({ password: this.userPassword });
+        }
+      });
   }
 
   onLogout(): void {
