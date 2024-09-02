@@ -12,9 +12,11 @@ export const stationActions = createActionGroup({
     createNewStationSuccess: props<{ id: number; station: Omit<Station, 'id'> }>(),
     createNewStationFailure: props<{ error: ServerError }>(),
     addNewStationToStore: props<{ newStation: Station }>(),
+    updateStoreAfterAdd: props<{ stationId: number; connectedStationId: number }>(),
     deleteStation: props<{ id: number }>(),
     deleteStationSuccess: props<{ id: number }>(),
     deleteStationFailure: props<{ error: ServerError }>(),
-    deleteStationInStore: props<{ id: number }>(),
+    deleteStationInStore: props<{ stations: Station[] }>(),
+    updateStoreAfterDelete: props<{ id: number }>(),
   },
 });

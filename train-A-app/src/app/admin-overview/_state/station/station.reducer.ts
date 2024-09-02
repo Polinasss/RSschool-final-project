@@ -33,8 +33,22 @@ export const stationFeature = createFeature({
       stationActions.addNewStationToStore,
       (state, { newStation }): StationState => ({
         ...state,
-        station: [...state.station, newStation],
+        station: [newStation, ...state.station],
         error: null,
+      }),
+    ),
+    on(
+      stationActions.updateStoreAfterAdd,
+      (state, { stationId, connectedStationId }): StationState => ({
+        ...state,
+        station: state.station.map((station) =>
+          station.id === stationId
+            ? {
+                ...station,
+                connectedTo: [...station.connectedTo, { id: connectedStationId }],
+              }
+            : station,
+        ),
       }),
     ),
     on(
@@ -47,9 +61,9 @@ export const stationFeature = createFeature({
     ),
     on(
       stationActions.deleteStationInStore,
-      (state, { id }): StationState => ({
+      (state, { stations }): StationState => ({
         ...state,
-        station: [...state.station.filter((item) => item.id !== id)],
+        station: stations,
         error: null,
       }),
     ),
@@ -59,6 +73,14 @@ export const stationFeature = createFeature({
         ...state,
         error: error.message,
         isLoading: false,
+      }),
+    ),
+    on(
+      stationActions.updateStoreAfterDelete,
+      (state, { id }): StationState => ({
+        ...state,
+        station: [...state.station.filter((item) => item.id !== id)],
+        error: null,
       }),
     ),
   ),
