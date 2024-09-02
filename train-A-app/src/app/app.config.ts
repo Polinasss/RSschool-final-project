@@ -17,6 +17,7 @@ import { CarriageEffects } from './admin-overview/_state/carriage/carriage.effec
 import { authInterceptor } from './auth/auth.interceptor';
 import { searchFeature } from './home/_state/search.reducer';
 import { TripEffects } from './home/_state/search.effects';
+import { rolesReducer } from './auth/_state/roles.reducer';
 import { stationFeature } from './admin-overview/_state/station/station.reducer';
 import { StationEffects } from './admin-overview/_state/station/station.effects';
 import { routeFeature } from './admin-overview/_state/route/route.reducer';
@@ -29,6 +30,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([authInterceptor])),
     provideAnimationsAsync(),
     provideStore(),
+    provideStore({ roleState: rolesReducer.reducer }),
     provideState(stationFeature),
     provideState(carriageFeature),
     provideState(searchFeature),

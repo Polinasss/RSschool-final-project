@@ -55,11 +55,11 @@ export class AdminOverviewPageComponent implements OnInit {
 
   private getPanelNameFromPath(path: string): string {
     switch (path) {
-      case '/admin/stations':
+      case '/admin-page/stations':
         return 'Stations';
-      case '/admin/carriages':
+      case '/admin-page/carriages':
         return 'Carriages';
-      case '/admin/routes':
+      case '/admin-page/routes':
         return 'Routes';
       default:
         return '';
