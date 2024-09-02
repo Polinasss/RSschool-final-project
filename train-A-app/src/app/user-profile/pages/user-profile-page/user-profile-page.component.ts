@@ -16,6 +16,8 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ChangePasswordDialogComponent } from 'app/user-profile/components/change-password-dialog/change-password-dialog.component';
 import { MatIconModule } from '@angular/material/icon';
+import { Store } from '@ngrx/store';
+import { rolesListActions } from 'app/auth/_state/roles.actions';
 import { EditNameFormComponent } from '../../components/edit-name-form/edit-name-form.component';
 import { EditEmailFormComponent } from '../../components/edit-email-form/edit-email-form.component';
 
@@ -54,6 +56,8 @@ export class UserProfilePageComponent implements OnInit, OnDestroy {
   readonly dialog = inject(MatDialog);
 
   public userPassword = '';
+
+  private store: Store<{ roleState: string }> = inject(Store);
 
   constructor(
     private fb: FormBuilder,
@@ -115,6 +119,7 @@ export class UserProfilePageComponent implements OnInit, OnDestroy {
 
   onLogout(): void {
     this.userProfileFacade.logoutUserProfile();
+    this.store.dispatch(rolesListActions.changeRole({ role: 'guest' }));
     this.router.navigate(['home']);
   }
 
