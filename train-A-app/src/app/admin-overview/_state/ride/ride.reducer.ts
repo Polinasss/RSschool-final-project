@@ -13,14 +13,9 @@ export const rideFeature = createFeature({
         isLoading: true,
       }),
     ),
-    on(
-      rideActions.loadRideByIdSuccess,
-      (state, { ride }): RideState => ({
-        ...state,
-        ride: { ...ride },
-        isLoading: false,
-      }),
-    ),
+    on(rideActions.loadRideByIdSuccess, (state, { ride }): RideState => {
+      return { ...state, ride: { ...ride }, isLoading: false };
+    }),
     on(
       rideActions.loadRideByIdFailure,
       (state, { error }): RideState => ({
@@ -63,9 +58,14 @@ export const rideFeature = createFeature({
     ),
     on(
       rideActions.deleteRideFromStore,
-      (state): RideState => ({
+      (state, { rideId }): RideState => ({
         ...state,
-        ride: null,
+        ride: state.ride
+          ? {
+              ...state.ride,
+              schedule: state.ride.schedule.filter((ride) => ride.rideId !== rideId),
+            }
+          : null,
         error: null,
       }),
     ),

@@ -19,6 +19,6 @@ export const rideActions = createActionGroup({
     deleteRide: props<{ routeId: number; rideId: number }>(),
     deleteRideSuccess: props<{ routeId: number; rideId: number }>(),
     deleteRideFailure: props<{ error: ServerError }>(),
-    deleteRideFromStore: props<{ routeId: number; rideId: number }>(),
+    deleteRideFromStore: props<{ rideId: number }>(),
   },
 });

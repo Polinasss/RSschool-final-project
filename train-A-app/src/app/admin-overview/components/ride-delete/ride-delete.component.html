@@ -1,0 +1,16 @@
+<h2 mat-dialog-title>Delete ride</h2>
+
+<ng-container *ngIf="this.data.status === 'ok'; else cannotDelete">
+  <mat-dialog-content> Would you like to delete ride? </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-button mat-dialog-close>No</button>
+    <button mat-button mat-dialog-close cdkFocusInitial (click)="deleteRide()">Ok</button>
+  </mat-dialog-actions>
+</ng-container>
+
+<ng-template #cannotDelete>
+  <mat-dialog-content> Trip cannot be deleted as it has already started </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-button mat-dialog-close cdkFocusInitial>Ok</button>
+  </mat-dialog-actions>
+</ng-template>

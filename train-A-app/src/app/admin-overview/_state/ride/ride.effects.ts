@@ -96,9 +96,7 @@ export class RideEffects {
     return this.actions$.pipe(
       ofType(rideActions.deleteRideSuccess),
       mergeMap((action) => {
-        return of(
-          rideActions.deleteRideFromStore({ routeId: action.routeId, rideId: action.rideId }),
-        );
+        return of(rideActions.deleteRideFromStore({ rideId: action.rideId }));
       }),
     );
   });
