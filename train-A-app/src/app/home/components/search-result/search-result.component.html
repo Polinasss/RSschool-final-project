@@ -1,0 +1,11 @@
+<div class="wrapper">
+  <p>route ID: {{ route.id }}</p>
+  @for (way of ways; track way) {
+    <app-schedule-item
+      [toCity]="toCity"
+      [fromCity]="fromCity"
+      [way]="way"
+      [path]="{ stations: route.path, carriages: route.carriages, id: route.id }"
+    ></app-schedule-item>
+  }
+</div>

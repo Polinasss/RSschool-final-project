@@ -1,0 +1,68 @@
+<div class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <span class="modal-title">Route {{ data.path.id }}</span>
+      <button class="close-button" (click)="onClose()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <table>
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Station</th>
+            <th class="right">Stop</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="edge-station">{{ data.schedule[0].time[0] | date: 'HH:mm' : '0' }}</div>
+            </td>
+            <td>
+              <div class="station">
+                <div class="station-marker first active"></div>
+                <div class="station-name">{{ cities[0] }}</div>
+              </div>
+            </td>
+            <td>
+              <div class="edge-station">first station</div>
+            </td>
+          </tr>
+          @for (station of data.path.stations.slice(1, -1); track idx; let idx = $index) {
+            <tr>
+              <td>
+                <div>{{ data.schedule[idx].time[1] | date: 'HH:mm' : '0' }}</div>
+                <div>{{ data.schedule[idx + 1].time[0] | date: 'HH:mm' : '0' }}</div>
+              </td>
+              <td>
+                <div class="station">
+                  <div class="station-marker"></div>
+                  <div class="station-name">{{ cities[idx + 1] }}</div>
+                </div>
+              </td>
+              <td>{{ this.durations[idx + 1] }}</td>
+            </tr>
+          }
+          <tr>
+            <td>
+              <div class="edge-station">
+                {{ data.schedule[data.schedule.length - 1].time[1] | date: 'HH:mm' : '0' }}
+              </div>
+            </td>
+            <td>
+              <div class="station">
+                <div class="station-marker last active"></div>
+                <div class="station-name">
+                  {{ cities[cities.length - 1] }}
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="edge-station">last station</div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+@import '@styles/variables.scss';
+
+.wrapper {
+  background-color: $primary;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 1200px;
+  margin: 15px auto;
+  background: $home-filter-color;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px $home-shadow-color;
+}
