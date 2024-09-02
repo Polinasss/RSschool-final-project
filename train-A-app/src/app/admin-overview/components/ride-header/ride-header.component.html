@@ -1,0 +1,16 @@
+<div class="header">
+  <div class="header__title">
+    <div class="header__button">
+      <mat-icon
+        aria-hidden="false"
+        class="header__icon"
+        aria-label="Go Icon"
+        fontIcon="arrow_back_ios"
+        (click)="goBack()"
+      >
+      </mat-icon>
+    </div>
+    <h2 class="header__subtitle">Route {{ this.id }}</h2>
+  </div>
+  <app-create-button (clickOnButton)="createRide()"></app-create-button>
+</div>

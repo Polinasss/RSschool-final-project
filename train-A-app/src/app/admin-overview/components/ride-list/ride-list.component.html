@@ -1,0 +1,14 @@
+<div class="ride">
+  <div class="ride__spinner" *ngIf="isLoading$ | async">
+    <mat-spinner></mat-spinner>
+  </div>
+  <div class="ride__error" *ngIf="error$ | async">
+    <p>{{ error$ | async }}</p>
+  </div>
+  <ng-container *ngIf="!(isLoading$ | async) && !(error$ | async)">
+    <ng-container *ngTemplateOutlet="ride"></ng-container>
+  </ng-container>
+  <ng-template #ride>
+    <app-ride-item [ride]="ride$ | async"></app-ride-item>
+  </ng-template>
+</div>
