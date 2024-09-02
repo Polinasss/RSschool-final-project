@@ -60,6 +60,55 @@ export const layoutRoutes: Routes = [
         data: {
           role: ['manager'],
         },
+        children: [
+          {
+            path: 'stations',
+            loadComponent: () =>
+              import('../admin-overview/pages/stations-page/stations-page.component').then(
+                (m) => m.StationsPageComponent,
+              ),
+          },
+          {
+            path: 'carriages',
+            loadComponent: () =>
+              import('../admin-overview/pages/carriages-page/carriages-page.component').then(
+                (m) => m.CarriagesPageComponent,
+              ),
+          },
+          {
+            path: 'routes',
+            loadComponent: () =>
+              import('../admin-overview/pages/routes-page/routes-page.component').then(
+                (m) => m.RoutesPageComponent,
+              ),
+            children: [
+              {
+                path: '',
+                loadComponent: () =>
+                  import('../admin-overview/components/route-list/route-list.component').then(
+                    (m) => m.RouteListComponent,
+                  ),
+              },
+              {
+                path: ':id',
+                loadComponent: () =>
+                  import('../admin-overview/pages/ride-page/ride-page.component').then(
+                    (m) => m.RidePageComponent,
+                  ),
+              },
+            ],
+          },
+          {
+            path: '',
+            redirectTo: 'stations',
+            pathMatch: 'full',
+          },
+        ],
+      },
+      {
+        path: '',
+        redirectTo: 'admin-page',
+        pathMatch: 'full',
       },
     ],
   },

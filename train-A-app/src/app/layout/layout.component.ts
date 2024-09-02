@@ -38,12 +38,9 @@ export class LayoutComponent implements OnInit {
     });
     this.role$.subscribe((role) => {
       this.role = role;
-      console.log(this.role);
-
       this.isAdmin = role.toLocaleLowerCase().includes('manager');
       this.isClient = role.toLocaleLowerCase().includes('user');
       this.isGuest = role.toLocaleLowerCase().includes('guest');
-      console.log(this.isGuest);
     });
   }
 }
