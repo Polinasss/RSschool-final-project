@@ -11,6 +11,13 @@ export interface Route {
   schedule: Schedule[];
 }
 
+export interface Ride {
+  path: number[];
+  carriages: string[];
+  rideId: number;
+  schedule: Schedule[];
+}
+
 export interface Schedule {
   rideId: number;
   segments: Segment[];

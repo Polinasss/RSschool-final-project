@@ -31,6 +31,11 @@ export const layoutRoutes: Routes = [
           import('../home/pages/home-page/home-page.component').then((m) => m.HomePageComponent),
       },
       {
+        path: 'trip/:rideId',
+        loadComponent: () =>
+          import('../trip/components/trip/trip.component').then((m) => m.TripComponent),
+      },
+      {
         path: '',
         pathMatch: 'full',
         redirectTo: 'home',

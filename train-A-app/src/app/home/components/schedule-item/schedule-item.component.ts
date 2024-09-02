@@ -10,6 +10,7 @@ import { Carriage } from 'app/admin-overview/models/carriage';
 import { Subscription } from 'rxjs';
 import { Station } from 'app/admin-overview/models/station';
 import { StationFacade } from 'app/admin-overview/_state/station/station.facade';
+import { Router } from '@angular/router';
 import { TripStationsComponent } from '../trip-stations/trip-stations.component';
 
 @Component({
@@ -69,6 +70,7 @@ export class ScheduleItemComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private carriageFacade: CarriageFacade,
     private stationFacade: StationFacade,
+    private router: Router,
   ) {
     this.stationFacade.station$.subscribe((stations) => {
       this.stations = stations;
@@ -143,5 +145,11 @@ export class ScheduleItemComponent implements OnInit, OnDestroy {
     const departureTimeStamp = new Date(this.arrivalTime).getTime();
     this.durationDateTime = departureTimeStamp - arrivalTimeStamp;
     this.duration = formatDuration(this.durationDateTime);
+  }
+
+  selectTrip() {
+    this.router.navigate(['/trip', this.way.rideId], {
+      queryParams: { from: this.startStopStations.start, to: this.startStopStations.stop },
+    });
   }
 }
