@@ -1,0 +1,145 @@
+@import '@styles/variables.scss';
+
+mat-card {
+  margin: 10px;
+  border-color: $text;
+  mat-card-header {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    position: relative;
+  }
+  mat-card-content {
+    display: flex;
+    justify-content: space-between;
+    padding: 0;
+  }
+}
+
+.travel-card {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  border-radius: 8px;
+  font-family: Roboto, Arial, sans-serif;
+  padding: 10px 10px 5px;
+}
+
+.time-route-wrapper {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  max-width: 500px;
+}
+
+.time-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.departure-time,
+.arrival-time {
+  text-align: left;
+  width: 100px;
+}
+
+.time {
+  display: block;
+  font-size: 24px;
+  font-weight: bold;
+  color: $home-ride-time-color;
+}
+
+.date {
+  display: block;
+  font-size: 14px;
+  color: $home-ride-date-color;
+}
+
+.city {
+  display: block;
+  font-size: 16px;
+  color: $home-ride-city-color;
+}
+
+.travel-duration {
+  text-align: center;
+  color: $home-blue;
+  font-size: 14px;
+  width: 300px;
+  margin: 0 10px;
+}
+
+.route-info {
+  display: flex;
+  gap: 10px;
+  text-align: left;
+}
+
+.route {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background-color: $home-route-backg-color;
+  padding: 0px 10px;
+  border-radius: 12px;
+  font-size: 14px;
+  color: $home-route-text-color;
+  width: 160px;
+  height: 40px;
+}
+.train {
+  margin-right: 5px;
+}
+
+.route-link {
+  display: block;
+  margin-top: 0px;
+  font-size: 14px;
+  color: $home-blue;
+  text-decoration: none;
+}
+
+.price-info {
+  display: flex;
+  flex-wrap: wrap;
+  text-align: right;
+  align-items: center;
+  justify-content: right;
+}
+
+.price {
+  min-width: 100px;
+  margin: 0 5px 5px;
+  background-color: $home-price-backg-color;
+  padding: 5px;
+  cursor: pointer;
+  border-radius: 5px;
+  &:hover {
+    background-color: $home-price-hover-color;
+  }
+}
+
+.class-type {
+  display: block;
+  font-size: 16px;
+  color: $home-route-text-color;
+  text-align: center;
+}
+
+.price-amount {
+  display: block;
+  font-size: 24px;
+  font-weight: 500;
+  color: $home-ride-city-color;
+  padding: 10px 0;
+  text-align: center;
+}
+
+.seats {
+  display: block;
+  font-size: 14px;
+  color: $home-ride-date-color;
+  text-align: center;
+}

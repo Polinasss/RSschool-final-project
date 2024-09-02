@@ -1,0 +1,36 @@
+@import '@styles/variables.scss';
+@import '@styles/mat-form-field.scss';
+
+.user-profile__email {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .small {
+    width: 90%;
+
+    mat-error {
+      margin-left: 0.93rem;
+      margin-top: -0.2rem;
+      font-size: 0.625rem;
+    }
+  }
+
+  &__edit-btn,
+  &__save-btn {
+    height: 2.19rem;
+    border: none;
+    background: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+
+    mat-icon {
+      margin-top: -1.25rem;
+      font-size: 1.5rem;
+      color: $secondary;
+    }
+  }
+}

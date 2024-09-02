@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg" xmlns:bx="https://boxy-svg.com">
+  <ellipse style="stroke-width: 2px; stroke: rgb(76, 107, 245); fill: rgba(216, 216, 216, 0);" cx="24.905" cy="24.83" rx="23.663" ry="23.663"/>
+  <path d="M 9.256 16.048 H 29.561 L 29.561 11.572 L 41.495 17.539 L 29.561 23.506 L 29.561 19.031 H 9.256 V 16.048 Z" style="fill: rgb(216, 216, 216); stroke: rgb(76, 107, 245);" bx:shape="arrow 9.256 11.572 32.239 11.934 2.983 11.934 0 1@32a53efe"/>
+  <path d="M -40.768 -34.241 H -20.463 L -20.463 -38.716 L -8.529 -32.749 L -20.463 -26.782 L -20.463 -31.258 H -40.768 V -34.241 Z" style="fill: rgb(216, 216, 216); stroke: rgb(76, 107, 245); transform-origin: -24.6485px -32.749px;" transform="matrix(-1, 0, 0, -1, 49.296998596192, 65.498004150391)" bx:shape="arrow -40.768 -38.716 32.239 11.934 2.983 11.934 0 1@a5b6e341"/>
+</svg>

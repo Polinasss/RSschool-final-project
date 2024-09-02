@@ -1,0 +1,25 @@
+<!-- <app-search-result></app-search-result> -->
+@if (isLoading$ | async) {
+  <div class="spinner">
+    <mat-spinner></mat-spinner>
+  </div>
+} @else {
+  @if (trip$ | async) {
+    @for (route of routes$ | async; track route.schedule[0].rideId) {
+      <app-search-result
+        [route]="route"
+        [toCity]="toCity"
+        [fromCity]="fromCity"
+      ></app-search-result>
+    } @empty {
+      @if (showFilter$ | async) {
+        <img class="noresults" src="assets/noresults.png" alt="noresults" height="400" />
+      }
+    }
+  }
+}
+@if (error$ | async) {
+  <div class="spinner">
+    <p>{{ error$ | async }}</p>
+  </div>
+}

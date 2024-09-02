@@ -1,0 +1,27 @@
+@if (showFilter$ | async) {
+  <div class="date-filter">
+    <button mat-icon-button (click)="previousDate()">
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+
+    <div class="tabs">
+      @for (date of dates; track i; let i = $index) {
+        <div
+          class="tab"
+          role="button"
+          tabindex="i"
+          [class.active]="selectedDate?.getTime() === date.getTime()"
+          (click)="selectDate(date)"
+          (keyup)="selectDate(date)"
+        >
+          <div>{{ date | date: 'MMMM dd' }}</div>
+          <div>{{ date | date: 'EEEE' }}</div>
+        </div>
+      }
+    </div>
+
+    <button mat-icon-button (click)="nextDate()">
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+  </div>
+}
