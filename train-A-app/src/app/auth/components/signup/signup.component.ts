@@ -100,7 +100,6 @@ export class SignupComponent implements OnDestroy {
   onSubmit(): void {
     if (this.signupForm.valid) {
       this.isSubmitting = true;
-      console.log(this.signupForm.getRawValue());
       const { email, password } = this.signupForm.getRawValue();
       const sub = this.http
         .post<{ token: string }>('/api/signup/', {
