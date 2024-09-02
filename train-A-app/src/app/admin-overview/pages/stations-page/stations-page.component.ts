@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -6,11 +6,16 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { StationFacade } from 'app/admin-overview/_state/station/station.facade';
+import { CommonModule } from '@angular/common';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { Subject, takeUntil } from 'rxjs';
+import { NotificationService } from 'app/core/services/notification/notification.service';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { StationMapComponent } from '../../components/station-map/station-map.component';
 import { StationFormComponent } from '../../components/station-form/station-form.component';
 import { StationListComponent } from '../../components/station-list/station-list.component';
-import { LocationData, Station } from '../../models/station';
-import { MOCK_STATIONS } from '../../models/mocked-data';
+import { LocationData, Station, StationBody } from '../../models/station';
 
 @Component({
   selector: 'app-stations-page',
@@ -20,23 +25,35 @@ import { MOCK_STATIONS } from '../../models/mocked-data';
     StationFormComponent,
     StationListComponent,
     FormsModule,
+    MatProgressSpinnerModule,
     ReactiveFormsModule,
+    CommonModule,
+    MatSnackBarModule,
   ],
   templateUrl: './stations-page.component.html',
   styleUrl: './stations-page.component.scss',
 })
-export class StationsPageComponent {
+export class StationsPageComponent implements OnInit, OnDestroy {
   stationsConnectedForm: FormGroup;
 
-  selectedLocation: LocationData | null = null;
+  public selectedLocation: LocationData | null = null;
 
-  stations: Station[] = MOCK_STATIONS;
+  private stationFacade = inject(StationFacade);
 
-  @ViewChild(StationMapComponent) mapComponent!: StationMapComponent;
+  readonly stations$ = this.stationFacade.station$;
 
-  @ViewChild(StationListComponent) listComponent!: StationListComponent;
+  readonly error$ = this.stationFacade.error$;
 
-  constructor(private fb: FormBuilder) {
+  readonly isLoading$ = this.stationFacade.isLoading$;
+
+  public stationList: Station[] = [];
+
+  private destroy$: Subject<void> = new Subject<void>();
+
+  constructor(
+    private fb: FormBuilder,
+    private notificationService: NotificationService,
+  ) {
     this.stationsConnectedForm = this.fb.group({
       city: ['', Validators.required],
       latitude: ['', [Validators.required, Validators.min(-90), Validators.max(90)]],
@@ -45,7 +62,18 @@ export class StationsPageComponent {
     });
   }
 
-  onLocationSelected(locationData: LocationData): void {
+  ngOnInit(): void {
+    this.error$.pipe(takeUntil(this.destroy$)).subscribe((error) => {
+      if (error) {
+        this.notificationService.openFailureSnackBar(error);
+      }
+    });
+    this.stations$.pipe(takeUntil(this.destroy$)).subscribe((stations: Station[]) => {
+      this.stationList = stations;
+    });
+  }
+
+  public onLocationSelected(locationData: LocationData): void {
     this.selectedLocation = locationData;
     this.stationsConnectedForm.patchValue({
       city: locationData.city,
@@ -54,34 +82,23 @@ export class StationsPageComponent {
     });
   }
 
-  onAddStation(newStation: Station) {
-    const stationExist = this.stations.find((station) => station.city === newStation.city);
+  public onAddStation(newStation: StationBody) {
+    const stationExists = this.stationList.find((station) => station.city === newStation.city);
 
-    if (stationExist) {
-      console.log('A station already exists in this city. Cannot add a new one!');
-      return;
+    if (stationExists) {
+      const message = 'Maximum 1 station can be in one city!';
+      this.notificationService.openFailureSnackBar(message);
+    } else {
+      this.stationFacade.addStation(newStation);
     }
-
-    this.stations.push(newStation);
-    this.mapComponent.updateMapMarkers();
   }
 
-  onDeleteStation(stationId: number) {
-    const index = this.stations.findIndex((station) => station.id === stationId);
-    if (index > -1) {
-      const isConnected = this.stations.some((station) =>
-        station.connectedTo.some((connection) => connection.id === stationId.toString()),
-      );
+  public onDeleteStation(stationId: number) {
+    this.stationFacade.deleteStation(stationId);
+  }
 
-      if (isConnected) {
-        console.log('Cannot delete station with active rides!');
-        return;
-      }
-
-      this.stations.splice(index, 1);
-      if (this.mapComponent) {
-        this.mapComponent.updateMapMarkers();
-      }
-    }
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

@@ -7,12 +7,23 @@ export interface Station {
 }
 
 export interface ConnectedCities {
-  id: string;
-  distance: number;
+  id: number;
+  distance?: number;
 }
 
 export interface LocationData {
   city: string;
   latitude: number;
   longitude: number;
+}
+
+export interface StationBody {
+  city: string;
+  latitude: number;
+  longitude: number;
+  relations: number[];
+}
+
+export interface StationResponse {
+  id: number;
 }

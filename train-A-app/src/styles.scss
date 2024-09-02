@@ -1,4 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
+@import '@styles/snackbar.scss';
 
 html,
 body {
@@ -7,4 +8,17 @@ body {
 body {
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+ul {
+  padding: 0;
+}
+li {
+  list-style: none;
+}
+ul {
+  margin: 0;
+  padding: 0;
+}
+li {
+  list-style: none;
 }

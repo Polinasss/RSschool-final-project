@@ -14,8 +14,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MOCK_STATIONS } from '../../models/mocked-data';
-import { LocationData, Station } from '../../models/station';
+import { MatButtonModule } from '@angular/material/button';
+import { LocationData, Station, StationBody } from '../../models/station';
 
 @Component({
   selector: 'app-station-form',
@@ -30,18 +30,19 @@ import { LocationData, Station } from '../../models/station';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    MatButtonModule,
   ],
   templateUrl: './station-form.component.html',
   styleUrl: './station-form.component.scss',
 })
 export class StationFormComponent implements OnInit, OnChanges {
-  @Input() formGroup!: FormGroup;
+  @Input() stationFormGroup!: FormGroup;
 
   @Input() locationData: LocationData | null = null;
 
-  @Output() stationAdded = new EventEmitter<Station>();
+  @Output() stationAdded = new EventEmitter<StationBody>();
 
-  stations: Station[] = MOCK_STATIONS;
+  @Input() stations!: Station[];
 
   constructor(private fb: FormBuilder) {}
 
@@ -55,9 +56,9 @@ export class StationFormComponent implements OnInit, OnChanges {
     }
   }
 
-  updateFormFields(): void {
+  private updateFormFields(): void {
     if (this.locationData) {
-      this.formGroup.patchValue({
+      this.stationFormGroup.patchValue({
         city: this.locationData.city,
         latitude: this.locationData.latitude,
         longitude: this.locationData.longitude,
@@ -66,36 +67,36 @@ export class StationFormComponent implements OnInit, OnChanges {
   }
 
   get cityControl() {
-    return this.formGroup.get('city');
+    return this.stationFormGroup.get('city');
   }
 
   get latitudeControl() {
-    return this.formGroup.get('latitude');
+    return this.stationFormGroup.get('latitude');
   }
 
   get longitudeControl() {
-    return this.formGroup.get('longitude');
+    return this.stationFormGroup.get('longitude');
   }
 
   get connectedToControl(): FormArray {
-    return this.formGroup.get('connectedTo') as FormArray;
+    return this.stationFormGroup.get('connectedTo') as FormArray;
   }
 
   get connectedToControlAsFormControl(): FormControl[] {
     return this.connectedToControl.controls as FormControl[];
   }
 
-  addConnectedCity(): void {
+  public addConnectedCity(): void {
     this.connectedToControl.push(this.fb.control('', Validators.required));
   }
 
-  addInitialConnectedCities(): void {
+  private addInitialConnectedCities(): void {
     while (this.connectedToControl.length < 3) {
       this.addConnectedCity();
     }
   }
 
-  displayFn(id: number): string {
+  public displayFn(id: number): string {
     if (id) {
       const index = this.stations.findIndex((station) => station.id === id);
       return this.stations[index].city;
@@ -103,45 +104,15 @@ export class StationFormComponent implements OnInit, OnChanges {
     return '';
   }
 
-  calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
-    const toRad = (x: number) => (x * Math.PI) / 180;
-    const R = 6371;
-    const dLat = toRad(lat2 - lat1);
-    const dLon = toRad(lon2 - lon1);
-    const a =
-      Math.sin(dLat / 2) ** 2 +
-      Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c;
-  }
+  public onSubmit(): void {
+    if (this.stationFormGroup.valid) {
+      const { city, latitude, longitude, connectedTo } = this.stationFormGroup.value;
 
-  createStationCoordinates(): void {
-    if (this.formGroup.valid) {
-      const { city, latitude, longitude, connectedTo } = this.formGroup.value;
-      const maxId = this.stations.reduce((max, station) => Math.max(max, station.id), 0);
-
-      const connectedWithDistance = connectedTo.map((connectedId: string) => {
-        const connectedStation = this.stations.find(
-          (station) => station.id === parseInt(connectedId, 10),
-        );
-        if (connectedStation) {
-          const distance = this.calculateDistance(
-            latitude,
-            longitude,
-            connectedStation.latitude,
-            connectedStation.longitude,
-          );
-          return { id: connectedId, distance: Math.round(distance) };
-        }
-        return { id: connectedId, distance: 0 };
-      });
-
-      const newStation: Station = {
-        id: maxId + 1,
+      const newStation: StationBody = {
         city,
         latitude,
         longitude,
-        connectedTo: connectedWithDistance,
+        relations: connectedTo,
       };
 
       this.stationAdded.emit(newStation);
@@ -149,16 +120,16 @@ export class StationFormComponent implements OnInit, OnChanges {
     }
   }
 
-  resetForm(): void {
-    this.formGroup.reset();
+  private resetForm(): void {
+    this.locationData = null;
+    this.stationFormGroup.reset();
+    this.cityControl?.setErrors(null);
+    this.latitudeControl?.setErrors(null);
+    this.longitudeControl?.setErrors(null);
 
     this.connectedToControl.controls.forEach((control) => {
       control.reset();
       control.setErrors(null);
     });
-
-    this.cityControl?.setErrors(null);
-    this.latitudeControl?.setErrors(null);
-    this.longitudeControl?.setErrors(null);
   }
 }

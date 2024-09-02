@@ -1,0 +1,13 @@
+<div class="carriage__schema schema" *ngIf="carriage">
+  <div class="schema__right" [style.--columns]="numberOfRows">
+    <div *ngFor="let column of rightSeatsInRows">
+      <app-seat *ngFor="let seat of column" [seat]="seat" [isDisabled]="this.isDisabled"></app-seat>
+    </div>
+  </div>
+  <div class="schema__aisle"></div>
+  <div class="schema__left" [style.--columns]="numberOfRows">
+    <div *ngFor="let column of leftSeatsInRows">
+      <app-seat *ngFor="let seat of column" [seat]="seat" [isDisabled]="this.isDisabled"></app-seat>
+    </div>
+  </div>
+</div>

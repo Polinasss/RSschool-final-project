@@ -3,3 +3,6 @@ export interface Route {
   path: number[];
   carriages: string[];
 }
+export interface RouteResponse {
+  id: number;
+}

@@ -1,18 +1,26 @@
-import {
-  Component,
-  AfterViewInit,
-  EventEmitter,
-  Output,
-  Input,
-  ChangeDetectorRef,
-} from '@angular/core';
+import { Component, AfterViewInit, EventEmitter, Output, OnDestroy } from '@angular/core';
 import * as L from 'leaflet';
-import { MOCK_STATIONS } from '../../models/mocked-data';
+import { Subject, takeUntil } from 'rxjs';
 import {
   GeocodingService,
   NominatimResponse,
 } from '../../services/geocoding-service/geocoding.service';
-import { LocationData, Station } from '../../models/station';
+import { LocationData } from '../../models/station';
+
+const iconRetinaUrl = '';
+const iconUrl = './assets/marker-icon.png';
+const shadowUrl = './assets/marker-shadow.png';
+const iconDefault = L.icon({
+  iconRetinaUrl,
+  iconUrl,
+  shadowUrl,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  tooltipAnchor: [16, -28],
+  shadowSize: [41, 41],
+});
+L.Marker.prototype.options.icon = iconDefault;
 
 @Component({
   selector: 'app-station-map',
@@ -21,79 +29,67 @@ import { LocationData, Station } from '../../models/station';
   templateUrl: './station-map.component.html',
   styleUrl: './station-map.component.scss',
 })
-export class StationMapComponent implements AfterViewInit {
-  @Input() stations: Station[] = MOCK_STATIONS;
-
+export class StationMapComponent implements AfterViewInit, OnDestroy {
   @Output() locationSelected = new EventEmitter<LocationData>();
 
   private map!: L.Map;
 
-  private customIcon: L.Icon;
+  private destroy$: Subject<void> = new Subject<void>();
 
-  private markers: L.Marker[] = [];
-
-  constructor(
-    private geocodingService: GeocodingService,
-    private cdr: ChangeDetectorRef,
-  ) {
-    this.customIcon = L.icon({
-      iconRetinaUrl:
-        'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
-      iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41],
-    });
-  }
+  constructor(private geocodingService: GeocodingService) {}
 
   ngAfterViewInit(): void {
     this.initializeMap();
+    if (this.map && iconDefault) {
+      this.geocodingService.updateMapMarkers(this.map);
+    }
+
+    this.map.on('click', this.handleMapClick.bind(this), { passive: true });
   }
 
-  initializeMap(): void {
+  private initializeMap(): void {
     if (this.map) {
       return;
     }
 
-    this.map = L.map('map').setView([51.505, -0.09], 13);
-
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-    }).addTo(this.map);
-
-    this.updateMapMarkers();
-
-    this.map.on('click', (e: L.LeafletMouseEvent) => {
-      const { lat, lng } = e.latlng;
-
-      this.map.panTo(e.latlng);
-
-      this.geocodingService
-        .getCityByCoordinates(lat, lng)
-        .subscribe((response: NominatimResponse) => {
-          const city =
-            response.address.city ||
-            response.address.town ||
-            response.address.village ||
-            'Unknown City';
-          this.locationSelected.emit({ city, latitude: lat, longitude: lng });
-        });
+    this.map = L.map('map', {
+      center: [51.505, -0.09],
+      zoom: 1,
     });
+
+    const titles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      minZoom: 1,
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    });
+
+    titles.addTo(this.map);
   }
 
-  public updateMapMarkers(): void {
-    this.markers.forEach((marker) => this.map.removeLayer(marker));
-    this.markers = [];
+  private handleMapClick(e: L.LeafletMouseEvent): void {
+    const { lat, lng } = e.latlng;
 
-    this.stations.forEach((station) => {
-      const marker = L.marker([station.latitude, station.longitude], { icon: this.customIcon })
-        .addTo(this.map)
-        .bindPopup(`${station.city}`)
-        .openPopup();
-      this.markers.push(marker);
-    });
+    this.map.panTo(e.latlng);
+
+    this.geocodingService
+      .getCityByCoordinates(lat, lng)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((response: NominatimResponse) => {
+        const city =
+          response.address.city ||
+          response.address.town ||
+          response.address.village ||
+          'Unknown City';
+        this.locationSelected.emit({ city, latitude: lat, longitude: lng });
+      });
+  }
+
+  ngOnDestroy(): void {
+    if (this.map) {
+      this.map.off('click');
+      this.map.remove();
+    }
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

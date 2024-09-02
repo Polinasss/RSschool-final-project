@@ -1,4 +1,4 @@
-@import './../../../core/styles/variables.scss';
+@import '@styles/variables.scss';
 
 ::ng-deep .panel-item.active .mdc-list-item__primary-text {
   color: $text-active;
@@ -12,15 +12,14 @@
 .admin-container {
   display: flex;
   margin: 0 auto;
-  height: 100vh;
+  height: auto;
 
   .admin-left-side {
-    width: 200px;
     background-color: $admin-panel;
 
     .admin-panel {
-      margin-top: 10px;
-      width: 100%;
+      margin-top: 0.625rem;
+      width: 10rem;
       background-color: $admin-panel;
       align-content: center;
 
@@ -37,7 +36,7 @@
   }
 
   .admin-right-side {
-    margin-left: 30px;
+    margin-left: 1.875rem;
     flex-grow: 1;
   }
 }
