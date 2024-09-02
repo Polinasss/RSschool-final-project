@@ -16,16 +16,6 @@
         <img class="noresults" src="assets/noresults.png" alt="noresults" height="400" />
       }
     }
-    <details>
-      <summary>All routes</summary>
-      @for (route of routes1$ | async; track route.id) {
-        <app-search-result
-          [route]="route"
-          [toCity]="toCity"
-          [fromCity]="fromCity"
-        ></app-search-result>
-      }
-    </details>
   }
 }
 @if (error$ | async) {

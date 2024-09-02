@@ -21,14 +21,14 @@
             <td>
               <div class="station">
                 <div class="station-marker first active"></div>
-                <div class="station-name">City{{ data.path.stations[0] }}</div>
+                <div class="station-name">{{ cities[0] }}</div>
               </div>
             </td>
             <td>
               <div class="edge-station">first station</div>
             </td>
           </tr>
-          @for (station of data.path.stations.slice(1, -1); track station; let idx = $index) {
+          @for (station of data.path.stations.slice(1, -1); track idx; let idx = $index) {
             <tr>
               <td>
                 <div>{{ data.schedule[idx].time[1] | date: 'HH:mm' : '0' }}</div>
@@ -37,7 +37,7 @@
               <td>
                 <div class="station">
                   <div class="station-marker"></div>
-                  <div class="station-name">City{{ station }}</div>
+                  <div class="station-name">{{ cities[idx + 1] }}</div>
                 </div>
               </td>
               <td>{{ this.durations[idx + 1] }}</td>
@@ -53,7 +53,7 @@
               <div class="station">
                 <div class="station-marker last active"></div>
                 <div class="station-name">
-                  City{{ data.path.stations[data.path.stations.length - 1] }}
+                  {{ cities[cities.length - 1] }}
                 </div>
               </div>
             </td>

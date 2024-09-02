@@ -8,6 +8,8 @@ import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { CarriageFacade } from 'app/admin-overview/_state/carriage/carriage.facade';
 import { Carriage } from 'app/admin-overview/models/carriage';
 import { Subscription } from 'rxjs';
+import { Station } from 'app/admin-overview/models/station';
+import { StationFacade } from 'app/admin-overview/_state/station/station.facade';
 import { TripStationsComponent } from '../trip-stations/trip-stations.component';
 
 @Component({
@@ -40,6 +42,8 @@ export class ScheduleItemComponent implements OnInit, OnDestroy {
     id: 0,
   };
 
+  stations: Station[] = [];
+
   departureTime = '';
 
   arrivalTime = '';
@@ -53,8 +57,8 @@ export class ScheduleItemComponent implements OnInit, OnDestroy {
   startStopStations = { start: 0, stop: 0 };
 
   middleStations = {
-    second: 0,
-    penult: 0,
+    second: 'err',
+    penult: 'err',
   };
 
   subscription: Subscription = new Subscription();
@@ -64,7 +68,12 @@ export class ScheduleItemComponent implements OnInit, OnDestroy {
   constructor(
     private dialog: MatDialog,
     private carriageFacade: CarriageFacade,
-  ) {}
+    private stationFacade: StationFacade,
+  ) {
+    this.stationFacade.station$.subscribe((stations) => {
+      this.stations = stations;
+    });
+  }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
@@ -77,8 +86,17 @@ export class ScheduleItemComponent implements OnInit, OnDestroy {
       data: {
         path: { stations: this.path.stations.slice(start, stop + 1), id: this.path.id },
         schedule: this.way.segments.slice(start, stop),
+        allStations: this.stations,
       },
     });
+  }
+
+  getCity(id: number) {
+    return (
+      this.stations.find((st) => {
+        return st.id === this.path.stations[id];
+      })?.city ?? ''
+    );
   }
 
   ngOnInit() {
@@ -90,8 +108,8 @@ export class ScheduleItemComponent implements OnInit, OnDestroy {
     const second = segments.length > 2 ? start + 1 : start;
     const penult = segments.length > 2 ? stop - 1 : stop;
     this.middleStations = {
-      second: this.path.stations[second],
-      penult: this.path.stations[penult],
+      second: this.getCity(second),
+      penult: this.getCity(penult),
     };
     const segmentsPrices = segments.map((seg) => seg.price);
     const carriageTypes = Object.keys(segmentsPrices[0]);
@@ -99,7 +117,6 @@ export class ScheduleItemComponent implements OnInit, OnDestroy {
     this.subscription = this.carriageFacade.carriage$.subscribe((carriages) => {
       this.carriageTypes = carriages;
       this.carriagePrices = carriageTypes.map((type) => {
-        // debugger;
         const carriage = this.carriageTypes.find((carriage) => carriage.name === type);
         let numberOfSeats = -1;
         if (carriage) {

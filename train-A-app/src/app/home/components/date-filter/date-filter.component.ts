@@ -56,7 +56,6 @@ export class DateFilterComponent {
     if (this.startDateIndex > 0) {
       this.startDateIndex -= 1;
     }
-    console.log(this.startDateIndex);
     const endDateIndex =
       this.startDateIndex + 4 < this.availableDates.length
         ? this.startDateIndex + 4
@@ -68,7 +67,6 @@ export class DateFilterComponent {
     if (this.startDateIndex + 4 < this.availableDates.length) {
       this.startDateIndex += 1;
     }
-    console.log(this.startDateIndex);
     const endDateIndex =
       this.startDateIndex + 4 < this.availableDates.length
         ? this.startDateIndex + 4

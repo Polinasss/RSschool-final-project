@@ -7,7 +7,6 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Station, Stations } from 'app/home/models/response.types';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
@@ -17,6 +16,8 @@ import { Observable, startWith, map, Subscription } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 import { SearchParams, SearchService } from 'app/home/services/search.service';
 import { TripFacade } from 'app/home/_state/search.facade';
+import { StationFacade } from 'app/admin-overview/_state/station/station.facade';
+import { Station } from 'app/admin-overview/models/station';
 
 @Component({
   selector: 'app-search-trip',
@@ -39,15 +40,15 @@ import { TripFacade } from 'app/home/_state/search.facade';
   styleUrl: './search-trip.component.scss',
 })
 export class SearchTripComponent implements OnDestroy {
-  optionsFrom: Stations = [];
+  optionsFrom: Station[] = [];
 
-  optionsTo: Stations = [];
+  optionsTo: Station[] = [];
 
-  stations: Stations = [];
+  stations: Station[] = [];
 
-  filteredStationsFrom: Observable<Stations> | undefined;
+  filteredStationsFrom: Observable<Station[]> | undefined;
 
-  filteredStationsTo: Observable<Stations> | undefined;
+  filteredStationsTo: Observable<Station[]> | undefined;
 
   searchForm: FormGroup;
 
@@ -61,13 +62,15 @@ export class SearchTripComponent implements OnDestroy {
     private fb: FormBuilder,
     private searchService: SearchService,
     private tripFacade: TripFacade,
+    private stationFacade: StationFacade,
   ) {
     this.searchForm = this.fb.group({
       from: ['', [Validators.required]],
       to: ['', [Validators.required]],
       date: [new Date(), [Validators.required]],
     });
-    this.subscription = this.searchService.getStations().subscribe((stations) => {
+    this.stationFacade.loadStation();
+    this.subscription = this.stationFacade.station$.subscribe((stations) => {
       this.stations = stations;
       this.filteredStationsFrom = this.searchForm.controls['from'].valueChanges.pipe(
         startWith(''),
@@ -84,7 +87,7 @@ export class SearchTripComponent implements OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  private filter(value: string, stations: Stations): Stations {
+  private filter(value: string, stations: Station[]): Station[] {
     const filterValue = value.toLowerCase();
     const station = stations.filter((station) => station.city.toLowerCase().includes(filterValue));
     return station;

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Stations } from '../models/response.types';
+import { Station } from 'app/admin-overview/models/station';
 import { Trip } from '../models/trip';
 
 export interface SearchParams {
@@ -45,7 +45,7 @@ export class SearchService {
   }
 
   getStations() {
-    return this.http.get<Stations>('/api/station/');
+    return this.http.get<Station[]>('/api/station/');
   }
 
   searchStations(params: SearchParams) {
