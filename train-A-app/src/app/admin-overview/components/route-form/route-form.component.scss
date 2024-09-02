@@ -39,6 +39,9 @@
       color: $white;
       font-size: 16px;
       align-self: flex-end;
+      &:disabled {
+        background-color: $label;
+      }
     }
   }
 }
