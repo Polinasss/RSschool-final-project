@@ -15,6 +15,7 @@
     <p class="form__label">Password</p>
     <input
       class="form__input"
+      type="password"
       [ngClass]="{ 'form__input--error': isSubmitted && email?.invalid && email?.touched }"
       formControlName="password"
     />
