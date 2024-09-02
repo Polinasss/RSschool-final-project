@@ -47,7 +47,8 @@ export const layoutRoutes: Routes = [
       },
       {
         path: 'orders',
-        loadComponent: () => import('../orders/orders.component').then((m) => m.OrdersComponent),
+        loadComponent: () =>
+          import('../orders/pages/order-page.component').then((m) => m.OrderPageComponent),
         canActivate: [IsAuthorizedGuard],
         data: {
           role: ['manager', 'user'],
