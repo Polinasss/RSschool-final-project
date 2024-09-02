@@ -112,7 +112,7 @@ export class UserProfilePageComponent implements OnInit, OnDestroy {
 
   onLogout(): void {
     this.userProfileFacade.logoutUserProfile();
-    this.router.navigate(['signin']);
+    this.router.navigate(['home']);
   }
 
   ngOnDestroy(): void {
