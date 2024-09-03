@@ -114,8 +114,8 @@ export class RideTimeComponent implements OnInit, OnDestroy {
 
       const isValidTime =
         arrivalDate < departureDate &&
-        (!previousSegment || arrivalDate > new Date(previousSegment.time[1])) &&
-        (!nextSegment || departureDate < new Date(nextSegment.time[0]));
+        (!previousSegment || adjustedArrivalDate > new Date(previousSegment.time[1])) &&
+        (!nextSegment || adjustedDepartureDate < new Date(nextSegment.time[0]));
 
       if (isValidTime) {
         this.editTimeIndex = null;
