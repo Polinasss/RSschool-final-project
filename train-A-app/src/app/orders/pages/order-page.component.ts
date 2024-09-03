@@ -11,6 +11,7 @@ import { Station } from 'app/admin-overview/models/station';
 import { OrderItemComponent } from '../components/order-item/order-item.component';
 import { UserFacade } from '../_state/user/user.facade';
 import { User } from '../models/user';
+import { Order } from '../models/order';
 
 export interface Users {
   id: number;
@@ -42,6 +43,8 @@ export class OrderPageComponent implements OnInit, OnDestroy {
   public stationList: Station[] = [];
 
   public userList: User[] = [];
+
+  public orderList: Order[] = [];
 
   private destroy$: Subject<void> = new Subject<void>();
 

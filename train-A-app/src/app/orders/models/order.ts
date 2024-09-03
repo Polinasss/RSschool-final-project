@@ -2,11 +2,13 @@ export interface Order {
   id: number;
   rideId: number;
   routeId: number;
-  seatId: number;
   userId: number;
+  seatId: number;
   status: string;
-  path: number[];
+  stationStart: number;
+  stationEnd: number;
   carriages: string[];
+  path: number[];
   schedule: Schedule;
 }
 
@@ -15,7 +17,7 @@ export interface Schedule {
 }
 
 export interface Segment {
-  time: [string, string];
+  time: string[];
   price: Price;
 }
 

@@ -12,7 +12,11 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 export class CancelDialogComponent {
   readonly dialogRef = inject(MatDialogRef<CancelDialogComponent>);
 
+  onClickYes(): void {
+    this.dialogRef.close(true);
+  }
+
   onClickNo(): void {
-    this.dialogRef.close();
+    this.dialogRef.close(false);
   }
 }

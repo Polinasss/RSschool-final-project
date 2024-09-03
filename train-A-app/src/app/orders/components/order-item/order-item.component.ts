@@ -8,8 +8,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { Station } from 'app/admin-overview/models/station';
 import { mockOrders } from 'app/orders/models/mocked-data';
-import { Order } from 'app/orders/models/order';
-import { Subject } from 'rxjs';
+import { Order, Segment } from 'app/orders/models/order';
+import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { CancelDialogComponent } from '../cancel-dialog/cancel-dialog.component';
 
 @Component({
@@ -33,13 +33,9 @@ export class OrderItemComponent implements OnDestroy {
 
   readonly dialog = inject(MatDialog);
 
-  orders: Order[] = mockOrders;
-
   private destroy$: Subject<void> = new Subject<void>();
 
-  public getTime(timeString: string): Date {
-    return new Date(timeString);
-  }
+  public orders$ = new BehaviorSubject<Order[]>(mockOrders);
 
   public getCityNameById(id: number): string {
     const station = this.stations.find((stationEl) => stationEl.id === id);
@@ -55,17 +51,53 @@ export class OrderItemComponent implements OnDestroy {
     return `${hours} h ${minutes} m`;
   }
 
+  private filterRoute(path: number[], startStation: number, endStation: number): number[] {
+    const startIndex = path.indexOf(startStation);
+    const endIndex = path.indexOf(endStation);
+
+    return path.slice(startIndex, endIndex + 1);
+  }
+
+  private filterSegments(segments: Segment[], startIndex: number, endIndex: number): Segment[] {
+    return segments.slice(startIndex, endIndex);
+  }
+
+  public getTripDetails(order: Order, startStation: number, endStation: number) {
+    const startIndex = order.path.indexOf(startStation);
+    const endIndex = order.path.indexOf(endStation);
+
+    const filteredPath = this.filterRoute(order.path, startStation, endStation);
+    const filteredSegments = this.filterSegments(order.schedule.segments, startIndex, endIndex);
+
+    const startTime = new Date(filteredSegments[0].time[0]);
+    const endTime = new Date(filteredSegments[filteredSegments.length - 1].time[1]);
+
+    return {
+      filteredPath,
+      filteredSegments,
+      startTime: startTime.toISOString(),
+      endTime: endTime.toISOString(),
+      duration: this.calculateDuration(startTime.toISOString(), endTime.toISOString()),
+    };
+  }
+
   public getPrice(order: Order): number {
     const priceObject = order.schedule.segments[0].price;
     return Object.values(priceObject)[0];
   }
 
-  public onCancelOrder(): void {
+  public onCancelOrder(orderId: number): void {
     const dialogRef = this.dialog.open(CancelDialogComponent, {});
 
-    dialogRef.afterClosed().subscribe(() => {
-      console.log('The order canceled!');
-    });
+    dialogRef
+      .afterClosed()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((result) => {
+        if (result) {
+          const updatedOrders = this.orders$.getValue().filter((order) => order.id !== orderId);
+          this.orders$.next(updatedOrders);
+        }
+      });
   }
 
   ngOnDestroy(): void {
