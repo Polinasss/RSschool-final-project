@@ -8,9 +8,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { StationFacade } from 'app/admin-overview/_state/station/station.facade';
 import { Subject, takeUntil } from 'rxjs';
 import { Station } from 'app/admin-overview/models/station';
+import { UserProfileFacade } from 'app/user-profile/_state/user-profile.facade';
+import { UserProfile } from 'app/user-profile/models/user-profile';
 import { OrderItemComponent } from '../components/order-item/order-item.component';
-import { UserFacade } from '../_state/user/user.facade';
-import { User } from '../models/user';
 import { Order } from '../models/order';
 
 export interface Users {
@@ -38,11 +38,11 @@ export interface Users {
 export class OrderPageComponent implements OnInit, OnDestroy {
   private stationFacade = inject(StationFacade);
 
-  private userFacade = inject(UserFacade);
+  private userProfileFacade = inject(UserProfileFacade);
 
   public stationList: Station[] = [];
 
-  public userList: User[] = [];
+  public user: UserProfile = { name: '', email: '', role: '' };
 
   public orderList: Order[] = [];
 
@@ -53,9 +53,8 @@ export class OrderPageComponent implements OnInit, OnDestroy {
     this.stationFacade.station$.pipe(takeUntil(this.destroy$)).subscribe((stations: Station[]) => {
       this.stationList = stations;
     });
-    this.userFacade.loadUser();
-    this.userFacade.user$.pipe(takeUntil(this.destroy$)).subscribe((user: User[]) => {
-      this.userList = user;
+    this.userProfileFacade.user$.pipe(takeUntil(this.destroy$)).subscribe((user) => {
+      this.user = user;
     });
   }
 

@@ -1,6 +1,9 @@
 <div class="dialog">
   <h2 class="dialog__title" mat-dialog-title>Cancel order</h2>
   <mat-dialog-content class="dialog__content">
+    <p *ngIf="data.user.role === 'manager'">
+      Would you like to cancel order №{{ data.orderId }} of user {{ data.user.name }}?
+    </p>
     <p>Would you like to cancel your order?</p>
   </mat-dialog-content>
   <mat-dialog-actions class="dialog__actions">

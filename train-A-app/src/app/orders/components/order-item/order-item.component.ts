@@ -10,6 +10,7 @@ import { Station } from 'app/admin-overview/models/station';
 import { mockOrders } from 'app/orders/models/mocked-data';
 import { Order, Segment } from 'app/orders/models/order';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
+import { UserProfile } from 'app/user-profile/models/user-profile';
 import { CancelDialogComponent } from '../cancel-dialog/cancel-dialog.component';
 
 @Component({
@@ -29,7 +30,7 @@ import { CancelDialogComponent } from '../cancel-dialog/cancel-dialog.component'
 export class OrderItemComponent implements OnDestroy {
   @Input() stations!: Station[];
 
-  public stationList: Station[] = [];
+  @Input() user!: UserProfile;
 
   readonly dialog = inject(MatDialog);
 
@@ -89,7 +90,9 @@ export class OrderItemComponent implements OnDestroy {
   }
 
   public onCancelOrder(orderId: number): void {
-    const dialogRef = this.dialog.open(CancelDialogComponent, {});
+    const dialogRef = this.dialog.open(CancelDialogComponent, {
+      data: { orderId, user: this.user },
+    });
 
     dialogRef
       .afterClosed()
