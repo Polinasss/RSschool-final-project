@@ -1,0 +1,37 @@
+@import '@styles/variables.scss';
+.schedule {
+  &__subtitle {
+    font-weight: 600;
+  }
+
+  &__price {
+    display: flex;
+    align-items: center;
+  }
+
+  &__icon {
+    margin-top: 12px;
+    color: $secondary;
+    cursor: pointer;
+    &:hover {
+      opacity: 0.3;
+    }
+  }
+
+  &__input {
+    padding: 5px;
+    margin: 5px;
+  }
+
+  &__form {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  &__timework {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px 10px 10px;
+  }
+}

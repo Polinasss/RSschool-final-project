@@ -1,0 +1,72 @@
+@import '@styles/variables.scss';
+
+.ride {
+  display: flex;
+  flex-direction: column;
+
+  &__schedule {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid $divider;
+    border-radius: 5px;
+    box-shadow: 2px 2px 2px 2px $divider;
+    margin: 10px 30px 20px 0;
+  }
+}
+
+.schedule {
+  &__title {
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  &__subtitle {
+    font-weight: 600;
+  }
+
+  &__name {
+    font-weight: 600;
+    padding: 10px;
+    background-color: $table-background;
+  }
+
+  &__segment {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  &__price {
+    display: flex;
+  }
+
+  &__icon {
+    margin-top: 12px;
+    color: $secondary;
+    cursor: pointer;
+    &:hover {
+      opacity: 0.3;
+    }
+  }
+
+  &__form {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 10px 0 10px;
+    margin-bottom: 0;
+    border-bottom: 1px solid $divider;
+  }
+
+  &__norides {
+    font-size: 24px;
+    font-weight: 600;
+    position: absolute;
+    top: 50%;
+    left: 60%;
+    transform: translate(-50%, -60%);
+  }
+}

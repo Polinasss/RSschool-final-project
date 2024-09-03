@@ -1,0 +1,65 @@
+<form class="example-form" [formGroup]="searchForm">
+  <div class="direction">
+    <mat-form-field class="example-full-width">
+      <mat-label>From</mat-label>
+      <input
+        type="text"
+        placeholder="Pick one"
+        aria-label="From"
+        matInput
+        formControlName="from"
+        [matAutocomplete]="from"
+        (change)="setFromStationByType()"
+      />
+      <mat-hint class="error">{{ fromError }}</mat-hint>
+      <mat-autocomplete #from="matAutocomplete">
+        @for (option of filteredStationsFrom | async; track option.id) {
+          <mat-option [value]="option.city" (click)="setFromStation(option)">{{
+            option.city
+          }}</mat-option>
+        }
+      </mat-autocomplete>
+    </mat-form-field>
+    <img
+      role="button"
+      tabindex="swap"
+      class="arrows"
+      src="assets/arrows.svg"
+      alt=""
+      width="30"
+      (click)="swapCities()"
+      (keyup)="swapCities()"
+    />
+
+    <mat-form-field class="example-full-width">
+      <mat-label>To</mat-label>
+      <input
+        type="text"
+        placeholder="Pick one"
+        aria-label="To"
+        matInput
+        formControlName="to"
+        [matAutocomplete]="to"
+        (change)="setToStationByType()"
+      />
+      <mat-hint class="error">{{ toError }}</mat-hint>
+      <mat-autocomplete #to="matAutocomplete">
+        @for (option of filteredStationsTo | async; track option.id) {
+          <mat-option [value]="option.city" (click)="setToStation(option)">{{
+            option.city
+          }}</mat-option>
+        }
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+  <mat-form-field class="example-full-width">
+    <mat-label>Choose a date</mat-label>
+    <input matInput [matDatepicker]="picker" formControlName="date" />
+    <mat-hint>MM/DD/YYYY</mat-hint>
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+  <div mat-dialog-actions>
+    <button mat-flat-button [disabled]="disabledForm" (click)="onSearch()">Search</button>
+  </div>
+</form>

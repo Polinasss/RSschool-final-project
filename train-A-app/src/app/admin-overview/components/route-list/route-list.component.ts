@@ -1,10 +1,10 @@
 import { AsyncPipe, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RouterOutlet } from '@angular/router';
 import { RouteFacade } from 'app/admin-overview/_state/route/route.facade';
 import { CreateButtonComponent } from 'app/shared/components/create-button/create-button.component';
-import { combineLatest, map, Observable } from 'rxjs';
+import { combineLatest, map, Observable, Subscription, tap } from 'rxjs';
 import { CarriageFacade } from 'app/admin-overview/_state/carriage/carriage.facade';
 import { Route } from 'app/admin-overview/models/route';
 import { StationFacade } from 'app/admin-overview/_state/station/station.facade';
@@ -31,7 +31,7 @@ import { RoutePanelComponent } from '../route-panel/route-panel.component';
   templateUrl: './route-list.component.html',
   styleUrl: './route-list.component.scss',
 })
-export class RouteListComponent implements OnInit {
+export class RouteListComponent implements OnInit, OnDestroy {
   private routeFacade = inject(RouteFacade);
 
   private carriageFacade = inject(CarriageFacade);
@@ -39,6 +39,8 @@ export class RouteListComponent implements OnInit {
   private stationFacade = inject(StationFacade);
 
   private panelService = inject(RoutePanelService);
+
+  private subscription: Subscription = new Subscription();
 
   readonly formState$ = this.panelService.panelState$;
 
@@ -57,7 +59,17 @@ export class RouteListComponent implements OnInit {
   >;
 
   public ngOnInit() {
-    this.routeFacade.loadRoutes();
+    this.subscription.add(
+      this.routes$
+        .pipe(
+          tap((routes) => {
+            if (!routes || routes.length === 0) {
+              this.routeFacade.loadRoutes();
+            }
+          }),
+        )
+        .subscribe(),
+    );
     this.routesWithStationsAndCarriages$ = combineLatest([
       this.routes$,
       this.carriages$,
@@ -84,5 +96,9 @@ export class RouteListComponent implements OnInit {
 
   public openForm() {
     this.panelService.togglePanel('panelRoute', 'create');
+  }
+
+  public ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

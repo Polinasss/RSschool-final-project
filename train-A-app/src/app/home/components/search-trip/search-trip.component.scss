@@ -1,0 +1,40 @@
+@import '@styles/function.scss';
+@import '@styles/variables.scss';
+@import '@styles/common.scss';
+
+.example-form {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  min-width: 150px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.example-full-width {
+  display: flex;
+  width: 300px;
+  margin: 10px;
+}
+
+.direction {
+  display: flex;
+  flex-wrap: wrap;
+  min-width: 200px;
+}
+
+.mdc-button {
+  border-radius: 4px;
+  margin: 0 10px 20px;
+}
+
+.arrows {
+  margin: 0 0 13px;
+  cursor: pointer;
+}
+
+.error {
+  color: $error;
+}
