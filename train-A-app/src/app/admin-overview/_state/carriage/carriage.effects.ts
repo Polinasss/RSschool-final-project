@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, exhaustMap, map, mergeMap, of } from 'rxjs';
+import { catchError, exhaustMap, map, mergeMap, of, tap } from 'rxjs';
+import { NotificationService } from 'app/core/services/notification/notification.service';
 import { CarriageService } from '../../services/carriage/carriage.service';
 import { carriageActions } from './carriage.action';
 import { Carriage } from '../../models/carriage';
@@ -10,6 +11,8 @@ export class CarriageEffects {
   private readonly actions$ = inject(Actions);
 
   private readonly carriageService = inject(CarriageService);
+
+  private readonly notificationService = inject(NotificationService);
 
   getCarriageList$ = createEffect(() => {
     return this.actions$.pipe(
@@ -28,6 +31,7 @@ export class CarriageEffects {
       ofType(carriageActions.createNewCarriage),
       mergeMap((action) =>
         this.carriageService.addCarriage(action.carriage).pipe(
+          tap(() => this.notificationService.openSuccessSnackBar('Carriage successfully added!')),
           map((response) =>
             carriageActions.createNewCarriageSuccess({
               code: response.code,
@@ -58,6 +62,7 @@ export class CarriageEffects {
       ofType(carriageActions.updateCarriage),
       mergeMap((action) =>
         this.carriageService.updateCarriage(action.carriage).pipe(
+          tap(() => this.notificationService.openSuccessSnackBar('Carriage successfully updated!')),
           map((responseId) =>
             carriageActions.updateCarriageSuccess({
               code: responseId,

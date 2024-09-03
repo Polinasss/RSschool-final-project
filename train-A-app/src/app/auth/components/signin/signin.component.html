@@ -1,9 +1,12 @@
 <div class="login">
   <h1 class="form__title">Sign In</h1>
   <form [formGroup]="loginForm" class="login__form form">
-    <p class="form__label">Email</p>
+    <label for="email" class="form__label">Email</label>
     <input
       class="form__input"
+      id="email"
+      type="text"
+      autocomplete="on"
       [ngClass]="{ 'form__input--error': isSubmitted && email?.invalid && email?.touched }"
       formControlName="email"
     />
@@ -12,9 +15,11 @@
       <p *ngIf="email?.hasError('pattern')" class="form__error">Incorrect email</p>
       <p *ngIf="email?.hasError('serverError')" class="form__error">Incorrect email or password</p>
     </div>
-    <p class="form__label">Password</p>
+    <label for="password" class="form__label">Password</label>
     <input
+      id="password"
       class="form__input"
+      type="password"
       [ngClass]="{ 'form__input--error': isSubmitted && email?.invalid && email?.touched }"
       formControlName="password"
     />

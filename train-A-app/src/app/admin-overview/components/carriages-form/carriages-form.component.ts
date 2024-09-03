@@ -138,7 +138,11 @@ export class CarriagesFormComponent implements OnInit, OnDestroy, AfterViewInit 
             takeUntil(this.destroy$),
             map((carriages) =>
               carriages
-                .filter((carriage) => carriage.code !== this.carriageForUpdating?.code)
+                .filter(
+                  (carriage) =>
+                    carriage.code.toLocaleUpperCase() !==
+                    this.carriageForUpdating?.code.toLocaleUpperCase(),
+                )
                 .some((carriage) => carriage.name === newCarriage.name),
             ),
           )
@@ -157,7 +161,11 @@ export class CarriagesFormComponent implements OnInit, OnDestroy, AfterViewInit 
         this.carriageFacade.carriage$
           .pipe(
             takeUntil(this.destroy$),
-            map((carriages) => carriages.some((carriage) => carriage.name === newCarriage.name)),
+            map((carriages) =>
+              carriages.some(
+                (carriage) => carriage.name.toLowerCase() === newCarriage.name.toLowerCase(),
+              ),
+            ),
           )
           .subscribe((isDuplicate) => {
             if (isDuplicate) {

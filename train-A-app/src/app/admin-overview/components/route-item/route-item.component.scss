@@ -21,14 +21,18 @@
 
   &__buttons {
     display: flex;
-    gap: 25px;
+    gap: 15px;
   }
 
   &__button {
     display: flex;
+    font-size: 16px;
     align-items: center;
-    gap: 5px;
+    gap: 3px;
     cursor: pointer;
+    border: none;
+    outline: none;
+    background-color: transparent;
 
     &:hover {
       opacity: 0.5;

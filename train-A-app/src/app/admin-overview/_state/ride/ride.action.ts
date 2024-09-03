@@ -12,19 +12,21 @@ export const rideActions = createActionGroup({
     createNewRideSuccess: props<{ id: number; ride: Omit<Ride, 'id'> }>(),
     createNewRideFailure: props<{ error: ServerError }>(),
     addNewRideToStore: props<{ newRide: Ride }>(),
-    updateRide: props<{ routeId: number; rideId: number; segmentId: number; segment: Segment }>(),
+    updateRide: props<{
+      routeId: number;
+      rideId: number;
+      segments: Segment[];
+    }>(),
     updateRideSuccess: props<{
       routeId: number;
       rideId: number;
-      segmentId: number;
-      segment: Segment;
+      segments: Segment[];
     }>(),
     updateRideFailure: props<{ error: ServerError }>(),
     updateRideInStore: props<{
       routeId: number;
       rideId: number;
-      segmentId: number;
-      updateRide: Segment;
+      segments: Segment[];
     }>(),
     deleteRide: props<{ routeId: number; rideId: number }>(),
     deleteRideSuccess: props<{ routeId: number; rideId: number }>(),
