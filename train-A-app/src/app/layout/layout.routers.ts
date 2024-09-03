@@ -29,6 +29,10 @@ export const layoutRoutes: Routes = [
         path: 'home',
         loadComponent: () =>
           import('../home/pages/home-page/home-page.component').then((m) => m.HomePageComponent),
+        canActivate: [IsAuthorizedGuard],
+        data: {
+          role: ['guest', 'manager', 'user'],
+        },
       },
       {
         path: '',
