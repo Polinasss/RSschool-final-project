@@ -6,9 +6,9 @@ export const mockOrders: Order[] = [
     rideId: 45,
     routeId: 18,
     seatId: 33,
-    userId: 3,
+    userId: 4,
     status: 'active',
-    path: [23, 15, 52, 31, 88, 94],
+    path: [156, 15, 52, 31, 88, 157],
     carriages: ['carriage_type_1'],
     schedule: {
       segments: [
@@ -26,7 +26,7 @@ export const mockOrders: Order[] = [
     rideId: 46,
     routeId: 19,
     seatId: 10,
-    userId: 7,
+    userId: 4,
     status: 'completed',
     path: [43, 10, 72, 21, 58, 44],
     carriages: ['carriage_type_3'],
@@ -46,9 +46,9 @@ export const mockOrders: Order[] = [
     rideId: 47,
     routeId: 20,
     seatId: 45,
-    userId: 8,
+    userId: 4,
     status: 'rejected',
-    path: [33, 5, 62, 11, 48, 34],
+    path: [153, 5, 62, 11, 48, 154],
     carriages: ['carriage_type_5'],
     schedule: {
       segments: [
