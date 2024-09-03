@@ -18,6 +18,7 @@ import { SearchParams, SearchService } from 'app/home/services/search.service';
 import { TripFacade } from 'app/home/_state/search.facade';
 import { StationFacade } from 'app/admin-overview/_state/station/station.facade';
 import { Station } from 'app/admin-overview/models/station';
+import { NotificationService } from 'app/core/services/notification/notification.service';
 
 @Component({
   selector: 'app-search-trip',
@@ -63,6 +64,7 @@ export class SearchTripComponent implements OnDestroy {
     private searchService: SearchService,
     private tripFacade: TripFacade,
     private stationFacade: StationFacade,
+    private notificationService: NotificationService,
   ) {
     this.searchForm = this.fb.group({
       from: ['', [Validators.required]],
@@ -93,6 +95,20 @@ export class SearchTripComponent implements OnDestroy {
     return station;
   }
 
+  setFromStationByType(): void {
+    const station = this.stations.find(
+      (sta) => this.searchForm.controls['from'].value.toLowerCase() === sta.city.toLowerCase(),
+    );
+    this.fromStation = station;
+  }
+
+  setToStationByType(): void {
+    const station = this.stations.find(
+      (sta) => this.searchForm.controls['to'].value.toLowerCase() === sta.city.toLowerCase(),
+    );
+    this.toStation = station;
+  }
+
   setFromStation(st: Station): void {
     this.fromStation = st;
   }
@@ -118,11 +134,31 @@ export class SearchTripComponent implements OnDestroy {
       this.searchService.setFilterActiveState(true);
       this.tripFacade.loadTrip(params);
     } else {
-      const fromControl = this.searchForm.controls['from'];
-      const toControl = this.searchForm.controls['to'];
-      fromControl.setValue('');
-      toControl.setValue('');
+      if (this.fromStation === undefined) {
+        this.searchForm.controls['from'].setErrors({ customError: "This station does'nt exist" });
+        this.notificationService.openFailureSnackBar(
+          `Station  ${this.searchForm.controls['from'].value} does'nt exists`,
+        );
+      }
+      if (this.toStation === undefined) {
+        this.searchForm.controls['to'].setErrors({ customError: "This station does'nt exist" });
+        this.notificationService.openFailureSnackBar(
+          `Station  ${this.searchForm.controls['to'].value} does'nt exists`,
+        );
+      }
     }
+  }
+
+  get toError() {
+    const errors = { ...this.searchForm.controls['to'].errors };
+    const err = errors ? errors['customError'] : '';
+    return err;
+  }
+
+  get fromError() {
+    const errors = { ...this.searchForm.controls['from'].errors };
+    const err = errors ? errors['customError'] : '';
+    return err;
   }
 
   swapCities(): void {
