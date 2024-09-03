@@ -23,9 +23,7 @@
           <span class="label-text">${{ carriage.price }}</span>
         </div>
       </ng-template>
-      <div class="small-box mat-elevation-z4">
-        {{ carriage.type }}
-      </div>
+      <app-carriages-item [item]="getCarriage(carriage.type)"></app-carriages-item>
     </mat-tab>
   } @empty {
     <div>s</div>
