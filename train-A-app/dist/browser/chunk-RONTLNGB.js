@@ -1,1 +1,0 @@
-import{a as o}from"./chunk-XIXW3NB4.js";import{t as e,w as t,x as r}from"./chunk-MGBRLVRV.js";var c=localStorage.getItem("role")||"null",s=e({name:"roleState",reducer:r(c,t(o.changeRole,(l,{role:a})=>a))});export{c as a,s as b};
