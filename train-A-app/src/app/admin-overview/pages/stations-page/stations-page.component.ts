@@ -85,8 +85,14 @@ export class StationsPageComponent implements OnInit, OnDestroy {
   public onAddStation(newStation: StationBody) {
     const stationExists = this.stationList.find((station) => station.city === newStation.city);
 
+    const connectedTo = this.stationsConnectedForm.get('connectedTo')?.value;
+    const uniqueConnectedTo = new Set(connectedTo.map((stationId: number) => stationId));
+
     if (stationExists) {
       const message = 'Maximum 1 station can be in one city!';
+      this.notificationService.openFailureSnackBar(message);
+    } else if (uniqueConnectedTo.size !== connectedTo.length) {
+      const message = 'Duplicate stations selected in "Connected"!';
       this.notificationService.openFailureSnackBar(message);
     } else {
       this.stationFacade.addStation(newStation);

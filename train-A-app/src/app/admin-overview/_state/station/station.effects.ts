@@ -1,15 +1,20 @@
 import { Injectable, inject } from '@angular/core';
-import { exhaustMap, map, catchError, of, mergeMap } from 'rxjs';
+import { exhaustMap, map, catchError, of, mergeMap, take } from 'rxjs';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { StationService } from 'app/admin-overview/services/station/station.service';
 import { Station } from 'app/admin-overview/models/station';
+import { Store } from '@ngrx/store';
 import { stationActions } from './station.action';
+import { stationFeature } from './station.reducer';
+import { StationState } from './station.state';
 
 @Injectable()
 export class StationEffects {
   private readonly actions$ = inject(Actions);
 
   private readonly stationService = inject(StationService);
+
+  private readonly store = inject<Store<StationState>>(Store);
 
   getStationList$ = createEffect(() => {
     return this.actions$.pipe(
@@ -52,11 +57,16 @@ export class StationEffects {
     return this.actions$.pipe(
       ofType(stationActions.createNewStationSuccess),
       mergeMap((action) => {
-        return of(
-          stationActions.addNewStationToStore({
-            newStation: { id: action.id, ...action.station },
+        const newStation = { id: action.id, ...action.station };
+        const addNewStationAction = stationActions.addNewStationToStore({ newStation });
+        const updateConnectedStationsActions = action.station.connectedTo.map((relatedStation) =>
+          stationActions.updateStoreAfterAdd({
+            stationId: relatedStation.id,
+            connectedStationId: newStation.id,
           }),
         );
+
+        return of(addNewStationAction, ...updateConnectedStationsActions);
       }),
     );
   });
@@ -81,7 +91,25 @@ export class StationEffects {
     return this.actions$.pipe(
       ofType(stationActions.deleteStationSuccess),
       mergeMap((action) => {
-        return of(stationActions.deleteStationInStore({ id: action.id }));
+        return this.store.select(stationFeature.selectStation).pipe(
+          take(1),
+          mergeMap((stations) => {
+            const updatedStations = stations.map((station) => {
+              if (station.connectedTo.some((conn) => conn.id === action.id)) {
+                return {
+                  ...station,
+                  connectedTo: station.connectedTo.filter((conn) => conn.id !== action.id),
+                };
+              }
+              return station;
+            });
+
+            return of(
+              stationActions.deleteStationInStore({ stations: updatedStations }),
+              stationActions.updateStoreAfterDelete({ id: action.id }),
+            );
+          }),
+        );
       }),
     );
   });
