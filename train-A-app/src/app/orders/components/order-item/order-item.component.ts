@@ -1,13 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input, OnDestroy } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatDialog } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { Station } from 'app/admin-overview/models/station';
 import { mockOrders } from 'app/orders/models/mocked-data';
 import { Order } from 'app/orders/models/order';
+import { Subject } from 'rxjs';
+import { CancelDialogComponent } from '../cancel-dialog/cancel-dialog.component';
 
 @Component({
   selector: 'app-order-item',
@@ -23,12 +26,16 @@ import { Order } from 'app/orders/models/order';
   templateUrl: './order-item.component.html',
   styleUrl: './order-item.component.scss',
 })
-export class OrderItemComponent {
+export class OrderItemComponent implements OnDestroy {
   @Input() stations!: Station[];
 
   public stationList: Station[] = [];
 
+  readonly dialog = inject(MatDialog);
+
   orders: Order[] = mockOrders;
+
+  private destroy$: Subject<void> = new Subject<void>();
 
   public getTime(timeString: string): Date {
     return new Date(timeString);
@@ -54,6 +61,15 @@ export class OrderItemComponent {
   }
 
   public onCancelOrder(): void {
-    console.log('The order canceled!');
+    const dialogRef = this.dialog.open(CancelDialogComponent, {});
+
+    dialogRef.afterClosed().subscribe(() => {
+      console.log('The order canceled!');
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
