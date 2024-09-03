@@ -2,7 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
-import { Schedule } from 'app/home/models/trip';
+import { ChosenRide, Schedule } from 'app/home/models/trip';
 import { formatDuration } from 'app/shared/utils/datetime';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { CarriageFacade } from 'app/admin-overview/_state/carriage/carriage.facade';
@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs';
 import { Station } from 'app/admin-overview/models/station';
 import { StationFacade } from 'app/admin-overview/_state/station/station.facade';
 import { Router } from '@angular/router';
+import { TripFacade } from 'app/home/_state/search.facade';
 import { TripStationsComponent } from '../trip-stations/trip-stations.component';
 
 @Component({
@@ -70,6 +71,7 @@ export class ScheduleItemComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private carriageFacade: CarriageFacade,
     private stationFacade: StationFacade,
+    private tripFacade: TripFacade,
     private router: Router,
   ) {
     this.stationFacade.station$.subscribe((stations) => {
@@ -86,7 +88,12 @@ export class ScheduleItemComponent implements OnInit, OnDestroy {
     this.dialog.open(TripStationsComponent, {
       width: '400px',
       data: {
-        path: { stations: this.path.stations.slice(start, stop + 1), id: this.path.id },
+        path: {
+          stations: this.path.stations
+            .slice(start, stop + 1)
+            .map((stNum, i) => ({ id: stNum, city: this.getCity(start + i) })),
+          id: this.path.id,
+        },
         schedule: this.way.segments.slice(start, stop),
         allStations: this.stations,
       },
@@ -148,6 +155,22 @@ export class ScheduleItemComponent implements OnInit, OnDestroy {
   }
 
   selectTrip() {
+    const { start, stop } = this.startStopStations;
+    const ride: ChosenRide = {
+      routeId: this.path.id,
+      fromCity: this.fromCity.city,
+      toCity: this.toCity.city,
+      stations: this.path.stations
+        .slice(start, stop + 1)
+        .map((stNum, i) => ({ id: stNum, city: this.getCity(start + i) })),
+      carriages: [...this.carriagePrices],
+      occupiedSeats: [],
+      date: new Date(this.arrivalTime),
+      schedule: this.way.segments.slice(start, stop),
+    };
+    this.tripFacade.saveRide(ride);
+    console.log({ ride });
+
     this.router.navigate(['/trip', this.way.rideId], {
       queryParams: { from: this.startStopStations.start, to: this.startStopStations.stop },
     });
