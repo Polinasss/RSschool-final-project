@@ -28,11 +28,13 @@
     font-weight: 600;
     padding: 10px;
     background-color: $table-background;
+    grid-row: span 2;
   }
 
   &__segment {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
   }
 
   &__price {
@@ -68,5 +70,14 @@
     top: 50%;
     left: 60%;
     transform: translate(-50%, -60%);
+  }
+
+  &__time {
+    grid-column: span 2;
+  }
+
+  &__price {
+    grid-column: 3;
+    grid-row: span 2;
   }
 }

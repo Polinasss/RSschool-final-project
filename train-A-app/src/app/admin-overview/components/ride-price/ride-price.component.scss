@@ -10,7 +10,6 @@
   }
 
   &__icon {
-    margin-top: 12px;
     color: $secondary;
     cursor: pointer;
     &:hover {
@@ -33,5 +32,9 @@
     display: flex;
     justify-content: space-between;
     padding: 10px 20px 10px 10px;
+  }
+
+  &__price__column {
+    min-width: 260px;
   }
 }
