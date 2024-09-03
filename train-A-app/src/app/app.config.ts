@@ -4,7 +4,7 @@ import {
   isDevMode,
   importProvidersFrom,
 } from '@angular/core';
-import { provideRouter, withComponentInputBinding  } from '@angular/router';
+import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideState, provideStore } from '@ngrx/store';
@@ -43,7 +43,14 @@ export const appConfig: ApplicationConfig = {
     provideState(userProfileFeature),
     provideState(searchFeature),
     provideState(routeFeature),
-    provideEffects([StationEffects, TripEffects, CarriageEffects, RoutesEffects, UserProfileEffects, RideEffects]),
+    provideEffects([
+      StationEffects,
+      TripEffects,
+      CarriageEffects,
+      RoutesEffects,
+      UserProfileEffects,
+      RideEffects,
+    ]),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
     importProvidersFrom(MatNativeDateModule),
   ],

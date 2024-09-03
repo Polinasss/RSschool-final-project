@@ -2,6 +2,7 @@ import { Location } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { Router } from '@angular/router';
+import { NotificationService } from 'app/core/services/notification/notification.service';
 import { CreateButtonComponent } from 'app/shared/components/create-button/create-button.component';
 
 @Component({
@@ -17,10 +18,11 @@ export class RideHeaderComponent {
   constructor(
     public location: Location,
     public router: Router,
+    private notificationService: NotificationService,
   ) {}
 
   public createRide() {
-    console.log('create');
+    this.notificationService.openFailureSnackBar('The service is in development');
   }
 
   public goBack() {

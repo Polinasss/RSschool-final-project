@@ -3,7 +3,8 @@ import { Component, inject, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatIcon } from '@angular/material/icon';
 import { CarriageFacade } from 'app/admin-overview/_state/carriage/carriage.facade';
-import { Price } from 'app/admin-overview/models/ride';
+import { RideFacade } from 'app/admin-overview/_state/ride/ride.facade';
+import { Price, Ride, Segment } from 'app/admin-overview/models/ride';
 import { map, Observable } from 'rxjs';
 
 @Component({
@@ -20,6 +21,10 @@ export class RidePriceComponent implements OnInit {
 
   @Input() length!: number;
 
+  @Input() ride!: Ride;
+
+  @Input() rideId!: number;
+
   public editPriceIndex: number | null = null;
 
   private carriageFacade = inject(CarriageFacade);
@@ -27,6 +32,8 @@ export class RidePriceComponent implements OnInit {
   private carriage$ = this.carriageFacade.carriage$;
 
   public carriageNames$!: Observable<string[]>;
+
+  private rideFacade = inject(RideFacade);
 
   public priceForm!: FormGroup;
 
@@ -66,6 +73,32 @@ export class RidePriceComponent implements OnInit {
   public onSavePrice() {
     if (this.priceForm.valid) {
       this.editPriceIndex = null;
+      const formValues = this.priceForm.value;
+      const updatedPrice: Price = Object.keys(formValues).reduce((acc, key) => {
+        acc[key] = formValues[key];
+        return acc;
+      }, {} as Price);
+
+      const scheduleForUpdate = this.ride.schedule.find(
+        (schedule) => schedule.rideId === this.rideId,
+      );
+      const segmentForUpdate = scheduleForUpdate?.segments[this.i];
+
+      const updatedSegment = {
+        ...segmentForUpdate,
+        price: updatedPrice,
+      } as Segment;
+
+      const updatedSchedule = {
+        ...scheduleForUpdate,
+        segments: scheduleForUpdate?.segments.map((segment, index) =>
+          index === this.i ? updatedSegment : segment,
+        ),
+      };
+      const newRide: Segment[] | undefined = updatedSchedule.segments;
+      if (newRide) {
+        this.rideFacade.updateRide(Number(this.ride.id), Number(this.rideId), newRide);
+      }
     }
   }
 }

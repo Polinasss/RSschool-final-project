@@ -40,7 +40,7 @@ export const rideFeature = createFeature({
         isLoading: false,
       }),
     ),
-    on(rideActions.updateRideInStore, (state, { rideId, segmentId, updateRide }): RideState => {
+    on(rideActions.updateRideInStore, (state, { rideId, segments }): RideState => {
       if (!state.ride) {
         return {
           ...state,
@@ -50,17 +50,11 @@ export const rideFeature = createFeature({
 
       const updatedRide = {
         ...state.ride,
-        schedule: state.ride?.schedule.map((schedule) =>
+        schedule: state.ride.schedule.map((schedule) =>
           schedule.rideId === rideId
             ? {
                 ...schedule,
-                segments: schedule.segments.map((segment, index) =>
-                  index === segmentId
-                    ? {
-                        ...updateRide,
-                      }
-                    : segment,
-                ),
+                segments: [...segments],
               }
             : schedule,
         ),
