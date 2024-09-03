@@ -15,7 +15,7 @@ import { routes } from './app.routes';
 import { carriageFeature } from './admin-overview/_state/carriage/carriage.reducer';
 import { CarriageEffects } from './admin-overview/_state/carriage/carriage.effects';
 import { authInterceptor } from './auth/auth.interceptor';
-import { searchFeature } from './home/_state/search.reducer';
+import { searchFeature, tripFeature } from './home/_state/search.reducer';
 import { TripEffects } from './home/_state/search.effects';
 import { rolesReducer } from './auth/_state/roles.reducer';
 import { stationFeature } from './admin-overview/_state/station/station.reducer';
@@ -38,7 +38,7 @@ export const appConfig: ApplicationConfig = {
     provideState(stationFeature),
     provideState(carriageFeature),
     provideState(rideFeature),
-    provideState(routeFeature),
+    provideState(tripFeature),
     provideState(routeFeature),
     provideState(userProfileFeature),
     provideState(searchFeature),

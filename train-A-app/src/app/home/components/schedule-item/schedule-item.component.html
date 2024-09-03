@@ -2,7 +2,7 @@
   <mat-card-content>
     <div class="travel-card">
       <div class="time-route-wrapper">
-        <p>Trip {{ way.rideId }}</p>
+        <p>Ride {{ way.rideId }}</p>
         <div class="time-info">
           <div class="departure-time">
             <span class="time">{{ departureTime | date: 'HH:mm' : '0' }}</span>
@@ -32,7 +32,7 @@
 
       <div class="price-info">
         @for (cp of carriagePrices; track cp.type) {
-          <div class="price">
+          <div class="price" (click)="selectTrip()">
             <span class="class-type">{{ cp.type }}</span>
             <span class="seats">{{ cp.seats }} seats</span>
             <span class="price-amount">${{ cp.price }}</span>

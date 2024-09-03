@@ -1,7 +1,26 @@
 import { createFeature, createReducer, createSelector, on } from '@ngrx/store';
-import { TripState, initialTripState } from './search.state';
-import { searchActions } from './search.action';
+import { RideState, TripState, initialRideState, initialTripState } from './search.state';
+import { searchActions, tripActions } from './search.action';
 import { Route, Schedule } from '../models/trip';
+
+export const tripFeature = createFeature({
+  name: 'trip',
+  reducer: createReducer<RideState>(
+    initialRideState,
+    on(
+      tripActions.saveRide,
+      (state, { ride }): RideState => ({
+        ride: { ...ride },
+      }),
+    ),
+    on(
+      tripActions.loadRide,
+      (state): RideState => ({
+        ride: { ...state.ride },
+      }),
+    ),
+  ),
+});
 
 export const searchFeature = createFeature({
   name: 'search',

@@ -1,0 +1,44 @@
+<div class="ride-header">
+  <button class="back-button" (click)="back()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <div class="ride-info">
+    <div class="ride-route">
+      <span class="ride-cities">{{ this.ride.fromCity }} → {{ this.ride.toCity }}</span>
+      <span class="ride-date">{{ this.ride.date | date: 'MMMM d, HH:mm' : '0' }}</span>
+    </div>
+    <div class="ride-details">
+      <span class="ride-id">Ride {{ rideId }}</span>
+      <button mat-button class="route-link" (click)="openDialog()">Route</button>
+    </div>
+  </div>
+</div>
+
+<mat-tab-group dynamicHeight>
+  @for (carriage of ride.carriages; track carriage.type) {
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <div class="carriage-item">
+          <span class="label-text">{{ carriage.type }}: {{ carriage.seats }}</span>
+          <span class="label-text">${{ carriage.price }}</span>
+        </div>
+      </ng-template>
+      @for (car of tripDetails.carriages; track $index) {
+        @if (car === carriage.type) {
+          <div class="wrapper">
+            <p>Carriage {{ $index }}</p>
+            <div class="carriage">
+              <app-carriage-schema
+                [carriage]="carriageSchemas[carriage.type]"
+                [isDisabled]="false"
+              ></app-carriage-schema>
+            </div>
+          </div>
+        }
+      }
+    </mat-tab>
+  }
+</mat-tab-group>
+<div class="order">
+  <button mat-flat-button [disabled]="false" (click)="letsBook()">Book seat</button>
+</div>

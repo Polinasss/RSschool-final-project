@@ -2,8 +2,9 @@ import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { SearchParams } from 'app/home/services/search.service';
 import { TripState } from './search.state';
-import { searchFeature } from './search.reducer';
-import { searchActions } from './search.action';
+import { searchFeature, tripFeature } from './search.reducer';
+import { searchActions, tripActions } from './search.action';
+import { ChosenRide } from '../models/trip';
 
 @Injectable({ providedIn: 'root' })
 export class TripFacade {
@@ -24,5 +25,11 @@ export class TripFacade {
 
   loadTrip(params: SearchParams) {
     this.store.dispatch(searchActions.loadTrip({ params }));
+  }
+
+  readonly ride$ = this.store.select(tripFeature.selectRide);
+
+  saveRide(ride: ChosenRide) {
+    this.store.dispatch(tripActions.saveRide({ ride }));
   }
 }
