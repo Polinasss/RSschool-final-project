@@ -26,7 +26,7 @@ export class LayoutComponent implements OnInit {
 
   public role$: Observable<string> = this.store.select(selectRoleFeature);
 
-  public role: string = initialState;
+  public role: string = localStorage.getItem('role') || initialState;
 
   constructor(private store: Store) {
     this.role$ = this.store.select(selectRoleFeature);
@@ -35,8 +35,10 @@ export class LayoutComponent implements OnInit {
   ngOnInit(): void {
     this.roleService.isAuthorized().subscribe((val) => {
       this.store.dispatch(rolesListActions.changeRole({ role: val }));
+      localStorage.setItem('role', val);
     });
     this.role$.subscribe((role) => {
+      localStorage.setItem('role', role);
       this.role = role;
       this.isAdmin = role.toLocaleLowerCase().includes('manager');
       this.isClient = role.toLocaleLowerCase().includes('user');
