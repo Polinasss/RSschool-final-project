@@ -6,7 +6,12 @@
     <div *ngFor="let schedule of ride.schedule" class="ride__schedule schedule">
       <div class="schedule__header">
         <h3 class="schedule__title">Ride {{ schedule.rideId }}</h3>
-        <div class="schedule__button" (click)="onDelete('5ms', '5ms', schedule.rideId)">
+        <div
+          class="schedule__button"
+          (click)="onDelete('5ms', '5ms', schedule.rideId)"
+          (keydown.enter)="onDelete('5ms', '5ms', schedule.rideId)"
+          tabindex="0"
+        >
           <mat-icon
             aria-hidden="false"
             class="schedule__icon"

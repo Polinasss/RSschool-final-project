@@ -2,7 +2,7 @@
   <div class="item__header">
     <h2 class="item__title">Route {{ item.id }}</h2>
     <div class="item__buttons">
-      <div class="item__button" (click)="onUpdate()">
+      <div class="item__button" (click)="onUpdate()" (keydown.enter)="onUpdate()" tabindex="0">
         <mat-icon
           aria-hidden="false"
           class="item__icon"
@@ -11,7 +11,7 @@
         ></mat-icon>
         <span>Update</span>
       </div>
-      <div class="item__button" (click)="assignRide()">
+      <div class="item__button" (click)="assignRide()" (keydown.enter)="assignRide()" tabindex="0">
         <mat-icon
           aria-hidden="false"
           class="item__icon"
@@ -21,7 +21,12 @@
         ></mat-icon>
         <span>Assign ride</span>
       </div>
-      <div class="item__button" (click)="onDelete('5ms', '5ms')">
+      <div
+        class="item__button"
+        (click)="onDelete('5ms', '5ms')"
+        (keydown.enter)="onDelete('5ms', '5ms')"
+        tabindex="0"
+      >
         <mat-icon
           aria-hidden="false"
           class="item__icon"
