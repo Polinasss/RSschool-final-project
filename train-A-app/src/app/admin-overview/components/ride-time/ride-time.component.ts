@@ -79,7 +79,7 @@ export class RideTimeComponent implements OnInit {
 
       const updatedSegment = {
         ...segmentForUpdate,
-        time: [departureTime, arrivalTime],
+        time: [new Date(arrivalTime).toISOString(), new Date(departureTime).toISOString()],
       } as Segment;
 
       const updatedSchedule = {
@@ -89,10 +89,8 @@ export class RideTimeComponent implements OnInit {
         ),
       };
       const newRide: Segment[] | undefined = updatedSchedule.segments;
-
-      console.log(this.ride, updatedSchedule, newRide);
       if (newRide) {
-        this.rideFacade.updateRide(this.ride.id, this.rideId, this.i, newRide);
+        this.rideFacade.updateRide(Number(this.ride.id), Number(this.rideId), newRide);
       }
     }
   }

@@ -15,20 +15,17 @@ export const rideActions = createActionGroup({
     updateRide: props<{
       routeId: number;
       rideId: number;
-      segmentId: number;
       segments: Segment[];
     }>(),
     updateRideSuccess: props<{
       routeId: number;
       rideId: number;
-      segmentId: number;
       segments: Segment[];
     }>(),
     updateRideFailure: props<{ error: ServerError }>(),
     updateRideInStore: props<{
       routeId: number;
       rideId: number;
-      segmentId: number;
       segments: Segment[];
     }>(),
     deleteRide: props<{ routeId: number; rideId: number }>(),

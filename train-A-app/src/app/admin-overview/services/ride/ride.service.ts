@@ -18,7 +18,7 @@ export class RideService {
   }
 
   public updateRide(routeId: number, rideId: number, newRide: Segment[]): Observable<number> {
-    return this.http.put<number>(`/api/route/${routeId}/ride/${rideId}`, newRide);
+    return this.http.put<number>(`/api/route/${routeId}/ride/${rideId}`, { segments: newRide });
   }
 
   public deleteRide(routeId: number, rideId: number): Observable<Ride> {
