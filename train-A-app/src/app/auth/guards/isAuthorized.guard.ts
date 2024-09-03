@@ -2,7 +2,6 @@ import { inject, Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router } from '@angular/router';
 import { map, Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
-// import { selectRoleFeature } from '../_state/roles.selectors';
 import { RoleService } from '../services/role.service';
 import { rolesListActions } from '../_state/roles.actions';
 
