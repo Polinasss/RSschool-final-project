@@ -83,11 +83,19 @@ export class RideTimeComponent implements OnInit, OnDestroy {
     this.initializeFormValues(this.arrivalTime, this.departureTime);
   }
 
+  private getDifferenceBetweenTimezones(localDate: Date) {
+    const timezoneOffsetInMilliseconds = -localDate.getTimezoneOffset() * 60 * 1000;
+    return timezoneOffsetInMilliseconds;
+  }
+
   public onSaveTime() {
     if (this.timeForm.valid) {
       const { arrivalTime, departureTime } = this.timeForm.value;
       const arrivalDate = new Date(arrivalTime);
       const departureDate = new Date(departureTime);
+      const timezoneOffset = this.getDifferenceBetweenTimezones(arrivalDate);
+      const adjustedArrivalDate = new Date(arrivalDate.getTime() + timezoneOffset);
+      const adjustedDepartureDate = new Date(departureDate.getTime() + timezoneOffset);
       const scheduleForUpdate = this.ride.schedule.find(
         (schedule) => schedule.rideId === this.rideId,
       );
@@ -111,10 +119,9 @@ export class RideTimeComponent implements OnInit, OnDestroy {
 
       if (isValidTime) {
         this.editTimeIndex = null;
-        console.log(isValidTime);
         const updatedSegment = {
           ...segmentForUpdate,
-          time: [new Date(arrivalTime).toISOString(), new Date(departureTime).toISOString()],
+          time: [adjustedArrivalDate.toISOString(), adjustedDepartureDate.toISOString()],
         } as Segment;
 
         const updatedSchedule = {
