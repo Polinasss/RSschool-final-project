@@ -3,21 +3,28 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ChosenRide, Ride } from 'app/home/models/trip';
 import { TripService } from 'app/trip/services/trip.service';
 import { MatTabsModule } from '@angular/material/tabs';
-import { Carriage } from 'app/admin-overview/models/carriage';
+import { Carriage, CarriageDataForSchema } from 'app/admin-overview/models/carriage';
 import { Station } from 'app/admin-overview/models/station';
 import { Subscription } from 'rxjs';
 import { TripFacade } from 'app/home/_state/search.facade';
 import { TripStationsComponent } from 'app/home/components/trip-stations/trip-stations.component';
 import { MatDialog } from '@angular/material/dialog';
-import { DatePipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { CarriagesItemComponent } from 'app/admin-overview/components/carriages-item/carriages-item.component';
 import { CarriageFacade } from 'app/admin-overview/_state/carriage/carriage.facade';
+import { CarriageSchemaComponent } from '../carriage-schema/carriage-schema.component';
 
 @Component({
   standalone: true,
-  imports: [MatTabsModule, DatePipe, MatIcon, MatButtonModule, CarriagesItemComponent],
+  imports: [
+    CommonModule,
+    MatTabsModule,
+    DatePipe,
+    MatIcon,
+    MatButtonModule,
+    CarriageSchemaComponent,
+  ],
   selector: 'app-trip',
   templateUrl: './trip.component.html',
   styleUrls: ['./trip.component.scss'],
@@ -44,6 +51,8 @@ export class TripComponent implements OnInit, OnDestroy {
 
   carriagePrices: { type: string; price: number; seats: number }[] = [];
 
+  train: Carriage[] = [];
+
   middleStations = {
     second: 'err',
     penult: 'err',
@@ -61,6 +70,8 @@ export class TripComponent implements OnInit, OnDestroy {
 
   subscription: Subscription = new Subscription();
 
+  carriageSchemas: { [type: string]: CarriageDataForSchema } = {};
+
   constructor(
     private route: ActivatedRoute,
     private tripService: TripService,
@@ -69,8 +80,19 @@ export class TripComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private router: Router,
   ) {
+    this.carriageFacade.loadCarriage();
     this.carriageFacade.carriage$.subscribe((cs) => {
       this.carriageTypes = cs;
+      cs.forEach((carriage) => {
+        this.carriageSchemas[carriage.name] = {
+          name: carriage.name,
+          rows: String(carriage.rows),
+          leftSeats: String(carriage.leftSeats),
+          rightSeats: String(carriage.rightSeats),
+        };
+      });
+      console.log({ cs });
+      console.log({ sh: this.carriageSchemas });
     });
     this.tripFacade.saveRide({
       routeId: 2,
@@ -177,8 +199,24 @@ export class TripComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  getCarriage(type: string) {
-    return this.carriageTypes.find((car) => car.name === type) ?? this.carriageTypes[0];
+  getCarriage(type: string): CarriageDataForSchema {
+    const carriage = this.carriageTypes.find((car) => car.name === type) ?? this.carriageTypes[0];
+    if (carriage) {
+      console.log({
+        name: carriage.name,
+        rows: String(carriage.rows),
+        leftSeats: String(carriage.leftSeats),
+        rightSeats: String(carriage.rightSeats),
+      });
+      return {
+        name: carriage.name,
+        rows: String(carriage.rows),
+        leftSeats: String(carriage.leftSeats),
+        rightSeats: String(carriage.rightSeats),
+      };
+    }
+
+    return { name: 'unknown', rows: String(0), leftSeats: String(0), rightSeats: String(0) };
   }
 
   getCity(id: number) {

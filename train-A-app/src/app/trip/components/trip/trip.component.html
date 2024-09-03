@@ -23,9 +23,19 @@
           <span class="label-text">${{ carriage.price }}</span>
         </div>
       </ng-template>
-      <app-carriages-item [item]="getCarriage(carriage.type)"></app-carriages-item>
+      @for (car of tripDetails.carriages; track $index) {
+        @if (car === carriage.type) {
+          <div class="wrapper">
+            <p>Carriage {{ $index }}</p>
+            <div class="carriage">
+              <app-carriage-schema
+                [carriage]="carriageSchemas[carriage.type]"
+                [isDisabled]="false"
+              ></app-carriage-schema>
+            </div>
+          </div>
+        }
+      }
     </mat-tab>
-  } @empty {
-    <div>s</div>
   }
 </mat-tab-group>

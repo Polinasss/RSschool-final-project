@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HomeComponent } from './home.component';
+import { CarriageSchemaComponent } from './carriage-schema.component';
 
-describe('HomeComponent', () => {
-  let component: HomeComponent;
-  let fixture: ComponentFixture<HomeComponent>;
+describe('CarriageSchemaComponent', () => {
+  let component: CarriageSchemaComponent;
+  let fixture: ComponentFixture<CarriageSchemaComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HomeComponent],
+      imports: [CarriageSchemaComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(HomeComponent);
+    fixture = TestBed.createComponent(CarriageSchemaComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

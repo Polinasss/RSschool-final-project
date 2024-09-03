@@ -1,0 +1,11 @@
+<button
+  class="seat"
+  [ngClass]="{
+    selected: !!seat.selected,
+    unavailable: !seat.isAvailable,
+  }"
+  [disabled]="this.isDisabled"
+  (click)="toggleSelectedSeat()"
+>
+  {{ seat.seatNumber }}
+</button>
