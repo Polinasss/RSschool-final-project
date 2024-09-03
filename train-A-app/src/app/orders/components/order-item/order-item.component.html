@@ -1,0 +1,76 @@
+<div class="order-page" *ngFor="let order of orders$ | async">
+  <mat-card class="order">
+    <div class="order__container">
+      <div class="order__container__info">
+        <div class="order__container__info__details route">
+          <span>{{ getCityNameById(order.stationStart) }}</span>
+        </div>
+        <div class="order__container__info__details route">
+          ➔ <span class="big">{{ getCityNameById(order.stationEnd) }}</span>
+        </div>
+        <div class="order__container__info__time">
+          <div class="order__container__info__time__date">
+            <p>
+              <span class="icon"><mat-icon>date_range</mat-icon><strong>Departure:</strong></span>
+              <span>{{
+                getTripDetails(order, order.path[0], order.path[order.path.length - 1]).startTime
+                  | date: 'MMMM dd'
+              }}</span>
+              <span>{{
+                getTripDetails(order, order.path[0], order.path[order.path.length - 1]).startTime
+                  | date: 'HH:mm'
+              }}</span>
+            </p>
+          </div>
+          <div class="order__container__info__time__date">
+            <p>
+              <span class="icon"><mat-icon>date_range</mat-icon><strong>Arrival:</strong></span>
+              <span>{{
+                getTripDetails(order, order.path[0], order.path[order.path.length - 1]).endTime
+                  | date: 'MMMM dd'
+              }}</span>
+              <span>{{
+                getTripDetails(order, order.path[0], order.path[order.path.length - 1]).endTime
+                  | date: 'HH:mm'
+              }}</span>
+            </p>
+          </div>
+          <div class="order__container__info__time__date">
+            <p>
+              <span class="icon"
+                ><mat-icon>access_time</mat-icon><strong>Trip duration:</strong></span
+              >
+              <span>
+                {{
+                  getTripDetails(order, order.path[0], order.path[order.path.length - 1]).duration
+                }}
+              </span>
+            </p>
+          </div>
+        </div>
+        <div class="order__container__info__details carriage">
+          <span class="icon"
+            ><mat-icon>train</mat-icon><strong>Carriage:</strong> {{ order.carriages[0] }}</span
+          >
+          <span><strong>Car:</strong> {{ order.routeId }}</span>
+          <span><strong>Seat:</strong> {{ order.seatId }}</span>
+        </div>
+      </div>
+      <div class="order__container__price">
+        <div class="order__container__price__divider"></div>
+        <div class="order__container__price__info">
+          <span><strong>Price:</strong> {{ calculateTotalPrice(order.schedule.segments) }}$</span>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+  <button
+    mat-flat-button
+    *ngIf="order.status === 'active'"
+    class="order__cancel-btn"
+    type="button"
+    (click)="onCancelOrder(order.id)"
+  >
+    Cancel
+  </button>
+</div>

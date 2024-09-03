@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "build:prod": "ng build --configuration=production",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
@@ -34,7 +35,7 @@
     "@ngrx/effects": "^18.0.2",
     "@ngrx/store": "^18.0.2",
     "@ngrx/store-devtools": "^18.0.2",
-    "@planess/train-a-backend": "^0.0.5",
+    "@planess/train-a-backend": "^0.0.11",
     "@types/leaflet": "^1.9.12",
     "leaflet": "^1.9.4",
     "rxjs": "~7.8.0",

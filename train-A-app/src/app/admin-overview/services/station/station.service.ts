@@ -17,7 +17,7 @@ export class StationService {
     return this.http.post<StationResponse>('/api/station', newStation);
   }
 
-  public deleteStation(id: number): Observable<number> {
-    return this.http.delete<number>(`/api/station/${id}`);
+  public deleteStation(id: number): Observable<void> {
+    return this.http.delete<void>(`/api/station/${id}`);
   }
 }

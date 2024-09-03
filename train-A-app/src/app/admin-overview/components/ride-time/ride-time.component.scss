@@ -1,0 +1,45 @@
+@import '@styles/variables.scss';
+.schedule {
+  display: flex;
+  gap: 10px;
+  padding: 10px 20px 10px 10px;
+
+  &__segment {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  &__timeform {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__time {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  &__time__column {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  &__icon {
+    margin-top: 12px;
+    color: $secondary;
+    cursor: pointer;
+    &:hover {
+      opacity: 0.3;
+    }
+  }
+
+  &__save {
+    color: $secondary;
+    cursor: pointer;
+    &:hover {
+      opacity: 0.3;
+    }
+  }
+}

@@ -11,6 +11,24 @@ export interface Route {
   schedule: Schedule[];
 }
 
+export interface Ride {
+  path: number[];
+  carriages: string[];
+  rideId: number;
+  schedule: { segments: Segment[] };
+}
+
+export interface ChosenRide {
+  routeId: number;
+  fromCity: string;
+  toCity: string;
+  date?: Date;
+  stations: { id: number; city: string }[];
+  carriages: { type: string; price: number; seats: number }[];
+  occupiedSeats: { carriage: string; value: number }[];
+  schedule: Segment[];
+}
+
 export interface Schedule {
   rideId: number;
   segments: Segment[];

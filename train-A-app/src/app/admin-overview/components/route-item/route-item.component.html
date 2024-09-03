@@ -2,7 +2,7 @@
   <div class="item__header">
     <h2 class="item__title">Route {{ item.id }}</h2>
     <div class="item__buttons">
-      <div class="item__button" (click)="onUpdate()">
+      <button class="item__button" (click)="onUpdate()">
         <mat-icon
           aria-hidden="false"
           class="item__icon"
@@ -10,8 +10,8 @@
           fontIcon="edit"
         ></mat-icon>
         <span>Update</span>
-      </div>
-      <div class="item__button" (click)="assignRide()">
+      </button>
+      <button class="item__button" (click)="assignRide()">
         <mat-icon
           aria-hidden="false"
           class="item__icon"
@@ -20,8 +20,8 @@
           (click)="assignRide()"
         ></mat-icon>
         <span>Assign ride</span>
-      </div>
-      <div class="item__button" (click)="onDelete('5ms', '5ms')">
+      </button>
+      <button class="item__button" (click)="onDelete('5ms', '5ms')">
         <mat-icon
           aria-hidden="false"
           class="item__icon"
@@ -29,7 +29,7 @@
           fontIcon="delete"
         ></mat-icon>
         <span>Delete route</span>
-      </div>
+      </button>
     </div>
   </div>
   <mat-card-content>

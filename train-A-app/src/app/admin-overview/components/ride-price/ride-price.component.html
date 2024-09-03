@@ -1,0 +1,36 @@
+<div class="schedule__timework">
+  <ng-container *ngIf="editPriceIndex === i; else showPrice">
+    <form [formGroup]="priceForm" class="schedule__price__column">
+      <p class="schedule__subtitle">Price</p>
+      <div *ngFor="let key of carriageNames$ | async" class="schedule__price">
+        <p>{{ key }}</p>
+        <p>-</p>
+        <input type="number" class="schedule__input" [formControlName]="key" />
+      </div>
+    </form>
+    <mat-icon
+      aria-hidden="false"
+      class="schedule__icon"
+      aria-label="Save Icon"
+      fontIcon="save"
+      (click)="onSavePrice()"
+    ></mat-icon>
+  </ng-container>
+  <ng-template #showPrice>
+    <div class="schedule__price__column">
+      <p class="schedule__subtitle">Price</p>
+      <div *ngFor="let key of carriageNames$ | async" class="schedule__price">
+        <p>{{ key }}</p>
+        <p>-</p>
+        <p>{{ priceForm.get(key)?.value | currency: 'USD' : 'symbol' : '1.0-0' }}</p>
+      </div>
+    </div>
+    <mat-icon
+      aria-hidden="false"
+      class="schedule__icon"
+      aria-label="Edit Icon"
+      fontIcon="edit"
+      (click)="onUpdatePrice(i)"
+    ></mat-icon>
+  </ng-template>
+</div>
