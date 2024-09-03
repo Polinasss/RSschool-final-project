@@ -6,14 +6,13 @@
     <div *ngFor="let schedule of ride.schedule" class="ride__schedule schedule">
       <div class="schedule__header">
         <h3 class="schedule__title">Ride {{ schedule.rideId }}</h3>
-        <div class="schedule__button" (click)="onDelete('5ms', '5ms', schedule.rideId)">
-          <mat-icon
-            aria-hidden="false"
-            class="schedule__icon"
-            aria-label="Delete Icon"
-            fontIcon="delete"
-          ></mat-icon>
-        </div>
+        <mat-icon
+          aria-hidden="false"
+          class="schedule__icon"
+          aria-label="Delete Icon"
+          fontIcon="delete"
+          (click)="onDelete('5ms', '5ms', schedule.rideId)"
+        ></mat-icon>
       </div>
       <div *ngFor="let segment of schedule.segments; let i = index" class="schedule__segment">
         <div class="schedule__name">{{ (rideStations$ | async)?.[i] }}</div>
