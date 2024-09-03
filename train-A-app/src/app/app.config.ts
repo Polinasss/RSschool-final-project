@@ -26,6 +26,10 @@ import { RideEffects } from './admin-overview/_state/ride/ride.effects';
 import { rideFeature } from './admin-overview/_state/ride/ride.reducer';
 import { userProfileFeature } from './user-profile/_state/user-profile.reducer';
 import { UserProfileEffects } from './user-profile/_state/user-profile.effects';
+import { orderFeature } from './orders/_state/order/order.reducer';
+import { userFeature } from './orders/_state/user/user.reducer';
+import { OrderEffects } from './orders/_state/order/order.effets';
+import { UserEffects } from './orders/_state/user/user.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -43,6 +47,8 @@ export const appConfig: ApplicationConfig = {
     provideState(userProfileFeature),
     provideState(searchFeature),
     provideState(routeFeature),
+    provideState(orderFeature),
+    provideState(userFeature),
     provideEffects([
       StationEffects,
       TripEffects,
@@ -50,6 +56,8 @@ export const appConfig: ApplicationConfig = {
       RoutesEffects,
       UserProfileEffects,
       RideEffects,
+      OrderEffects,
+      UserEffects,
     ]),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
     importProvidersFrom(MatNativeDateModule),
