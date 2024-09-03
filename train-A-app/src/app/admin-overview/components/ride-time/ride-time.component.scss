@@ -1,7 +1,7 @@
 @import '@styles/variables.scss';
 .schedule {
   display: flex;
-  justify-content: space-between;
+  gap: 10px;
   padding: 10px 20px 10px 10px;
 
   &__segment {
@@ -28,6 +28,14 @@
 
   &__icon {
     margin-top: 12px;
+    color: $secondary;
+    cursor: pointer;
+    &:hover {
+      opacity: 0.3;
+    }
+  }
+
+  &__save {
     color: $secondary;
     cursor: pointer;
     &:hover {
