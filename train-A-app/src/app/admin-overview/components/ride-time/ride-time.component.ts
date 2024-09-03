@@ -76,21 +76,24 @@ export class RideTimeComponent implements OnInit {
         (schedule) => schedule.rideId === this.rideId,
       );
       const segmentForUpdate = scheduleForUpdate?.segments[this.i];
+
       const updatedSegment = {
         ...segmentForUpdate,
         time: [departureTime, arrivalTime],
       } as Segment;
+
       const updatedSchedule = {
         ...scheduleForUpdate,
         segments: scheduleForUpdate?.segments.map((segment, index) =>
           index === this.i ? updatedSegment : segment,
         ),
       };
-      const newRide: Segment = {
-        ...updatedSegment,
-      };
-      console.log(this.ride, updatedSchedule);
-      this.rideFacade.updateRide(this.ride.id, this.rideId, this.i, newRide);
+      const newRide: Segment[] | undefined = updatedSchedule.segments;
+
+      console.log(this.ride, updatedSchedule, newRide);
+      if (newRide) {
+        this.rideFacade.updateRide(this.ride.id, this.rideId, this.i, newRide);
+      }
     }
   }
 }

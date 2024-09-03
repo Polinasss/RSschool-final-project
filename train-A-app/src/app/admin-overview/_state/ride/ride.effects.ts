@@ -54,13 +54,13 @@ export class RideEffects {
     return this.actions$.pipe(
       ofType(rideActions.updateRide),
       mergeMap((action) =>
-        this.rideService.updateRide(action.routeId, action.rideId, action.segment).pipe(
+        this.rideService.updateRide(action.routeId, action.rideId, action.segments).pipe(
           map(() =>
             rideActions.updateRideSuccess({
               routeId: action.routeId,
               rideId: action.rideId,
               segmentId: action.segmentId,
-              segment: action.segment,
+              segments: action.segments,
             }),
           ),
           catchError((error) => of(rideActions.updateRideFailure({ error }))),
@@ -78,7 +78,7 @@ export class RideEffects {
             routeId: action.routeId,
             rideId: action.rideId,
             segmentId: action.segmentId,
-            updateRide: action.segment,
+            segments: action.segments,
           }),
         );
       }),
