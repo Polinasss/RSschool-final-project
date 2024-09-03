@@ -81,9 +81,11 @@ export class OrderItemComponent implements OnDestroy {
     };
   }
 
-  public getPrice(order: Order): number {
-    const priceObject = order.schedule.segments[0].price;
-    return Object.values(priceObject)[0];
+  public calculateTotalPrice(segments: Segment[]): number {
+    return segments.reduce((total, segment) => {
+      const totalPrice = segment.price;
+      return total + Object.values(totalPrice)[0];
+    }, 0);
   }
 
   public onCancelOrder(orderId: number): void {
@@ -94,7 +96,12 @@ export class OrderItemComponent implements OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((result) => {
         if (result) {
-          const updatedOrders = this.orders$.getValue().filter((order) => order.id !== orderId);
+          const updatedOrders = this.orders$.getValue().map((order) => {
+            if (order.id === orderId) {
+              return { ...order, status: 'cancelled' };
+            }
+            return order;
+          });
           this.orders$.next(updatedOrders);
         }
       });

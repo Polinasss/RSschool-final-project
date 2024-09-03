@@ -59,7 +59,7 @@
       <div class="order__container__price">
         <div class="order__container__price__divider"></div>
         <div class="order__container__price__info">
-          <span><strong>Price:</strong> {{ getPrice(order) }}$</span>
+          <span><strong>Price:</strong> {{ calculateTotalPrice(order.schedule.segments) }}$</span>
         </div>
       </div>
     </div>
