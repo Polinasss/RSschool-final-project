@@ -1,8 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, exhaustMap, map, mergeMap, of, switchMap } from 'rxjs';
+import { catchError, exhaustMap, map, mergeMap, of, switchMap, tap } from 'rxjs';
 import { RouteService } from 'app/admin-overview/services/route/route.service';
 import { Route } from 'app/admin-overview/models/route';
+import { NotificationService } from 'app/core/services/notification/notification.service';
 import { routeActions } from './route.action';
 
 @Injectable()
@@ -10,6 +11,8 @@ export class RoutesEffects {
   private readonly actions$ = inject(Actions);
 
   private readonly routeService = inject(RouteService);
+
+  private readonly notificationService = inject(NotificationService);
 
   getRoutesList$ = createEffect(() => {
     return this.actions$.pipe(
@@ -28,6 +31,7 @@ export class RoutesEffects {
       ofType(routeActions.createNewRoute),
       switchMap((action) =>
         this.routeService.addRoute(action.route).pipe(
+          tap(() => this.notificationService.openSuccessSnackBar('Route successfully added!')),
           map((response) =>
             routeActions.createNewRouteSuccess({
               id: response.id,
@@ -55,6 +59,7 @@ export class RoutesEffects {
       ofType(routeActions.updateRoute),
       mergeMap((action) =>
         this.routeService.updateRoute(action.route).pipe(
+          tap(() => this.notificationService.openSuccessSnackBar('Route successfully updated!')),
           map(() =>
             routeActions.updateRouteSuccess({
               route: action.route,
@@ -80,6 +85,7 @@ export class RoutesEffects {
       ofType(routeActions.deleteRoute),
       mergeMap((action) =>
         this.routeService.deleteRoute(action.id).pipe(
+          tap(() => this.notificationService.openSuccessSnackBar('Route successfully removed!')),
           map(() =>
             routeActions.deleteRouteSuccess({
               id: action.id,

@@ -1,9 +1,11 @@
 import { DatePipe, NgIf } from '@angular/common';
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatIcon } from '@angular/material/icon';
 import { RideFacade } from 'app/admin-overview/_state/ride/ride.facade';
 import { Ride, Segment } from 'app/admin-overview/models/ride';
+import { NotificationService } from 'app/core/services/notification/notification.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-ride-time',
@@ -12,7 +14,7 @@ import { Ride, Segment } from 'app/admin-overview/models/ride';
   templateUrl: './ride-time.component.html',
   styleUrl: './ride-time.component.scss',
 })
-export class RideTimeComponent implements OnInit {
+export class RideTimeComponent implements OnInit, OnDestroy {
   @Input() time!: [string, string];
 
   @Input() i!: number;
@@ -33,7 +35,14 @@ export class RideTimeComponent implements OnInit {
 
   private rideFacade = inject(RideFacade);
 
-  constructor(private fb: FormBuilder) {}
+  public error$ = this.rideFacade.error$;
+
+  private destroy$: Subject<void> = new Subject<void>();
+
+  constructor(
+    private fb: FormBuilder,
+    private notificationService: NotificationService,
+  ) {}
 
   ngOnInit() {
     this.timeForm = this.fb.group({
@@ -44,6 +53,12 @@ export class RideTimeComponent implements OnInit {
       [this.arrivalTime, this.departureTime] = this.time as [string, string];
       this.initializeFormValues(this.arrivalTime, this.departureTime);
     }
+
+    this.error$.pipe(takeUntil(this.destroy$)).subscribe((error) => {
+      if (error) {
+        this.notificationService.openFailureSnackBar('Time sequence is wrong');
+      }
+    });
   }
 
   private initializeFormValues(arrivalTime: string, departureTime: string) {
@@ -71,27 +86,57 @@ export class RideTimeComponent implements OnInit {
   public onSaveTime() {
     if (this.timeForm.valid) {
       const { arrivalTime, departureTime } = this.timeForm.value;
-      this.editTimeIndex = null;
+      const arrivalDate = new Date(arrivalTime);
+      const departureDate = new Date(departureTime);
       const scheduleForUpdate = this.ride.schedule.find(
         (schedule) => schedule.rideId === this.rideId,
       );
-      const segmentForUpdate = scheduleForUpdate?.segments[this.i];
 
-      const updatedSegment = {
-        ...segmentForUpdate,
-        time: [new Date(arrivalTime).toISOString(), new Date(departureTime).toISOString()],
-      } as Segment;
+      if (!scheduleForUpdate) {
+        this.notificationService.openFailureSnackBar('Schedule not found');
+        return;
+      }
 
-      const updatedSchedule = {
-        ...scheduleForUpdate,
-        segments: scheduleForUpdate?.segments.map((segment, index) =>
-          index === this.i ? updatedSegment : segment,
-        ),
-      };
-      const newRide: Segment[] | undefined = updatedSchedule.segments;
-      if (newRide) {
-        this.rideFacade.updateRide(Number(this.ride.id), Number(this.rideId), newRide);
+      const segmentForUpdate = scheduleForUpdate.segments[this.i];
+      const previousSegment = this.i > 0 ? scheduleForUpdate.segments[this.i - 1] : null;
+      const nextSegment =
+        this.i < scheduleForUpdate.segments.length - 1
+          ? scheduleForUpdate.segments[this.i + 1]
+          : null;
+
+      const isValidTime =
+        arrivalDate < departureDate &&
+        (!previousSegment || arrivalDate > new Date(previousSegment.time[1])) &&
+        (!nextSegment || departureDate < new Date(nextSegment.time[0]));
+
+      if (isValidTime) {
+        this.editTimeIndex = null;
+        console.log(isValidTime);
+        const updatedSegment = {
+          ...segmentForUpdate,
+          time: [new Date(arrivalTime).toISOString(), new Date(departureTime).toISOString()],
+        } as Segment;
+
+        const updatedSchedule = {
+          ...scheduleForUpdate,
+          segments: scheduleForUpdate?.segments.map((segment, index) =>
+            index === this.i ? updatedSegment : segment,
+          ),
+        };
+        const newRide: Segment[] | undefined = updatedSchedule.segments;
+        if (newRide) {
+          this.rideFacade.updateRide(Number(this.ride.id), Number(this.rideId), newRide);
+        }
+      } else {
+        this.notificationService.openFailureSnackBar(
+          'Time sequence is wrong. If it is the first and last station, then the train is already occupied. If intercity, check with the schedule of neighboring stations',
+        );
       }
     }
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

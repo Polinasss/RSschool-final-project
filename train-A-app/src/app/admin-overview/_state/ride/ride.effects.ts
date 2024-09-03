@@ -1,8 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { RideService } from 'app/admin-overview/services/ride/ride.service';
-import { catchError, map, mergeMap, of, switchMap } from 'rxjs';
+import { catchError, map, mergeMap, of, switchMap, tap } from 'rxjs';
 import { Ride } from 'app/admin-overview/models/ride';
+import { NotificationService } from 'app/core/services/notification/notification.service';
 import { rideActions } from './ride.action';
 
 @Injectable()
@@ -10,6 +11,8 @@ export class RideEffects {
   private readonly actions$ = inject(Actions);
 
   private readonly rideService = inject(RideService);
+
+  private readonly notificationService = inject(NotificationService);
 
   getRideById$ = createEffect(() => {
     return this.actions$.pipe(
@@ -28,6 +31,7 @@ export class RideEffects {
       ofType(rideActions.createNewRide),
       switchMap((action) =>
         this.rideService.addRide(action.routeId, action.ride).pipe(
+          tap(() => this.notificationService.openSuccessSnackBar('Ride created successfully!')),
           map((response) =>
             rideActions.createNewRideSuccess({
               id: response.id,
@@ -90,6 +94,7 @@ export class RideEffects {
       ofType(rideActions.deleteRide),
       mergeMap((action) =>
         this.rideService.deleteRide(action.routeId, action.rideId).pipe(
+          tap(() => this.notificationService.openSuccessSnackBar('Ride successfully removed!')),
           map(() =>
             rideActions.deleteRideSuccess({
               routeId: action.routeId,
