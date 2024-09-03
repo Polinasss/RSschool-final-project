@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChosenRide, Ride } from 'app/home/models/trip';
-import { TripService } from 'app/trip/services/trip.service';
+import { Order, TripService } from 'app/trip/services/trip.service';
 import { MatTabsModule } from '@angular/material/tabs';
 import { Carriage, CarriageDataForSchema } from 'app/admin-overview/models/carriage';
 import { Station } from 'app/admin-overview/models/station';
@@ -20,6 +20,7 @@ import { CarriageSchemaComponent } from '../carriage-schema/carriage-schema.comp
   imports: [
     CommonModule,
     MatTabsModule,
+    MatButtonModule,
     DatePipe,
     MatIcon,
     MatButtonModule,
@@ -91,95 +92,6 @@ export class TripComponent implements OnInit, OnDestroy {
           rightSeats: String(carriage.rightSeats),
         };
       });
-      console.log({ cs });
-      console.log({ sh: this.carriageSchemas });
-    });
-    this.tripFacade.saveRide({
-      routeId: 2,
-      fromCity: 'city1',
-      toCity: 'city5',
-      stations: [
-        {
-          id: 1,
-          city: 'city1',
-        },
-        {
-          id: 4,
-          city: 'city4',
-        },
-        {
-          id: 63,
-          city: 'city63',
-        },
-        {
-          id: 5,
-          city: 'city5',
-        },
-      ],
-      carriages: [
-        {
-          type: 'carriage3',
-          price: 4985,
-          seats: 32,
-        },
-        {
-          type: 'carriage1',
-          price: 3684,
-          seats: 512,
-        },
-        {
-          type: 'carriage4',
-          price: 4197,
-          seats: 112,
-        },
-        {
-          type: 'carriage5',
-          price: 3477,
-          seats: 132,
-        },
-        {
-          type: 'carriage2',
-          price: 1608,
-          seats: 144,
-        },
-      ],
-      occupiedSeats: [],
-      date: new Date('2024-09-12T21:51:18.424Z'),
-      schedule: [
-        {
-          time: ['2024-09-03T15:53:18.424Z', '2024-09-06T00:17:18.424Z'],
-          price: {
-            carriage3: 1921,
-            carriage1: 1523,
-            carriage4: 573,
-            carriage5: 2091,
-            carriage2: 876,
-          },
-          occupiedSeats: [],
-        },
-        {
-          time: ['2024-09-06T01:04:18.424Z', '2024-09-09T06:49:18.424Z'],
-          price: {
-            carriage3: 2268,
-            carriage1: 757,
-            carriage4: 1612,
-            carriage5: 994,
-            carriage2: 464,
-          },
-          occupiedSeats: [],
-        },
-        {
-          time: ['2024-09-09T07:46:18.424Z', '2024-09-12T21:51:18.424Z'],
-          price: {
-            carriage3: 796,
-            carriage1: 1404,
-            carriage4: 2012,
-            carriage5: 392,
-            carriage2: 268,
-          },
-          occupiedSeats: [],
-        },
-      ],
     });
     this.tripFacade.ride$.subscribe((ride) => {
       this.ride = ride;
@@ -199,26 +111,6 @@ export class TripComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  getCarriage(type: string): CarriageDataForSchema {
-    const carriage = this.carriageTypes.find((car) => car.name === type) ?? this.carriageTypes[0];
-    if (carriage) {
-      console.log({
-        name: carriage.name,
-        rows: String(carriage.rows),
-        leftSeats: String(carriage.leftSeats),
-        rightSeats: String(carriage.rightSeats),
-      });
-      return {
-        name: carriage.name,
-        rows: String(carriage.rows),
-        leftSeats: String(carriage.leftSeats),
-        rightSeats: String(carriage.rightSeats),
-      };
-    }
-
-    return { name: 'unknown', rows: String(0), leftSeats: String(0), rightSeats: String(0) };
-  }
-
   getCity(id: number) {
     return (
       this.stations.find((st) => {
@@ -231,7 +123,6 @@ export class TripComponent implements OnInit, OnDestroy {
     if (this.rideId) {
       this.tripService.getTripDetails(this.rideId).subscribe((data: Ride) => {
         this.tripDetails = data;
-        console.log({ data });
       });
     } else {
       console.warn('Missing parameters: Cannot fetch trip details');
@@ -240,6 +131,18 @@ export class TripComponent implements OnInit, OnDestroy {
 
   back() {
     this.router.navigate(['/home']);
+  }
+
+  letsBook() {
+    const order: Order = {
+      rideId: this.rideId,
+      seat: Math.ceil(Math.random() * 100),
+      stationStart: this.ride.stations[0].id,
+      stationEnd: this.ride.stations[this.ride.stations.length - 1].id,
+    };
+    this.tripService.sendBooking(order).subscribe((order) => {
+      console.log(order);
+    });
   }
 
   openDialog(): void {
