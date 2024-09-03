@@ -16,7 +16,7 @@ import { RouteFacade } from 'app/admin-overview/_state/route/route.facade';
 import { StationFacade } from 'app/admin-overview/_state/station/station.facade';
 import { CarriageFormEditMode } from 'app/admin-overview/models/carriage';
 import { Route } from 'app/admin-overview/models/route';
-import { Station } from 'app/admin-overview/models/station';
+import { ConnectedCities, Station } from 'app/admin-overview/models/station';
 import { RoutePanelService } from 'app/admin-overview/services/route-panel/route-panel.service';
 import { combineLatest, map, Observable } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -150,11 +150,14 @@ export class RouteFormComponent implements OnInit, AfterViewInit {
     if (index === 0) {
       this.filteredStationOptionsMap[index] = this.stations$;
     } else {
-      const lastSelectedStationId = this.stations.at(index - 1)?.value;
+      const lastSelectedStationId: number = this.stations.at(index - 1)?.value;
       this.filteredStationOptionsMap[index] = combineLatest([this.stations$]).pipe(
         map(([stations]) => {
+          const connectedCities = stations.find(
+            (station) => station.id === lastSelectedStationId,
+          )?.connectedTo;
           return stations.filter((station) =>
-            station.connectedTo.some((connection) => connection.id === lastSelectedStationId),
+            connectedCities?.some((city: ConnectedCities) => station.id === city.id),
           );
         }),
       );
