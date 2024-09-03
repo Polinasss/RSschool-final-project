@@ -13,6 +13,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { CarriageFacade } from 'app/admin-overview/_state/carriage/carriage.facade';
+import { NotificationService } from 'app/core/services/notification/notification.service';
 import { CarriageSchemaComponent } from '../carriage-schema/carriage-schema.component';
 
 @Component({
@@ -37,8 +38,6 @@ export class TripComponent implements OnInit, OnDestroy {
 
   toStationId: number = 0;
 
-  private carriageTypes: Carriage[] = [];
-
   stations: Station[] = [];
 
   tripDetails: Ride = {
@@ -49,6 +48,8 @@ export class TripComponent implements OnInit, OnDestroy {
   };
 
   startStopStations = { start: 0, stop: 0 };
+
+  private carriageTypes: Carriage[] = [];
 
   carriagePrices: { type: string; price: number; seats: number }[] = [];
 
@@ -69,9 +70,9 @@ export class TripComponent implements OnInit, OnDestroy {
     schedule: [],
   };
 
-  subscription: Subscription = new Subscription();
-
   carriageSchemas: { [type: string]: CarriageDataForSchema } = {};
+
+  subscriptions: Subscription = new Subscription();
 
   constructor(
     private route: ActivatedRoute,
@@ -80,35 +81,42 @@ export class TripComponent implements OnInit, OnDestroy {
     private carriageFacade: CarriageFacade,
     private dialog: MatDialog,
     private router: Router,
+    private notificationService: NotificationService,
   ) {
     this.carriageFacade.loadCarriage();
-    this.carriageFacade.carriage$.subscribe((cs) => {
-      this.carriageTypes = cs;
-      cs.forEach((carriage) => {
-        this.carriageSchemas[carriage.name] = {
-          name: carriage.name,
-          rows: String(carriage.rows),
-          leftSeats: String(carriage.leftSeats),
-          rightSeats: String(carriage.rightSeats),
-        };
-      });
-    });
-    this.tripFacade.ride$.subscribe((ride) => {
-      this.ride = ride;
-    });
+    this.subscriptions.add(
+      this.carriageFacade.carriage$.subscribe((cs) => {
+        this.carriageTypes = cs;
+        cs.forEach((carriage) => {
+          this.carriageSchemas[carriage.name] = {
+            name: carriage.name,
+            rows: String(carriage.rows),
+            leftSeats: String(carriage.leftSeats),
+            rightSeats: String(carriage.rightSeats),
+          };
+        });
+      }),
+    );
+    this.subscriptions.add(
+      this.tripFacade.ride$.subscribe((ride) => {
+        this.ride = ride;
+      }),
+    );
   }
 
   ngOnInit(): void {
     this.rideId = Number(this.route.snapshot.paramMap.get('rideId')) || 0;
-    this.route.queryParams.subscribe((params) => {
-      this.fromStationId = Number(params['from']) || 0;
-      this.toStationId = Number(params['to']) || 0;
-      this.fetchTripDetails();
-    });
+    this.subscriptions.add(
+      this.route.queryParams.subscribe((params) => {
+        this.fromStationId = Number(params['from']) || 0;
+        this.toStationId = Number(params['to']) || 0;
+        this.fetchTripDetails();
+      }),
+    );
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 
   getCity(id: number) {
@@ -121,9 +129,11 @@ export class TripComponent implements OnInit, OnDestroy {
 
   fetchTripDetails() {
     if (this.rideId) {
-      this.tripService.getTripDetails(this.rideId).subscribe((data: Ride) => {
-        this.tripDetails = data;
-      });
+      this.subscriptions.add(
+        this.tripService.getTripDetails(this.rideId).subscribe((data: Ride) => {
+          this.tripDetails = data;
+        }),
+      );
     } else {
       console.warn('Missing parameters: Cannot fetch trip details');
     }
@@ -140,9 +150,21 @@ export class TripComponent implements OnInit, OnDestroy {
       stationStart: this.ride.stations[0].id,
       stationEnd: this.ride.stations[this.ride.stations.length - 1].id,
     };
-    this.tripService.sendBooking(order).subscribe((order) => {
-      console.log(order);
-    });
+    this.subscriptions.add(
+      this.tripService.sendBooking(order).subscribe(
+        (order) => {
+          console.log(order);
+          if (order.id) {
+            this.notificationService.openSuccessSnackBar('Success!');
+          } else {
+            this.notificationService.openFailureSnackBar('Failed!');
+          }
+        },
+        (err) => {
+          this.notificationService.openFailureSnackBar(`Failed! ${err.error.message}`);
+        },
+      ),
+    );
   }
 
   openDialog(): void {

@@ -20,7 +20,7 @@ export class TripService {
     return this.http.get<Ride>(`/api/search/${rideId}`);
   }
 
-  sendBooking(order: Order): Observable<Ride> {
-    return this.http.post<Ride>(`/api/order/`, { ...order });
+  sendBooking(order: Order) {
+    return this.http.post<{ id: number }>(`/api/order/`, { ...order });
   }
 }
